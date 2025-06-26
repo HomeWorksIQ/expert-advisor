@@ -471,17 +471,17 @@ export const HomePage = () => {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Logo in top corner */}
         <div className="absolute top-8 left-8 z-20">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 shadow-2xl">
             <img 
-              src="/eye-candy-logo.png" 
-              alt="Eye Candy Logo" 
-              className="h-16 w-auto"
+              src="/eye-candy-logo.svg" 
+              alt="Eye Candy - Interlocking Hearts Logo" 
+              className="h-16 w-auto drop-shadow-lg"
             />
             <div className="text-center mt-2">
-              <div className="text-red-500 font-bold text-sm italic" style={{fontFamily: 'cursive'}}>
+              <div className="text-red-500 font-bold text-sm italic drop-shadow-md" style={{fontFamily: 'cursive'}}>
                 Eye Candy
               </div>
-              <div className="text-gray-300 text-xs italic" style={{fontFamily: 'cursive'}}>
+              <div className="text-gray-200 text-xs italic drop-shadow-sm" style={{fontFamily: 'cursive'}}>
                 Unwrap Me
               </div>
             </div>
