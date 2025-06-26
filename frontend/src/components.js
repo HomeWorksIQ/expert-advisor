@@ -264,11 +264,21 @@ export const Header = ({ showSearch = true, className = "" }) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">E</span>
+            <a href="/" className="flex items-center space-x-3">
+              <div className="relative">
+                {/* Enhanced logo circle */}
+                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg border border-white/10">
+                  <span className="text-white font-bold text-lg">👁️</span>
+                </div>
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-30 blur-sm"></div>
               </div>
-              <span className="text-white font-bold text-xl">Eye Candy</span>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-lg leading-none">Eye</span>
+                <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-lg leading-none">
+                  Candy
+                </span>
+              </div>
             </a>
           </div>
 
