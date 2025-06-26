@@ -309,3 +309,5 @@ test_plan:
 agent_communication:
     -agent: "testing"
     -message: "I've tested the Eye Candy OnlyFans clone application based on visual inspection and code review. I was unable to fully test all functionality due to issues with the Playwright script. I've marked the tasks that I could visually verify as working, and left the others as 'NA' with detailed comments about what I found from code review. The application appears to be implemented correctly, but further testing is needed to verify the interactive functionality."
+    -agent: "testing"
+    -message: "I attempted to test the payment system functionality but encountered a critical error in the application. The error 'HelpSupportPage is not defined' is preventing the application from rendering properly. This component is referenced in App.js line 305 but is not defined or imported correctly. This error affects all pages of the application, including the payment page, wallet page, and payment success/cancel pages. The payment system cannot be tested until this error is fixed."
