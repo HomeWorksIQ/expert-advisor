@@ -1463,9 +1463,9 @@ export const SubscriptionPage = () => (
   </div>
 );
 
-// Import payment and wallet components
-import { PaymentPage } from './payment-components';
-import { WalletPage } from './wallet-components';
+// Re-export payment and wallet components
+export { PaymentPage } from './payment-components';
+export { WalletPage } from './wallet-components';
 
 // Payment Success Page
 export const PaymentSuccessPage = () => {
