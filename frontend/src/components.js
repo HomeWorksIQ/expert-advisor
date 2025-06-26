@@ -1614,13 +1614,27 @@ export const NotificationsPage = () => (
 );
 
 export const HelpSupportPage = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Help & Support</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
+  <div className="min-h-screen bg-black text-white">
+    <Header />
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-4">Help & Support</h1>
+      <div className="bg-gray-800 rounded-lg p-6">
+        <p className="text-gray-400 mb-4">Need help? We're here to assist you!</p>
+        <div className="space-y-4">
+          <div className="bg-gray-700 rounded-lg p-4">
+            <h3 className="font-semibold mb-2">📧 Email Support</h3>
+            <p className="text-gray-400">support@eyecandy.com</p>
+          </div>
+          <div className="bg-gray-700 rounded-lg p-4">
+            <h3 className="font-semibold mb-2">💬 Live Chat</h3>
+            <p className="text-gray-400">Available 24/7 for premium members</p>
+          </div>
+          <div className="bg-gray-700 rounded-lg p-4">
+            <h3 className="font-semibold mb-2">📚 FAQ</h3>
+            <p className="text-gray-400">Check our frequently asked questions</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 );
