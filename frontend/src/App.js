@@ -300,6 +300,8 @@ function App() {
             <Route path="/discover" element={<DiscoverPage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="/post/:id" element={<PostDetailPage />} />
+            <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/payment-cancelled" element={<PaymentCancelledPage />} />
             <Route path="/help" element={<HelpSupportPage />} />
 
             {/* Admin Routes */}
