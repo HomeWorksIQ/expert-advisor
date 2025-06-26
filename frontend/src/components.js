@@ -1340,29 +1340,8 @@ export const BankVerificationPage = () => (
   </div>
 );
 
-export const DiscoverPage = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Discover</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
-    </div>
-  </div>
-);
-
-export const MemberDashboard = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Member Dashboard</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
-    </div>
-  </div>
-);
+// Import enhanced components
+export { DiscoverPage, MemberDashboard } from './enhanced-components';
 
 export const PerformerDashboard = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
