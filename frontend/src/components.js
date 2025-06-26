@@ -718,8 +718,8 @@ export const HomePage = () => {
             <div>
               <div className="flex items-center justify-center space-x-3 mb-4">
                 <img 
-                  src="/eye-candy-logo.png" 
-                  alt="Eye Candy Logo" 
+                  src="/eye-candy-logo.svg" 
+                  alt="Eye Candy - Interlocking Hearts Logo" 
                   className="h-6 w-auto"
                 />
                 <div className="flex flex-col">
