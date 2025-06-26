@@ -1463,29 +1463,143 @@ export const SubscriptionPage = () => (
   </div>
 );
 
-export const PaymentPage = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Payment</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
-    </div>
-  </div>
-);
+// Import payment and wallet components
+export { PaymentPage, WalletPage } from './payment-components';
+export { WalletPage as WalletComponent } from './wallet-components';
 
-export const WalletPage = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Wallet</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
+// Payment Success Page
+export const PaymentSuccessPage = () => {
+  const [sessionId, setSessionId] = useState('');
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const session = urlParams.get('session_id');
+    
+    if (session) {
+      setSessionId(session);
+      checkPaymentStatus(session);
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const checkPaymentStatus = async (sessionId) => {
+    try {
+      const response = await fetch(`/api/payments/status/${sessionId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+      
+      const result = await response.json();
+      setPaymentDetails(result);
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center text-white">
+          <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg">Confirming your payment...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <Header />
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+        <div className="bg-green-600 bg-opacity-20 border border-green-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-8">
+          <svg className="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        
+        <h1 className="text-4xl font-bold mb-4">Payment Successful!</h1>
+        <p className="text-xl text-gray-400 mb-8">
+          Thank you for your purchase. Your payment has been processed successfully.
+        </p>
+        
+        {paymentDetails && (
+          <div className="bg-gray-800 rounded-lg p-6 mb-8">
+            <h3 className="text-lg font-semibold mb-4">Payment Details</h3>
+            <div className="space-y-2 text-left">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Transaction ID:</span>
+                <span>{paymentDetails.transactionId}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Amount:</span>
+                <span>${paymentDetails.amount}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Date:</span>
+                <span>{new Date(paymentDetails.date).toLocaleDateString()}</span>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div className="space-y-4">
+          <a
+            href="/member-dashboard"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
+          >
+            Go to Dashboard
+          </a>
+          <div>
+            <a href="/discover" className="text-pink-400 hover:text-pink-300">
+              Discover More Content
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+// Payment Cancelled Page
+export const PaymentCancelledPage = () => {
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <Header />
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+        <div className="bg-yellow-600 bg-opacity-20 border border-yellow-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-8">
+          <svg className="w-12 h-12 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+        </div>
+        
+        <h1 className="text-4xl font-bold mb-4">Payment Cancelled</h1>
+        <p className="text-xl text-gray-400 mb-8">
+          Your payment was cancelled. No charges have been made to your account.
+        </p>
+        
+        <div className="space-y-4">
+          <a
+            href="/payment"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
+          >
+            Try Again
+          </a>
+          <div>
+            <a href="/discover" className="text-pink-400 hover:text-pink-300">
+              Continue Browsing
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const NotificationsPage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
