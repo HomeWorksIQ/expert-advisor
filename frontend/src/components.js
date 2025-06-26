@@ -853,11 +853,19 @@ export const LoginPage = () => {
       <div className="max-w-md w-full mx-4">
         <div className="bg-gray-900 rounded-lg shadow-xl p-8">
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">E</span>
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <div className="relative">
+                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-xl">👁️</span>
+                </div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-30 blur-sm"></div>
               </div>
-              <span className="text-white font-bold text-2xl">Eye Candy</span>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-xl leading-none">Eye</span>
+                <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-xl leading-none">
+                  Candy
+                </span>
+              </div>
             </div>
             <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
             <p className="text-gray-400">Sign in to your account</p>
