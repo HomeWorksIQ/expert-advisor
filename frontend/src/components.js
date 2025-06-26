@@ -722,11 +722,19 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">E</span>
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <div className="relative">
+                  <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-lg">👁️</span>
+                  </div>
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-20 blur-sm"></div>
                 </div>
-                <span className="text-white font-bold text-xl">Eye Candy</span>
+                <div className="flex flex-col">
+                  <span className="text-white font-bold text-lg leading-none">Eye</span>
+                  <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-lg leading-none">
+                    Candy
+                  </span>
+                </div>
               </div>
               <p className="text-gray-400 mb-4">
                 The world's most exclusive content platform for creators and fans.
