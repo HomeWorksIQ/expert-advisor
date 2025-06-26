@@ -476,20 +476,53 @@ export const HomePage = () => {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Logo in top corner */}
         <div className="absolute top-8 left-8 z-20">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              {/* Main logo circle with enhanced gradient */}
-              <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl border-2 border-white/20">
-                <span className="text-white font-bold text-2xl">👁️</span>
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <svg 
+              width="80" 
+              height="60" 
+              viewBox="0 0 120 80" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient id="heartGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#DC2626" />
+                  <stop offset="50%" stopColor="#EC4899" />
+                  <stop offset="100%" stopColor="#F97316" />
+                </linearGradient>
+                <linearGradient id="heartGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#9333EA" />
+                  <stop offset="50%" stopColor="#C026D3" />
+                  <stop offset="100%" stopColor="#EC4899" />
+                </linearGradient>
+                <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feDropShadow dx="1" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.4"/>
+                </filter>
+              </defs>
+              
+              {/* First Heart (Red to Pink) */}
+              <path
+                d="M25 35 C25 25, 35 20, 45 25 C55 20, 65 25, 65 35 C65 50, 45 65, 45 65 C45 65, 25 50, 25 35 Z"
+                fill="url(#heartGradient1)"
+                filter="url(#shadow)"
+                transform="rotate(-15 45 40)"
+              />
+              
+              {/* Second Heart (Purple to Pink) */}
+              <path
+                d="M35 25 C35 15, 45 10, 55 15 C65 10, 75 15, 75 25 C75 40, 55 55, 55 55 C55 55, 35 40, 35 25 Z"
+                fill="url(#heartGradient2)"
+                filter="url(#shadow)"
+                transform="rotate(15 55 30)"
+              />
+            </svg>
+            <div className="text-center mt-2">
+              <div className="text-red-500 font-bold text-sm italic" style={{fontFamily: 'cursive'}}>
+                Eye Candy
               </div>
-              {/* Decorative glow ring */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-40 blur-md"></div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-white font-bold text-xl leading-none drop-shadow-lg">Eye</span>
-              <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-xl leading-none drop-shadow-lg">
-                Candy
-              </span>
+              <div className="text-gray-300 text-xs italic" style={{fontFamily: 'cursive'}}>
+                Unwrap Me
+              </div>
             </div>
           </div>
         </div>
@@ -506,7 +539,7 @@ export const HomePage = () => {
             Eye Candy
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-lg">
-            Premium Content. Exclusive Experiences. Unlimited Possibilities.
+            Premium Content. Exclusive Experiences. Waiting for you.
           </p>
           <p className="text-lg mb-8 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
             Join thousands of creators and fans in the world's most exclusive content platform. 
