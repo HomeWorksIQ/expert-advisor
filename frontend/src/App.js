@@ -25,7 +25,8 @@ import {
   PaymentPage,
   WalletPage,
   NotificationsPage,
-  HelpSupportPage
+  PaymentSuccessPage,
+  PaymentCancelledPage
 } from './components';
 
 // Global Context for User State Management
