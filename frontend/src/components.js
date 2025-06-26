@@ -935,17 +935,41 @@ export const LoginPage = () => {
         <div className="bg-gray-900 rounded-lg shadow-xl p-8">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">👁️</span>
-                </div>
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-30 blur-sm"></div>
-              </div>
+              <svg 
+                width="40" 
+                height="30" 
+                viewBox="0 0 120 80" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="authHeartGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#DC2626" />
+                    <stop offset="50%" stopColor="#EC4899" />
+                    <stop offset="100%" stopColor="#F97316" />
+                  </linearGradient>
+                  <linearGradient id="authHeartGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#9333EA" />
+                    <stop offset="50%" stopColor="#C026D3" />
+                    <stop offset="100%" stopColor="#EC4899" />
+                  </linearGradient>
+                </defs>
+                
+                <path
+                  d="M25 35 C25 25, 35 20, 45 25 C55 20, 65 25, 65 35 C65 50, 45 65, 45 65 C45 65, 25 50, 25 35 Z"
+                  fill="url(#authHeartGradient1)"
+                  transform="rotate(-15 45 40)"
+                />
+                
+                <path
+                  d="M35 25 C35 15, 45 10, 55 15 C65 10, 75 15, 75 25 C75 40, 55 55, 55 55 C55 55, 35 40, 35 25 Z"
+                  fill="url(#authHeartGradient2)"
+                  transform="rotate(15 55 30)"
+                />
+              </svg>
               <div className="flex flex-col">
-                <span className="text-white font-bold text-xl leading-none">Eye</span>
-                <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-xl leading-none">
-                  Candy
-                </span>
+                <span className="text-red-500 font-bold text-xl leading-none italic" style={{fontFamily: 'cursive'}}>Eye Candy</span>
+                <span className="text-gray-400 text-sm italic" style={{fontFamily: 'cursive'}}>Unwrap Me</span>
               </div>
             </div>
             <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
