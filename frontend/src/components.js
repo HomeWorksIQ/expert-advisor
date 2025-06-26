@@ -464,34 +464,54 @@ export const HomePage = () => {
       
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Logo in top corner */}
+        <div className="absolute top-8 left-8 z-20">
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              {/* Main logo circle with enhanced gradient */}
+              <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl border-2 border-white/20">
+                <span className="text-white font-bold text-2xl">👁️</span>
+              </div>
+              {/* Decorative glow ring */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-40 blur-md"></div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-white font-bold text-xl leading-none drop-shadow-lg">Eye</span>
+              <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-xl leading-none drop-shadow-lg">
+                Candy
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1701286618296-b40443dc63a9')`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1652715256284-6cba3e829a70?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxsaW5nZXJpZSUyMG1vZGVsfGVufDB8fHxibGFja3wxNzUwOTQ3MjExfDA&ixlib=rb-4.1.0&q=85')`
           }}
         />
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl">
             Eye Candy
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-300">
+          <p className="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-lg">
             Premium Content. Exclusive Experiences. Unlimited Possibilities.
           </p>
-          <p className="text-lg mb-8 text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg mb-8 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
             Join thousands of creators and fans in the world's most exclusive content platform. 
             Create, share, and monetize your content with our advanced features and secure payment system.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
               href="/signup"
-              className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all transform hover:scale-105"
+              className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-2xl"
             >
               Start Your Journey
             </a>
             <a 
               href="/discover"
-              className="px-8 py-4 border-2 border-pink-500 text-pink-400 rounded-lg text-lg font-semibold hover:bg-pink-500 hover:text-white transition-all"
+              className="px-8 py-4 border-2 border-pink-500 text-pink-400 rounded-lg text-lg font-semibold hover:bg-pink-500 hover:text-white transition-all shadow-lg backdrop-blur-sm bg-black/20"
             >
               Explore Creators
             </a>
