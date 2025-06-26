@@ -266,8 +266,8 @@ export const Header = ({ showSearch = true, className = "" }) => {
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-3">
               <img 
-                src="/eye-candy-logo.png" 
-                alt="Eye Candy Logo" 
+                src="/eye-candy-logo.svg" 
+                alt="Eye Candy - Interlocking Hearts Logo" 
                 className="h-8 w-auto"
               />
               <div className="flex flex-col">
