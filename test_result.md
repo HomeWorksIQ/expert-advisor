@@ -317,7 +317,9 @@ test_plan:
     - "Dashboard Functionality - Go Live Button"
     - "Dashboard Functionality - Referral Links"
     - "Responsive Design - Different Screen Sizes"
-  stuck_tasks: []
+    - "Payment System Implementation"
+  stuck_tasks:
+    - "Payment System Implementation"
   test_all: true
   test_priority: "high_first"
 
