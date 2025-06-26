@@ -28,6 +28,7 @@ import {
   PaymentSuccessPage,
   PaymentCancelledPage
 } from './components';
+import HelpSupportPage from './HelpSupportPage';
 
 // Global Context for User State Management
 const UserContext = createContext();
