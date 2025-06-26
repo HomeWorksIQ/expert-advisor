@@ -780,17 +780,41 @@ export const HomePage = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center justify-center space-x-3 mb-4">
-                <div className="relative">
-                  <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-lg">👁️</span>
-                  </div>
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-purple-600 rounded-full opacity-20 blur-sm"></div>
-                </div>
+                <svg 
+                  width="32" 
+                  height="24" 
+                  viewBox="0 0 120 80" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <linearGradient id="footerHeartGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#DC2626" />
+                      <stop offset="50%" stopColor="#EC4899" />
+                      <stop offset="100%" stopColor="#F97316" />
+                    </linearGradient>
+                    <linearGradient id="footerHeartGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#9333EA" />
+                      <stop offset="50%" stopColor="#C026D3" />
+                      <stop offset="100%" stopColor="#EC4899" />
+                    </linearGradient>
+                  </defs>
+                  
+                  <path
+                    d="M25 35 C25 25, 35 20, 45 25 C55 20, 65 25, 65 35 C65 50, 45 65, 45 65 C45 65, 25 50, 25 35 Z"
+                    fill="url(#footerHeartGradient1)"
+                    transform="rotate(-15 45 40)"
+                  />
+                  
+                  <path
+                    d="M35 25 C35 15, 45 10, 55 15 C65 10, 75 15, 75 25 C75 40, 55 55, 55 55 C55 55, 35 40, 35 25 Z"
+                    fill="url(#footerHeartGradient2)"
+                    transform="rotate(15 55 30)"
+                  />
+                </svg>
                 <div className="flex flex-col">
-                  <span className="text-white font-bold text-lg leading-none">Eye</span>
-                  <span className="text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text font-bold text-lg leading-none">
-                    Candy
-                  </span>
+                  <span className="text-red-500 font-bold text-lg leading-none italic" style={{fontFamily: 'cursive'}}>Eye Candy</span>
+                  <span className="text-gray-400 text-xs italic" style={{fontFamily: 'cursive'}}>Unwrap Me</span>
                 </div>
               </div>
               <p className="text-gray-400 mb-4">
