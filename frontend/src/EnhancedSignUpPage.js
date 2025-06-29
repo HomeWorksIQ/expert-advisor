@@ -172,7 +172,7 @@ const EnhancedSignUpPage = () => {
           
           {/* Mobile Trial Banner */}
           <div className="lg:hidden mb-8 text-center">
-            <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-3 rounded-lg mb-4">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-3 rounded-lg mb-4">
               <div className="text-lg font-bold">
                 {getTrialDays()}-Day FREE Trial
               </div>
