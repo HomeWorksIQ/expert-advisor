@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 const TrialExpirationModal = ({ isOpen, onClose, trialData }) => {
   const { user, API } = useUser();

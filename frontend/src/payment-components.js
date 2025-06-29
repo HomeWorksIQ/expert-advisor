@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 // Payment Method Selection Component
 export const PaymentMethodSelector = ({ onMethodSelect, selectedMethod }) => {

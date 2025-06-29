@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 const EnhancedSignUpPage = () => {
   const [formData, setFormData] = useState({

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 const EnhancedPerformerSearch = () => {
   const { user, API } = useUser();
