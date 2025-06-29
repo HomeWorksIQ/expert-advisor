@@ -1,8 +1,88 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any
-from datetime import datetime
+from typing import Optional, Dict, Any, List
+from datetime import datetime, timedelta
 from enum import Enum
 import uuid
+
+
+class TrialStatus(str, Enum):
+    ACTIVE = "active"
+    EXPIRED = "expired"
+    USED = "used"
+    NOT_STARTED = "not_started"
+
+
+class Trial(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(..., description="User ID")
+    trial_type: str = Field(..., description="Type of trial (performer/member)")
+    
+    # Trial Period
+    trial_start_date: datetime = Field(..., description="Trial start date")
+    trial_end_date: datetime = Field(..., description="Trial end date")
+    trial_duration_days: int = Field(7, description="Trial duration in days")
+    
+    # Trial Status
+    status: TrialStatus = Field(TrialStatus.ACTIVE, description="Current trial status")
+    is_active: bool = Field(True, description="Whether trial is currently active")
+    has_used_trial: bool = Field(True, description="Whether user has used their trial")
+    
+    # Trial Benefits
+    benefits_unlocked: List[str] = Field([], description="List of benefits unlocked during trial")
+    access_level: str = Field("premium", description="Access level during trial")
+    
+    # Usage Tracking
+    days_used: int = Field(0, description="Number of days used")
+    days_remaining: int = Field(7, description="Number of days remaining")
+    usage_stats: Optional[Dict[str, Any]] = Field(None, description="Trial usage statistics")
+    
+    # Conversion Tracking
+    converted_to_paid: bool = Field(False, description="Whether trial converted to paid subscription")
+    conversion_date: Optional[datetime] = Field(None, description="Date of conversion to paid")
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    expired_at: Optional[datetime] = Field(None, description="Trial expiration timestamp")
+    
+    def update_status(self):
+        """Update trial status based on current date"""
+        now = datetime.utcnow()
+        
+        if now > self.trial_end_date:
+            self.status = TrialStatus.EXPIRED
+            self.is_active = False
+            if not self.expired_at:
+                self.expired_at = now
+        else:
+            # Calculate remaining days
+            remaining = self.trial_end_date - now
+            self.days_remaining = max(0, remaining.days)
+            self.days_used = self.trial_duration_days - self.days_remaining
+            
+            if self.days_remaining > 0:
+                self.status = TrialStatus.ACTIVE
+                self.is_active = True
+            else:
+                self.status = TrialStatus.EXPIRED
+                self.is_active = False
+        
+        self.updated_at = now
+
+
+class TrialCreate(BaseModel):
+    user_id: str
+    trial_type: str
+    trial_duration_days: int = 7
+    benefits_unlocked: List[str] = []
+    access_level: str = "premium"
+
+
+class TrialUpdate(BaseModel):
+    status: Optional[TrialStatus] = None
+    benefits_unlocked: Optional[List[str]] = None
+    usage_stats: Optional[Dict[str, Any]] = None
+    converted_to_paid: Optional[bool] = None
 
 
 class APIKeyStatus(str, Enum):
