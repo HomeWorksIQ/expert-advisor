@@ -27,33 +27,41 @@ class TestDiscoverPageRoute(unittest.TestCase):
         # Print response details for debugging
         print(f"Response Status Code: {response.status_code}")
         print(f"Response URL (after redirects): {response.url}")
-        print(f"Response Headers: {response.headers}")
         
         # Check if the response contains HTML content
         content_type = response.headers.get('Content-Type', '')
         print(f"Content-Type: {content_type}")
         
-        # Check if the response contains React app markers
+        # Get the HTML content
         html_content = response.text
-        contains_react = 'react' in html_content.lower() or 'root' in html_content.lower()
-        print(f"Contains React markers: {contains_react}")
         
-        # Check for common React bundle patterns
-        has_bundle = bool(re.search(r'(static\/js\/|bundle\.js|chunk\.js|main\.js)', html_content))
-        print(f"Contains JS bundle references: {has_bundle}")
+        # Check if the page has the Discover page title
+        has_discover_title = 'Discover - Eye Candy' in html_content
+        print(f"Contains 'Discover - Eye Candy' title: {has_discover_title}")
         
-        # Check if the page has the Discover page title or content
-        has_discover_content = 'discover' in html_content.lower() or 'creators' in html_content.lower()
+        # Check if the page has Discover page content
+        has_discover_content = 'Discover Amazing Creators' in html_content or 'View Profile' in html_content
         print(f"Contains Discover page content: {has_discover_content}")
+        
+        # Check for performer names that should be on the Discover page
+        performer_names = ['Isabella', 'Sophia', 'Phoenix', 'Zara']
+        found_performers = [name for name in performer_names if name in html_content]
+        print(f"Found performers: {', '.join(found_performers) if found_performers else 'None'}")
         
         # Assertions
         self.assertTrue(response.status_code in [200, 304], "Response status code should be 200 or 304")
         self.assertTrue('text/html' in content_type.lower(), "Response should be HTML")
-        self.assertTrue(contains_react or has_bundle, "Response should contain React app markers")
+        self.assertTrue(has_discover_title, "Response should contain 'Discover - Eye Candy' title")
+        self.assertTrue(has_discover_content, "Response should contain Discover page content")
+        self.assertTrue(len(found_performers) > 0, "Response should contain performer names")
         
         # Print summary
-        if response.status_code in [200, 304] and ('text/html' in content_type.lower()) and (contains_react or has_bundle):
-            print("\nSUCCESS: The Discover page is being served correctly by the React app")
+        if (response.status_code in [200, 304] and 
+            ('text/html' in content_type.lower()) and 
+            has_discover_title and 
+            has_discover_content and 
+            len(found_performers) > 0):
+            print("\nSUCCESS: The Discover page is being served correctly")
         else:
             print("\nFAILURE: The Discover page is not being served correctly")
             
