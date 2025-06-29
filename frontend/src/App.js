@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-
 import axios from 'axios';
 import './App.css';
 import { UserContext, useUser } from './UserContext';
-import { UserContext, useUser } from './UserContext';
 import { 
   HomePage, 
   LoginPage, 
