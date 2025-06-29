@@ -495,9 +495,11 @@ class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
             "location": ny_location
         }
         
+        print(f"Sending NY access request: {json.dumps(access_request)}")
         response = requests.post(f"{API_URL}/check-profile-access", json=access_request)
         self.assertEqual(response.status_code, 200)
         access_data = response.json()
+        print(f"NY access response: {json.dumps(access_data)}")
         
         self.assertTrue(access_data['allowed'])
         self.assertEqual(access_data['access_level'], "teaser")
@@ -521,9 +523,11 @@ class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
             "location": gb_location
         }
         
+        print(f"Sending GB access request: {json.dumps(access_request)}")
         response = requests.post(f"{API_URL}/check-profile-access", json=access_request)
         self.assertEqual(response.status_code, 200)
         access_data = response.json()
+        print(f"GB access response: {json.dumps(access_data)}")
         
         self.assertFalse(access_data['allowed'])
         self.assertEqual(access_data['access_level'], "blocked")
@@ -537,9 +541,11 @@ class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
             "location": us_location  # Use US location which would normally be allowed
         }
         
+        print(f"Sending blocked user access request: {json.dumps(access_request)}")
         response = requests.post(f"{API_URL}/check-profile-access", json=access_request)
         self.assertEqual(response.status_code, 200)
         access_data = response.json()
+        print(f"Blocked user access response: {json.dumps(access_data)}")
         
         self.assertFalse(access_data['allowed'])
         self.assertEqual(access_data['access_level'], "blocked")
@@ -554,13 +560,16 @@ class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
             "location": ny_location
         }
         
+        print(f"Creating teaser session with request: {json.dumps(access_request)}")
         response = requests.post(f"{API_URL}/check-profile-access", json=access_request)
         self.assertEqual(response.status_code, 200)
         
         # Now check the teaser session status
+        print(f"Checking teaser session status for user: teaser-test-user")
         response = requests.get(f"{API_URL}/teaser-session/{TEST_PERFORMER_ID}?user_id=teaser-test-user")
         self.assertEqual(response.status_code, 200)
         session_data = response.json()
+        print(f"Teaser session response: {json.dumps(session_data)}")
         
         self.assertTrue(session_data['active'])
         self.assertIn('remaining_seconds', session_data)
