@@ -173,8 +173,15 @@ const EnhancedSignUpPage = () => {
           {/* Mobile Trial Banner */}
           <div className="lg:hidden mb-8 text-center">
             <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-3 rounded-lg mb-4">
-              <div className="text-lg font-bold">{getTrialDays()}-Day FREE Trial</div>
-              <div className="text-sm opacity-90">No credit card required</div>
+              <div className="text-lg font-bold">
+                {getTrialDays()}-Day FREE Trial
+              </div>
+              <div className="text-sm opacity-90">
+                No credit card required
+                <span className="block text-xs mt-1">
+                  Regular price: ${formData.userType === 'performer' ? '29.99' : '19.99'}/month
+                </span>
+              </div>
             </div>
           </div>
 
