@@ -580,9 +580,9 @@ frontend:
 
   - task: "UI/UX Testing - Discover Page"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "medium"
     needs_retesting: false
     status_history:
@@ -592,6 +592,9 @@ frontend:
         -working: "NA"
         -agent: "testing"
         -comment: "Unable to fully test the discover page functionality due to Playwright script issues. From code review, the search and filter functionality is implemented with proper state management."
+        -working: false
+        -agent: "testing"
+        -comment: "The Discover page is not rendering properly. When navigating to /discover, the user is redirected to the homepage. The DiscoverPage component is imported from './enhanced-components.js' in components.js, but there might be an issue with how it's being exported or imported. The component itself has the necessary state variables (searchTerm, filters, filteredPerformers, currentPage, etc.) but is not being rendered."
 
   - task: "UI/UX Testing - Creator Cards"
     implemented: true
