@@ -491,12 +491,12 @@ export const DiscoverPage = () => {
         ) : (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {getCurrentPagePerformers().map(performer => (
-                <div key={performer.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300 group">
+              {getCurrentPageExperts().map(expert => (
+                <div key={expert.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300 group">
                   <div className="relative">
                     <img 
-                      src={performer.coverImage} 
-                      alt={performer.displayName}
+                      src={expert.coverImage} 
+                      alt={expert.displayName}
                       className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     
