@@ -7,7 +7,7 @@ from xml.etree import ElementTree as ET
 from fastapi import HTTPException
 import httpx
 import aiofiles
-from .api_key_models import APIKeyType
+from api_key_models import APIKeyType
 
 
 class USPSShippingService:
