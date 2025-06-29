@@ -54,6 +54,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (activeTab === 'api-keys') {
       fetchApiKeys();
+    } else if (activeTab === 'trial-management') {
+      fetchTrialSettings();
+      fetchTrialStats();
     }
   }, [activeTab]);
 
