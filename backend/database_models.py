@@ -233,7 +233,7 @@ class Content(BaseModel):
 # Story Models (24-hour content)
 class Story(BaseModel):
     id: str = Field(..., description="Unique story identifier")
-    performerId: str = Field(..., description="Creator user ID")
+    expertId: str = Field(..., description="Expert user ID")
     
     # Story Content
     contentType: ContentType = Field(..., description="Type of story content")
