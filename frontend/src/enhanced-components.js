@@ -220,6 +220,7 @@ export const DiscoverPage = () => {
   }
 
   // Filter and search logic
+  // Initialize state with expert data
   useEffect(() => {
     setIsLoading(true);
     // Simulate API loading
