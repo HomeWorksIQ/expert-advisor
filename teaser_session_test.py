@@ -82,6 +82,13 @@ def test_teaser_session():
     session_data = response.json()
     print(f"Response: {json.dumps(session_data, indent=2)}")
     
+    # Try again with a small delay
+    print("\nWaiting 1 second and checking again...")
+    time.sleep(1)
+    response = requests.get(f"{API_URL}/teaser-session/{TEST_PERFORMER_ID}?user_id=teaser-test-user")
+    session_data = response.json()
+    print(f"Response after delay: {json.dumps(session_data, indent=2)}")
+    
     # 5. Wait for teaser to expire
     if session_data.get('active', False):
         remaining_seconds = session_data.get('remaining_seconds', 0)
