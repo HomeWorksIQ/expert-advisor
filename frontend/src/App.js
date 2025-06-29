@@ -28,6 +28,9 @@ import {
   PaymentSuccessPage,
   PaymentCancelledPage
 } from './components';
+import AdminDashboard from './AdminDashboard';
+import ChatSystem from './ChatSystem';
+import AppointmentSystem from './AppointmentSystem';
 import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
