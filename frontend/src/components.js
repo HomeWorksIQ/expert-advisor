@@ -654,9 +654,9 @@ export const HomePage = () => {
             </a>
             <a 
               href="/discover"
-              className="px-8 py-4 border-2 border-white text-white rounded-lg text-lg font-semibold hover:bg-white hover:text-purple-600 transition-all"
+              className="px-8 py-4 border-2 border-white text-white rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
             >
-              Browse Creators
+              Browse Experts
             </a>
           </div>
         </div>
