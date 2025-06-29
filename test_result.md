@@ -258,15 +258,18 @@ frontend:
 
   - task: "Profile Access Control Components"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/AccessControlComponents.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented teaser countdown, access denied screens, and profile access controller with location-based access enforcement."
+        -working: false
+        -agent: "testing"
+        -comment: "The components are implemented in the code but not functioning correctly. The profile page shows a placeholder message 'This page will be implemented in the next iteration' instead of the actual profile content or access control components."
 
   - task: "Enhanced Performer Dashboard"
     implemented: true
