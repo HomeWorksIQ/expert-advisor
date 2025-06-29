@@ -199,34 +199,34 @@ const EnhancedSignUpPage = () => {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setFormData({...formData, userType: 'member'})}
+                  onClick={() => setFormData({...formData, userType: 'client'})}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.userType === 'member'
-                      ? 'border-purple-500 bg-purple-900/30 text-white'
+                    formData.userType === 'client'
+                      ? 'border-blue-500 bg-blue-900/30 text-white'
                       : 'border-gray-600 bg-gray-800 text-gray-300 hover:border-gray-500'
                   }`}
                 >
                   <div className="text-2xl mb-2">👤</div>
-                  <div className="font-medium">Member</div>
+                  <div className="font-medium">Client</div>
                   <div className="text-xs opacity-75">
-                    {trialSettings.member_trial_days} days FREE
+                    {trialSettings.client_trial_days} days FREE
                     <span className="text-gray-400"> (reg. $19.99/mo)</span>
                   </div>
                 </button>
                 
                 <button
                   type="button"
-                  onClick={() => setFormData({...formData, userType: 'performer'})}
+                  onClick={() => setFormData({...formData, userType: 'expert'})}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.userType === 'performer'
-                      ? 'border-pink-500 bg-pink-900/30 text-white'
+                    formData.userType === 'expert'
+                      ? 'border-blue-500 bg-blue-900/30 text-white'
                       : 'border-gray-600 bg-gray-800 text-gray-300 hover:border-gray-500'
                   }`}
                 >
-                  <div className="text-2xl mb-2">⭐</div>
-                  <div className="font-medium">Performer</div>
+                  <div className="text-2xl mb-2">🎓</div>
+                  <div className="font-medium">Expert</div>
                   <div className="text-xs opacity-75">
-                    {trialSettings.performer_trial_days} days FREE
+                    {trialSettings.expert_trial_days} days FREE
                     <span className="text-gray-400"> (reg. $29.99/mo)</span>
                   </div>
                 </button>
