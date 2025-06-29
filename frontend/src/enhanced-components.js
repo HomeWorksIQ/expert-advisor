@@ -9,95 +9,90 @@ export const DiscoverPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
-    subscriptionType: 'all',
-    sortBy: 'popularity',
-    gender: 'all',
-    ageRange: 'all'
+    consultationType: 'all',
+    sortBy: 'rating',
+    expertiseCategory: 'all',
+    experienceLevel: 'all'
   });
-  const [performers, setPerformers] = useState([]);
-  const [filteredPerformers, setFilteredPerformers] = useState([]);
+  const [experts, setExperts] = useState([]);
+  const [filteredExperts, setFilteredExperts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const performersPerPage = 12;
+  const expertsPerPage = 12;
 
-  // Complete diverse performer dataset
-  const mockPerformers = [
-    // FEMALE PERFORMERS (6 total)
+  // Professional expert dataset
+  const mockExperts = [
+    // LEGAL EXPERTS
     {
-      id: 1, firstName: "Isabella", lastName: "Rose", displayName: "Isabella Rose", username: "@isabella_rose",
-      bio: "Welcome to my exclusive world ✨ Premium content creator sharing intimate moments and lifestyle content.",
-      profileImage: "https://images.unsplash.com/photo-1701286618296-b40443dc63a9", 
-      coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
-      gender: "female", age: 25, isOnline: true, followers: 125000, posts: 247, subscribers: 12500, rating: 4.9,
-      subscriptionType: "paid", monthlyFee: 19.99, isVerified: true, joinedDate: "2023-01-15", 
-      totalLikes: 450000, totalMedia: 890, lastSeen: new Date().toISOString(),
-      bundles: [{ months: 3, price: 54.99, discount: 8 }, { months: 6, price: 99.99, discount: 17 }, { months: 12, price: 179.99, discount: 25 }]
+      id: 1, firstName: "Dr. Sarah", lastName: "Chen", displayName: "Dr. Sarah Chen", username: "@sarah_chen_law",
+      bio: "Senior Corporate Attorney with 15+ years experience. Harvard Law graduate specializing in M&A and business compliance.",
+      profileImage: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2", 
+      coverImage: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f",
+      expertiseCategory: "legal", experienceLevel: "expert", age: 42, isOnline: true, totalConsultations: 1247, 
+      totalClients: 389, rating: 4.9, consultationFee: 350.0, isVerified: true, joinedDate: "2020-03-15", 
+      yearsExperience: 15, credentials: ["J.D. Harvard Law School", "NY State Bar", "American Bar Association"],
+      specializations: ["Corporate Law", "Mergers & Acquisitions", "Contract Negotiation"], ethnicity: "asian"
     },
     {
-      id: 2, firstName: "Sophia", lastName: "Dreams", displayName: "Sophia Dreams", username: "@sophia_dreams",
-      bio: "Your favorite girl next door 💕 Custom content available. Let's chat!",
-      profileImage: "https://images.unsplash.com/photo-1701286842710-5f37edc4b8b4", 
-      coverImage: "https://images.pexels.com/photos/2330137/pexels-photo-2330137.jpeg",
-      gender: "female", age: 23, isOnline: false, followers: 89000, posts: 189, subscribers: 8900, rating: 4.7,
-      subscriptionType: "paid", monthlyFee: 24.99, isVerified: true, joinedDate: "2023-03-22", 
-      totalLikes: 287000, totalMedia: 567, lastSeen: "2024-01-20T14:45:00Z",
-      bundles: [{ months: 3, price: 69.99, discount: 7 }, { months: 6, price: 129.99, discount: 13 }, { months: 12, price: 239.99, discount: 20 }]
-    },
-    {
-      id: 3, firstName: "Luna", lastName: "Nights", displayName: "Luna Nights", username: "@luna_nights",
-      bio: "Late night adventures and exclusive content 🌙 VIP experience guaranteed.",
-      profileImage: "https://images.pexels.com/photos/1983035/pexels-photo-1983035.jpeg", 
-      coverImage: "https://images.unsplash.com/photo-1717295248358-4b8f2c8989d6",
-      gender: "female", age: 28, isOnline: true, followers: 156000, posts: 312, subscribers: 15600, rating: 4.8,
-      subscriptionType: "paid", monthlyFee: 29.99, isVerified: true, joinedDate: "2022-11-08", 
-      totalLikes: 678000, totalMedia: 1240, lastSeen: new Date().toISOString(),
-      bundles: [{ months: 3, price: 79.99, discount: 11 }, { months: 6, price: 149.99, discount: 17 }, { months: 12, price: 269.99, discount: 25 }]
-    },
-    {
-      id: 4, firstName: "Maya", lastName: "Divine", displayName: "Maya Divine", username: "@maya_divine",
-      bio: "Spiritual content and meditation sessions. Find your inner peace with me ✨",
-      profileImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", 
-      coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
-      gender: "female", age: 26, isOnline: true, followers: 45000, posts: 98, subscribers: 3200, rating: 4.9,
-      subscriptionType: "paid", monthlyFee: 15.99, isVerified: false, joinedDate: "2023-09-03", 
-      totalLikes: 89000, totalMedia: 234, lastSeen: new Date().toISOString(),
-      bundles: [{ months: 3, price: 42.99, discount: 10 }, { months: 6, price: 79.99, discount: 17 }, { months: 12, price: 149.99, discount: 22 }]
-    },
-    {
-      id: 5, firstName: "Aria", lastName: "Star", displayName: "Aria Star", username: "@aria_star",
-      bio: "Pop culture enthusiast and gaming streamer 🎮 Join me for fun conversations and exclusive content!",
-      profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80", 
-      coverImage: "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5",
-      gender: "female", age: 22, isOnline: false, followers: 72000, posts: 156, subscribers: 6800, rating: 4.6,
-      subscriptionType: "paid", monthlyFee: 18.99, isVerified: true, joinedDate: "2023-05-14", 
-      totalLikes: 198000, totalMedia: 423, lastSeen: "2024-01-21T10:30:00Z",
-      bundles: [{ months: 3, price: 49.99, discount: 12 }, { months: 6, price: 89.99, discount: 21 }, { months: 12, price: 159.99, discount: 30 }]
-    },
-    {
-      id: 6, firstName: "Victoria", lastName: "Grace", displayName: "Victoria Grace", username: "@victoria_grace",
-      bio: "Fashion model and lifestyle creator 👗 Behind-the-scenes content from photoshoots and events.",
-      profileImage: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb", 
-      coverImage: "https://images.unsplash.com/photo-1509631179647-0177331693ae",
-      gender: "female", age: 29, isOnline: true, followers: 203000, posts: 387, subscribers: 18900, rating: 4.8,
-      subscriptionType: "paid", monthlyFee: 34.99, isVerified: true, joinedDate: "2022-08-20", 
-      totalLikes: 892000, totalMedia: 1156, lastSeen: new Date().toISOString(),
-      bundles: [{ months: 3, price: 94.99, discount: 9 }, { months: 6, price: 179.99, discount: 14 }, { months: 12, price: 329.99, discount: 22 }]
-    },
-
-    // MALE PERFORMERS (6 total)
-    {
-      id: 7, firstName: "Alex", lastName: "Storm", displayName: "Alex Storm", username: "@alex_storm",
-      bio: "Fitness enthusiast and lifestyle content creator. Join my journey to wellness! 💪",
+      id: 2, firstName: "Marcus", lastName: "Williams", displayName: "Marcus Williams", username: "@marcus_williams_law",
+      bio: "Compassionate family law attorney with expertise in divorce, child custody, and family mediation.",
       profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", 
-      coverImage: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
-      gender: "male", age: 30, isOnline: false, followers: 67000, posts: 145, subscribers: 5400, rating: 4.6,
-      subscriptionType: "free", monthlyFee: 0, isVerified: true, joinedDate: "2023-06-12", 
-      totalLikes: 123000, totalMedia: 345, lastSeen: "2024-01-19T18:30:00Z", bundles: []
+      coverImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216",
+      expertiseCategory: "legal", experienceLevel: "experienced", age: 38, isOnline: true, totalConsultations: 892, 
+      totalClients: 267, rating: 4.8, consultationFee: 275.0, isVerified: true, joinedDate: "2019-08-22", 
+      yearsExperience: 14, credentials: ["J.D. UCLA School of Law", "CA State Bar", "Certified Family Mediator"],
+      specializations: ["Family Law", "Divorce Proceedings", "Child Custody"], ethnicity: "black"
     },
+
+    // MEDICAL EXPERTS
     {
-      id: 8, firstName: "Marcus", lastName: "King", displayName: "Marcus King", username: "@marcus_king",
-      bio: "Chef and culinary artist 👨‍🍳 Cooking tutorials, kitchen adventures, and exclusive recipes!",
+      id: 3, firstName: "Dr. Priya", lastName: "Patel", displayName: "Dr. Priya Patel", username: "@dr_priya_patel",
+      bio: "Board-Certified Internal Medicine Physician committed to providing personalized healthcare guidance.",
+      profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54", 
+      coverImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56",
+      expertiseCategory: "medical", experienceLevel: "expert", age: 35, isOnline: true, totalConsultations: 1456, 
+      totalClients: 623, rating: 4.9, consultationFee: 200.0, isVerified: true, joinedDate: "2018-09-03", 
+      yearsExperience: 11, credentials: ["M.D. Johns Hopkins", "Board Certified Internal Medicine"],
+      specializations: ["Internal Medicine", "Preventive Care", "Chronic Disease Management"], ethnicity: "asian"
+    },
+
+    // FINANCIAL EXPERTS
+    {
+      id: 4, firstName: "Jennifer", lastName: "Thompson", displayName: "Jennifer Thompson", username: "@jennifer_cfp",
+      bio: "Certified Financial Planner helping individuals and families achieve their financial goals through comprehensive planning.",
+      profileImage: "https://images.unsplash.com/photo-1580489944761-15a19d654956", 
+      coverImage: "https://images.unsplash.com/photo-1553729459-efe14ef6055d",
+      expertiseCategory: "financial", experienceLevel: "expert", age: 40, isOnline: false, totalConsultations: 734, 
+      totalClients: 298, rating: 4.8, consultationFee: 250.0, isVerified: true, joinedDate: "2019-01-15", 
+      yearsExperience: 12, credentials: ["CFP Certification", "Series 7 License", "Series 66 License"],
+      specializations: ["Financial Planning", "Investment Strategy", "Retirement Planning"], ethnicity: "white"
+    },
+
+    // ACCOUNTING EXPERTS
+    {
+      id: 5, firstName: "David", lastName: "Kim", displayName: "David Kim", username: "@david_kim_cpa",
+      bio: "CPA & Tax Specialist with expertise in individual and business tax preparation, financial analysis.",
+      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e", 
+      coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f",
+      expertiseCategory: "accounting", experienceLevel: "expert", age: 44, isOnline: true, totalConsultations: 1123, 
+      totalClients: 456, rating: 4.9, consultationFee: 175.0, isVerified: true, joinedDate: "2017-11-08", 
+      yearsExperience: 20, credentials: ["CPA License", "Enrolled Agent (EA)", "QuickBooks ProAdvisor"],
+      specializations: ["Tax Preparation", "Business Accounting", "Financial Analysis"], ethnicity: "asian"
+    },
+
+    // BUSINESS EXPERTS
+    {
+      id: 6, firstName: "Amara", lastName: "Johnson", displayName: "Amara Johnson", username: "@amara_biz_consultant",
+      bio: "Former Fortune 500 executive turned business consultant. MBA from Wharton specializing in strategic planning.",
+      profileImage: "https://images.unsplash.com/photo-1589156229687-496a31ad1d1f", 
+      coverImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+      expertiseCategory: "business", experienceLevel: "expert", age: 39, isOnline: true, totalConsultations: 567, 
+      totalClients: 189, rating: 4.9, consultationFee: 300.0, isVerified: true, joinedDate: "2018-05-20", 
+      yearsExperience: 15, credentials: ["MBA Wharton", "PMP Certification", "Six Sigma Black Belt"],
+      specializations: ["Strategic Planning", "Operations Management", "Startup Advisory"], ethnicity: "black"
+    }
+  ];
       profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e", 
       coverImage: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136",
       gender: "male", age: 27, isOnline: true, followers: 91000, posts: 203, subscribers: 8700, rating: 4.7,
