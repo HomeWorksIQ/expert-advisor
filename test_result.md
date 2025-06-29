@@ -243,15 +243,18 @@ frontend:
 
   - task: "User Blocking Management"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented user blocking interface with reason selection, notes field, blocked users list, and unblock functionality."
+        -working: false
+        -agent: "testing"
+        -comment: "The component is implemented in the code but not rendering on the page. API endpoint for blocked users is working (returns 200), but the UI component is not visible when accessing the geo-location settings page directly."
 
   - task: "Profile Access Control Components"
     implemented: true
