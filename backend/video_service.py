@@ -9,7 +9,7 @@ from twilio.jwt.access_token.grants import VideoGrant
 from twilio.rest import Client
 import httpx
 import aiofiles
-from .api_key_models import APIKeyType
+from api_key_models import APIKeyType
 
 
 class VideoConferencingService:
