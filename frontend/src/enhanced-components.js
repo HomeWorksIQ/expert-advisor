@@ -467,7 +467,7 @@ export const DiscoverPage = () => {
               </div>
             ))}
           </div>
-        ) : filteredPerformers.length === 0 ? (
+        ) : filteredExperts.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-semibold mb-2">No creators found</h3>
