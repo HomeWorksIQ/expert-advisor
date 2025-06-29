@@ -228,15 +228,18 @@ frontend:
 
   - task: "Teaser Settings Configuration"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented teaser settings component with duration selection (15-300 seconds), enable/disable toggle, and customizable expiry messages."
+        -working: false
+        -agent: "testing"
+        -comment: "The component is implemented in the code but not rendering on the page. API endpoint for teaser settings is working (returns 200), but the UI component is not visible when accessing the geo-location settings page directly."
 
   - task: "User Blocking Management"
     implemented: true
