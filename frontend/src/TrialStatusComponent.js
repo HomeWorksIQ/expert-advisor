@@ -8,6 +8,7 @@ const TrialStatusComponent = () => {
   const [trialData, setTrialData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showExpirationModal, setShowExpirationModal] = useState(false);
 
   useEffect(() => {
     if (user) {
