@@ -400,8 +400,8 @@ function App() {
               element={<ProfilePageWithAccessControl />} 
             />
 
-            {/* Catch-all route */}
-            <Route path="*" element={<Navigate to="/" />} />
+            {/* Temporarily commenting out catch-all route for testing */}
+            {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>
         </BrowserRouter>
       </div>
