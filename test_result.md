@@ -198,15 +198,18 @@ backend:
 frontend:
   - task: "Location Selector Component"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented comprehensive location selector supporting country, state, city, and zip code selection with hierarchical dropdowns and display management."
+        -working: false
+        -agent: "testing"
+        -comment: "The component is implemented in the code but not rendering on the page. API endpoint for location preferences is working (returns 200), but the UI component is not visible when accessing the geo-location settings page directly."
 
   - task: "Subscription Type Selector"
     implemented: true
