@@ -1,604 +1,829 @@
-import React, { useState, useRef, useEffect } from 'react';
-import AgoraRTC from 'agora-rtc-sdk-ng';
-import { connect } from 'twilio-video';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useUser } from './App';
+import { v4 as uuidv4 } from 'uuid';
+import { Calendar, Clock, Users, Camera, Mic, MicOff, VideoOff, Share, MessageSquare, Settings, Phone, PhoneOff } from 'lucide-react';
+import { useUser } from './UserContext';
 
 const VideoConferenceSystem = () => {
   const { user, API } = useUser();
-  const [activeProvider, setActiveProvider] = useState('agora');
-  const [isInMeeting, setIsInMeeting] = useState(false);
-  const [roomName, setRoomName] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingId, setRecordingId] = useState(null);
-  const [recordings, setRecordings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  
-  // Agora specific states
-  const [agoraClient, setAgoraClient] = useState(null);
-  const [localAudioTrack, setLocalAudioTrack] = useState(null);
-  const [localVideoTrack, setLocalVideoTrack] = useState(null);
-  const [screenTrack, setScreenTrack] = useState(null);
-  const [remoteUsers, setRemoteUsers] = useState(new Map());
-
-  // Twilio specific states
-  const [twilioRoom, setTwilioRoom] = useState(null);
-  
-  // Jitsi specific states
-  const [jitsiConfig, setJitsiConfig] = useState(null);
+  const [conferences, setConferences] = useState([]);
+  const [activeConference, setActiveConference] = useState(null);
+  const [isInCall, setIsInCall] = useState(false);
+  const [localStream, setLocalStream] = useState(null);
+  const [remoteStreams, setRemoteStreams] = useState([]);
+  const [mediaDevices, setMediaDevices] = useState({ cameras: [], microphones: [], speakers: [] });
+  const [selectedDevices, setSelectedDevices] = useState({ camera: '', microphone: '', speaker: '' });
+  const [conferenceSettings, setConferenceSettings] = useState({
+    video: true,
+    audio: true,
+    screenShare: false,
+    recording: false,
+    backgroundBlur: false
+  });
+  const [chatMessages, setChatMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [participants, setParticipants] = useState([]);
+  const [showSettings, setShowSettings] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('disconnected'); // disconnected, connecting, connected
+  const [callDuration, setCallDuration] = useState(0);
+  const [showParticipants, setShowParticipants] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
-  const screenShareRef = useRef(null);
-  const jitsiContainerRef = useRef(null);
+  const chatContainerRef = useRef(null);
+  const callStartTimeRef = useRef(null);
+  const intervalRef = useRef(null);
 
+  // Initialize media devices
   useEffect(() => {
-    if (user?.userType === 'performer') {
-      fetchRecordings();
+    initializeMediaDevices();
+    return () => {
+      cleanupMedia();
+    };
+  }, []);
+
+  // Load conferences
+  useEffect(() => {
+    if (user) {
+      loadConferences();
     }
   }, [user]);
 
-  const fetchRecordings = async () => {
+  // Update call duration
+  useEffect(() => {
+    if (isInCall && callStartTimeRef.current) {
+      intervalRef.current = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - callStartTimeRef.current) / 1000);
+        setCallDuration(elapsed);
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isInCall]);
+
+  // Auto-scroll chat
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  const initializeMediaDevices = async () => {
     try {
-      const response = await axios.get(`${API}/video/recordings/${user.id}`);
-      setRecordings(response.data.recordings);
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cameras = devices.filter(device => device.kind === 'videoinput');
+      const microphones = devices.filter(device => device.kind === 'audioinput');
+      const speakers = devices.filter(device => device.kind === 'audiooutput');
+      
+      setMediaDevices({ cameras, microphones, speakers });
+      
+      // Set default devices
+      if (cameras.length > 0) setSelectedDevices(prev => ({ ...prev, camera: cameras[0].deviceId }));
+      if (microphones.length > 0) setSelectedDevices(prev => ({ ...prev, microphone: microphones[0].deviceId }));
+      if (speakers.length > 0) setSelectedDevices(prev => ({ ...prev, speaker: speakers[0].deviceId }));
     } catch (error) {
-      console.error('Failed to fetch recordings:', error);
+      console.error('Error initializing media devices:', error);
     }
   };
 
-  // Agora Functions
-  const initializeAgora = async () => {
+  const loadConferences = async () => {
     try {
-      const client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
-      
-      // Get token from backend
-      const tokenResponse = await axios.post(`${API}/video/agora/token`, {
-        channel: roomName,
-        uid: 0,
-        role: 1
-      });
-      
-      const { token } = tokenResponse.data;
-      
-      // Create local tracks
-      const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-      const videoTrack = await AgoraRTC.createCameraVideoTrack();
-      
-      // Join channel
-      await client.join(process.env.REACT_APP_AGORA_APP_ID, roomName, token, 0);
-      
-      // Publish tracks
-      await client.publish([audioTrack, videoTrack]);
-      
-      // Play local video
-      videoTrack.play(localVideoRef.current);
-      
-      // Handle remote users
-      client.on('user-published', async (user, mediaType) => {
-        await client.subscribe(user, mediaType);
-        
-        if (mediaType === 'video') {
-          const remoteVideoContainer = document.createElement('div');
-          remoteVideoContainer.style.width = '320px';
-          remoteVideoContainer.style.height = '240px';
-          remoteVideoRef.current.appendChild(remoteVideoContainer);
-          user.videoTrack.play(remoteVideoContainer);
-        }
-        
-        if (mediaType === 'audio') {
-          user.audioTrack.play();
-        }
-        
-        setRemoteUsers(prev => new Map(prev.set(user.uid, user)));
-      });
-      
-      client.on('user-unpublished', (user) => {
-        setRemoteUsers(prev => {
-          const newMap = new Map(prev);
-          newMap.delete(user.uid);
-          return newMap;
-        });
-      });
-      
-      setAgoraClient(client);
-      setLocalAudioTrack(audioTrack);
-      setLocalVideoTrack(videoTrack);
-      setIsInMeeting(true);
-      
+      const response = await axios.get(`${API}/video-conferences/user/${user.id}`);
+      setConferences(response.data);
     } catch (error) {
-      console.error('Agora initialization failed:', error);
-      alert('Failed to join Agora meeting');
+      console.error('Error loading conferences:', error);
     }
   };
 
-  const startAgoraScreenShare = async () => {
+  const createConference = async (conferenceData) => {
     try {
-      const screenTrack = await AgoraRTC.createScreenVideoTrack();
-      
-      await agoraClient.unpublish(localVideoTrack);
-      await agoraClient.publish(screenTrack);
-      
-      screenTrack.play(screenShareRef.current);
-      setScreenTrack(screenTrack);
-      
-      screenTrack.on('track-ended', () => {
-        stopAgoraScreenShare();
+      const response = await axios.post(`${API}/video-conferences`, {
+        ...conferenceData,
+        host_id: user.id,
+        conference_id: uuidv4()
       });
       
+      await loadConferences();
+      return response.data;
     } catch (error) {
-      console.error('Screen sharing failed:', error);
+      console.error('Error creating conference:', error);
+      throw error;
     }
   };
 
-  const stopAgoraScreenShare = async () => {
-    if (screenTrack) {
-      await agoraClient.unpublish(screenTrack);
-      screenTrack.close();
-      await agoraClient.publish(localVideoTrack);
-      localVideoTrack.play(localVideoRef.current);
-      setScreenTrack(null);
-    }
-  };
-
-  const leaveAgoraRoom = async () => {
-    if (agoraClient) {
-      await agoraClient.leave();
-      localAudioTrack?.close();
-      localVideoTrack?.close();
-      screenTrack?.close();
-      setAgoraClient(null);
-      setLocalAudioTrack(null);
-      setLocalVideoTrack(null);
-      setScreenTrack(null);
-      setRemoteUsers(new Map());
-    }
-    setIsInMeeting(false);
-  };
-
-  // Twilio Functions
-  const initializeTwilio = async () => {
+  const joinConference = async (conferenceId) => {
     try {
-      // Get token from backend
-      const tokenResponse = await axios.post(`${API}/video/twilio/token`, {
-        identity: user.username || user.id,
-        room: roomName
-      });
+      setConnectionStatus('connecting');
       
-      const { token } = tokenResponse.data;
-      
-      // Connect to room
-      const room = await connect(token, {
-        audio: true,
-        video: { width: 640 }
-      });
-      
-      // Display local video
-      room.localParticipant.tracks.forEach(publication => {
-        if (publication.track) {
-          const element = publication.track.attach();
-          localVideoRef.current.appendChild(element);
+      // Get user media
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId: selectedDevices.camera ? { exact: selectedDevices.camera } : undefined,
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: {
+          deviceId: selectedDevices.microphone ? { exact: selectedDevices.microphone } : undefined,
+          echoCancellation: true,
+          noiseSuppression: true
         }
       });
-      
-      // Handle remote participants
-      room.participants.forEach(participant => {
-        participant.tracks.forEach(publication => {
-          if (publication.track) {
-            const element = publication.track.attach();
-            remoteVideoRef.current.appendChild(element);
-          }
-        });
+
+      setLocalStream(stream);
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+
+      // Join conference via API
+      const response = await axios.post(`${API}/video-conferences/${conferenceId}/join`, {
+        user_id: user.id
       });
+
+      setActiveConference(response.data);
+      setIsInCall(true);
+      setConnectionStatus('connected');
+      callStartTimeRef.current = Date.now();
       
-      room.on('participantConnected', participant => {
-        participant.tracks.forEach(publication => {
-          if (publication.track) {
-            const element = publication.track.attach();
-            remoteVideoRef.current.appendChild(element);
-          }
-        });
-      });
-      
-      setTwilioRoom(room);
-      setIsInMeeting(true);
+      // Load participants and messages
+      loadParticipants(conferenceId);
+      loadChatMessages(conferenceId);
       
     } catch (error) {
-      console.error('Twilio initialization failed:', error);
-      alert('Failed to join Twilio meeting');
+      console.error('Error joining conference:', error);
+      setConnectionStatus('disconnected');
     }
   };
 
-  const startTwilioScreenShare = async () => {
+  const leaveConference = async () => {
     try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { frameRate: 15 }
-      });
-      
-      const screenTrack = new window.Twilio.Video.LocalVideoTrack(
-        stream.getVideoTracks()[0],
-        { name: 'screen' }
-      );
-      
-      await twilioRoom.localParticipant.publishTrack(screenTrack);
-      screenTrack.attach(screenShareRef.current);
-      
-      screenTrack.on('stopped', () => {
-        twilioRoom.localParticipant.unpublishTrack(screenTrack);
-      });
-      
-    } catch (error) {
-      console.error('Twilio screen sharing failed:', error);
-    }
-  };
-
-  const leaveTwilioRoom = () => {
-    if (twilioRoom) {
-      twilioRoom.disconnect();
-      setTwilioRoom(null);
-    }
-    setIsInMeeting(false);
-  };
-
-  // Jitsi Functions
-  const initializeJitsi = async () => {
-    try {
-      // Get room configuration from backend
-      const configResponse = await axios.post(`${API}/video/jitsi/room`, {
-        room_name: roomName,
-        user_name: user.username || user.firstName
-      });
-      
-      const config = configResponse.data.config;
-      setJitsiConfig(config);
-      
-      // Load Jitsi Meet API
-      if (window.JitsiMeetExternalAPI) {
-        const api = new window.JitsiMeetExternalAPI('meet.jit.si', {
-          roomName: config.room_name,
-          parentNode: jitsiContainerRef.current,
-          userInfo: {
-            displayName: config.user_name
-          },
-          configOverwrite: config.config,
-          interfaceConfigOverwrite: config.interface_config
+      if (activeConference) {
+        await axios.post(`${API}/video-conferences/${activeConference.id}/leave`, {
+          user_id: user.id
         });
-        
-        api.addEventListener('videoConferenceJoined', () => {
-          setIsInMeeting(true);
-        });
-        
-        api.addEventListener('videoConferenceLeft', () => {
-          setIsInMeeting(false);
-        });
-        
-        return api;
-      } else {
-        // Load Jitsi Meet API script
-        const script = document.createElement('script');
-        script.src = 'https://meet.jit.si/external_api.js';
-        script.onload = () => {
-          initializeJitsi();
-        };
-        document.head.appendChild(script);
       }
       
+      cleanupMedia();
+      setActiveConference(null);
+      setIsInCall(false);
+      setConnectionStatus('disconnected');
+      setParticipants([]);
+      setChatMessages([]);
+      setCallDuration(0);
+      callStartTimeRef.current = null;
+      
     } catch (error) {
-      console.error('Jitsi initialization failed:', error);
-      alert('Failed to initialize Jitsi meeting');
+      console.error('Error leaving conference:', error);
     }
   };
 
-  // Recording Functions
-  const startRecording = async () => {
+  const cleanupMedia = () => {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      setLocalStream(null);
+    }
+    remoteStreams.forEach(stream => {
+      stream.getTracks().forEach(track => track.stop());
+    });
+    setRemoteStreams([]);
+  };
+
+  const toggleVideo = () => {
+    if (localStream) {
+      const videoTrack = localStream.getVideoTracks()[0];
+      if (videoTrack) {
+        videoTrack.enabled = !videoTrack.enabled;
+        setConferenceSettings(prev => ({ ...prev, video: videoTrack.enabled }));
+      }
+    }
+  };
+
+  const toggleAudio = () => {
+    if (localStream) {
+      const audioTrack = localStream.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = !audioTrack.enabled;
+        setConferenceSettings(prev => ({ ...prev, audio: audioTrack.enabled }));
+      }
+    }
+  };
+
+  const startScreenShare = async () => {
     try {
-      setLoading(true);
-      
-      const sessionData = {
-        session_id: `session_${Date.now()}`,
-        performer_id: user.id,
-        participants: [user.id],
-        channel: roomName,
-        room_sid: twilioRoom?.sid,
-        uid: 0
-      };
-      
-      const response = await axios.post(`${API}/video/recording/start`, {
-        provider: activeProvider,
-        session_data: sessionData
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true
       });
       
-      setRecordingId(response.data.recording_id);
-      setIsRecording(true);
-      alert('Recording started successfully!');
+      // Replace video track with screen share
+      const videoTrack = screenStream.getVideoTracks()[0];
+      if (localStream && videoTrack) {
+        const sender = localStream.getVideoTracks()[0];
+        // In a real WebRTC implementation, you would replace the track here
+        setConferenceSettings(prev => ({ ...prev, screenShare: true }));
+      }
       
+      videoTrack.onended = () => {
+        setConferenceSettings(prev => ({ ...prev, screenShare: false }));
+      };
     } catch (error) {
-      console.error('Failed to start recording:', error);
-      alert('Failed to start recording');
-    } finally {
-      setLoading(false);
+      console.error('Error starting screen share:', error);
     }
   };
 
-  const stopRecording = async () => {
+  const loadParticipants = async (conferenceId) => {
     try {
-      setLoading(true);
-      
-      await axios.post(`${API}/video/recording/stop/${recordingId}`);
-      
-      setIsRecording(false);
-      setRecordingId(null);
-      await fetchRecordings();
-      alert('Recording stopped successfully!');
-      
+      const response = await axios.get(`${API}/video-conferences/${conferenceId}/participants`);
+      setParticipants(response.data);
     } catch (error) {
-      console.error('Failed to stop recording:', error);
-      alert('Failed to stop recording');
-    } finally {
-      setLoading(false);
+      console.error('Error loading participants:', error);
     }
   };
 
-  const downloadRecording = async (recordingId) => {
+  const loadChatMessages = async (conferenceId) => {
     try {
-      const response = await axios.get(`${API}/video/recordings/${recordingId}/download`);
-      alert(`Recording downloaded to: ${response.data.download_path}`);
+      const response = await axios.get(`${API}/video-conferences/${conferenceId}/messages`);
+      setChatMessages(response.data);
     } catch (error) {
-      console.error('Failed to download recording:', error);
-      alert('Failed to download recording');
+      console.error('Error loading chat messages:', error);
     }
   };
 
-  // Main control functions
-  const joinMeeting = async () => {
-    if (!roomName.trim()) {
-      alert('Please enter a room name');
-      return;
+  const sendChatMessage = async () => {
+    if (!newMessage.trim() || !activeConference) return;
+
+    try {
+      const response = await axios.post(`${API}/video-conferences/${activeConference.id}/messages`, {
+        user_id: user.id,
+        message: newMessage,
+        timestamp: new Date().toISOString()
+      });
+
+      setChatMessages(prev => [...prev, response.data]);
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
+  };
+
+  const formatDuration = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
     
-    switch (activeProvider) {
-      case 'agora':
-        await initializeAgora();
-        break;
-      case 'twilio':
-        await initializeTwilio();
-        break;
-      case 'jitsi':
-        await initializeJitsi();
-        break;
-      default:
-        alert('Unknown provider');
+    if (hours > 0) {
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const leaveMeeting = async () => {
-    if (isRecording) {
-      await stopRecording();
-    }
-    
-    switch (activeProvider) {
-      case 'agora':
-        await leaveAgoraRoom();
-        break;
-      case 'twilio':
-        leaveTwilioRoom();
-        break;
-      case 'jitsi':
-        if (jitsiContainerRef.current) {
-          jitsiContainerRef.current.innerHTML = '';
-        }
-        setIsInMeeting(false);
-        break;
-    }
-  };
-
-  const shareScreen = async () => {
-    switch (activeProvider) {
-      case 'agora':
-        if (screenTrack) {
-          await stopAgoraScreenShare();
-        } else {
-          await startAgoraScreenShare();
-        }
-        break;
-      case 'twilio':
-        await startTwilioScreenShare();
-        break;
-      case 'jitsi':
-        // Jitsi handles screen sharing through its own UI
-        break;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-            Live Video Conferencing
-          </h1>
-          <p className="text-gray-400 mt-2">
-            Multi-provider video conferencing with recording capabilities
-          </p>
-        </div>
-
-        {/* Provider Selection */}
-        <div className="mb-6">
-          <div className="flex space-x-4">
-            {['agora', 'twilio', 'jitsi'].map(provider => (
+  if (isInCall && activeConference) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col">
+        {/* Header */}
+        <div className="bg-gray-900 border-b border-gray-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <h1 className="text-xl font-bold">{activeConference.title}</h1>
+              <div className="flex items-center space-x-2 text-green-400">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-sm">{formatDuration(callDuration)}</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-400">{participants.length} participants</span>
               <button
-                key={provider}
-                onClick={() => setActiveProvider(provider)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  activeProvider === provider
-                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-                disabled={isInMeeting}
+                onClick={() => setShowParticipants(!showParticipants)}
+                className="p-2 text-gray-400 hover:text-white transition-colors"
               >
-                {provider.charAt(0).toUpperCase() + provider.slice(1)}
+                <Users className="w-5 h-5" />
               </button>
-            ))}
+              <button
+                onClick={() => setShowChat(!showChat)}
+                className="p-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="p-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Room Controls */}
-        <div className="bg-gray-800 rounded-lg p-6 mb-6">
-          <div className="flex items-center space-x-4 mb-4">
-            <input
-              type="text"
-              value={roomName}
-              onChange={(e) => setRoomName(e.target.value)}
-              placeholder="Enter room name"
-              className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              disabled={isInMeeting}
-            />
-            {!isInMeeting ? (
-              <button
-                onClick={joinMeeting}
-                className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-medium"
-                disabled={!roomName.trim()}
-              >
-                Join Meeting
-              </button>
-            ) : (
-              <button
-                onClick={leaveMeeting}
-                className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-medium"
-              >
-                Leave Meeting
-              </button>
+        {/* Main Content */}
+        <div className="flex-1 flex">
+          {/* Video Area */}
+          <div className="flex-1 relative">
+            {/* Local Video */}
+            <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+              <video
+                ref={localVideoRef}
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+                style={{ display: conferenceSettings.video ? 'block' : 'none' }}
+              />
+              {!conferenceSettings.video && (
+                <div className="flex flex-col items-center">
+                  <div className="w-32 h-32 bg-gray-600 rounded-full flex items-center justify-center mb-4">
+                    <span className="text-4xl font-bold">{user?.firstName?.[0]}</span>
+                  </div>
+                  <p className="text-gray-400">Camera is off</p>
+                </div>
+              )}
+            </div>
+
+            {/* Remote Videos */}
+            <div className="absolute top-4 right-4 space-y-2">
+              {remoteStreams.map((stream, index) => (
+                <div key={index} className="w-40 h-30 bg-gray-700 rounded-lg overflow-hidden">
+                  <video
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover"
+                    ref={(ref) => {
+                      if (ref) ref.srcObject = stream;
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Screen Share Indicator */}
+            {conferenceSettings.screenShare && (
+              <div className="absolute top-4 left-4 bg-blue-500 bg-opacity-90 px-3 py-1 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <Share className="w-4 h-4" />
+                  <span className="text-sm">Sharing Screen</span>
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Meeting Controls */}
-          {isInMeeting && (
-            <div className="flex space-x-4">
-              {activeProvider !== 'jitsi' && (
-                <button
-                  onClick={shareScreen}
-                  className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
-                >
-                  {screenTrack ? 'Stop Screen Share' : 'Share Screen'}
-                </button>
+          {/* Sidebar */}
+          {(showParticipants || showChat) && (
+            <div className="w-80 bg-gray-900 border-l border-gray-700">
+              {showParticipants && (
+                <div className="p-4 border-b border-gray-700">
+                  <h3 className="font-semibold mb-3">Participants ({participants.length})</h3>
+                  <div className="space-y-2">
+                    {participants.map((participant) => (
+                      <div key={participant.id} className="flex items-center space-x-3">
+                        <img
+                          src={participant.avatar || `https://ui-avatars.com/api/?name=${participant.name}&background=ef4444&color=fff`}
+                          alt={participant.name}
+                          className="w-8 h-8 rounded-full"
+                        />
+                        <span className="text-sm">{participant.name}</span>
+                        {participant.is_host && (
+                          <span className="text-xs bg-pink-500 px-2 py-1 rounded">Host</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
               
-              {user?.userType === 'performer' && (
-                <>
-                  {!isRecording ? (
-                    <button
-                      onClick={startRecording}
-                      className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg"
-                      disabled={loading}
-                    >
-                      Start Recording
-                    </button>
-                  ) : (
-                    <button
-                      onClick={stopRecording}
-                      className="bg-red-800 hover:bg-red-900 px-4 py-2 rounded-lg"
-                      disabled={loading}
-                    >
-                      Stop Recording
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Video Container */}
-        <div className="bg-gray-800 rounded-lg p-6 mb-6">
-          {activeProvider === 'jitsi' ? (
-            <div
-              ref={jitsiContainerRef}
-              className="w-full h-96 bg-gray-900 rounded-lg"
-            />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Local Video */}
-              <div className="bg-gray-900 rounded-lg overflow-hidden">
-                <div className="p-3 bg-gray-700">
-                  <h3 className="text-sm font-medium">Local Video</h3>
-                </div>
-                <div
-                  ref={localVideoRef}
-                  className="w-full h-64 bg-gray-900 flex items-center justify-center"
-                >
-                  {!isInMeeting && (
-                    <span className="text-gray-500">Join a meeting to see your video</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Remote Video */}
-              <div className="bg-gray-900 rounded-lg overflow-hidden">
-                <div className="p-3 bg-gray-700">
-                  <h3 className="text-sm font-medium">Remote Participants</h3>
-                </div>
-                <div
-                  ref={remoteVideoRef}
-                  className="w-full h-64 bg-gray-900 flex items-center justify-center"
-                >
-                  {!isInMeeting && (
-                    <span className="text-gray-500">Waiting for participants...</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Screen Share */}
-              {screenTrack && (
-                <div className="md:col-span-2 bg-gray-900 rounded-lg overflow-hidden">
-                  <div className="p-3 bg-gray-700">
-                    <h3 className="text-sm font-medium">Screen Share</h3>
+              {showChat && (
+                <div className="flex-1 flex flex-col">
+                  <div className="p-4 border-b border-gray-700">
+                    <h3 className="font-semibold">Chat</h3>
                   </div>
-                  <div
-                    ref={screenShareRef}
-                    className="w-full h-64 bg-gray-900"
-                  />
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Recordings List */}
-        {user?.userType === 'performer' && recordings.length > 0 && (
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">Your Recordings</h3>
-            <div className="space-y-4">
-              {recordings.map(recording => (
-                <div key={recording.recording_id} className="bg-gray-700 p-4 rounded-lg">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium">{recording.room_id}</h4>
-                      <p className="text-sm text-gray-400">
-                        Provider: {recording.provider} | Status: {recording.status}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        Created: {new Date(recording.created_at).toLocaleString()}
-                      </p>
-                      {recording.duration && (
-                        <p className="text-sm text-gray-400">
-                          Duration: {recording.duration}s
-                        </p>
-                      )}
+                  
+                  <div 
+                    ref={chatContainerRef}
+                    className="flex-1 p-4 space-y-3 overflow-y-auto"
+                    style={{ maxHeight: '400px' }}
+                  >
+                    {chatMessages.map((message, index) => (
+                      <div key={index} className="text-sm">
+                        <div className="font-medium text-pink-400">{message.sender_name}</div>
+                        <div className="text-gray-300">{message.message}</div>
+                        <div className="text-xs text-gray-500">
+                          {new Date(message.timestamp).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="p-4 border-t border-gray-700">
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                        placeholder="Type a message..."
+                        className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
+                      />
+                      <button
+                        onClick={sendChatMessage}
+                        className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                      >
+                        Send
+                      </button>
                     </div>
-                    <button
-                      onClick={() => downloadRecording(recording.recording_id)}
-                      className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
-                      disabled={recording.status !== 'stopped'}
-                    >
-                      Download
-                    </button>
                   </div>
                 </div>
-              ))}
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Controls */}
+        <div className="bg-gray-900 border-t border-gray-700 p-4">
+          <div className="flex items-center justify-center space-x-4">
+            <button
+              onClick={toggleAudio}
+              className={`p-3 rounded-full transition-colors ${
+                conferenceSettings.audio 
+                  ? 'bg-gray-700 hover:bg-gray-600' 
+                  : 'bg-red-500 hover:bg-red-600'
+              }`}
+            >
+              {conferenceSettings.audio ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
+            </button>
+            
+            <button
+              onClick={toggleVideo}
+              className={`p-3 rounded-full transition-colors ${
+                conferenceSettings.video 
+                  ? 'bg-gray-700 hover:bg-gray-600' 
+                  : 'bg-red-500 hover:bg-red-600'
+              }`}
+            >
+              {conferenceSettings.video ? <Camera className="w-5 h-5" /> : <VideoOff className="w-5 h-5" />}
+            </button>
+            
+            <button
+              onClick={startScreenShare}
+              className={`p-3 rounded-full transition-colors ${
+                conferenceSettings.screenShare 
+                  ? 'bg-blue-500 hover:bg-blue-600' 
+                  : 'bg-gray-700 hover:bg-gray-600'
+              }`}
+            >
+              <Share className="w-5 h-5" />
+            </button>
+            
+            <button
+              onClick={leaveConference}
+              className="p-3 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+            >
+              <PhoneOff className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Settings Modal */}
+        {showSettings && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+              <h3 className="text-xl font-bold mb-4">Conference Settings</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Camera</label>
+                  <select
+                    value={selectedDevices.camera}
+                    onChange={(e) => setSelectedDevices(prev => ({ ...prev, camera: e.target.value }))}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                  >
+                    {mediaDevices.cameras.map(device => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label || `Camera ${device.deviceId.slice(0, 8)}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-2">Microphone</label>
+                  <select
+                    value={selectedDevices.microphone}
+                    onChange={(e) => setSelectedDevices(prev => ({ ...prev, microphone: e.target.value }))}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                  >
+                    {mediaDevices.microphones.map(device => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-2">Speaker</label>
+                  <select
+                    value={selectedDevices.speaker}
+                    onChange={(e) => setSelectedDevices(prev => ({ ...prev, speaker: e.target.value }))}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                  >
+                    {mediaDevices.speakers.map(device => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label || `Speaker ${device.deviceId.slice(0, 8)}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="flex-1 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         )}
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Video Conferencing</h1>
+          <p className="text-gray-400">Schedule and join video calls with creators and members</p>
+        </div>
+
+        {/* Conference Creation */}
+        <ConferenceCreator onConferenceCreated={(conference) => {
+          loadConferences();
+          joinConference(conference.id);
+        }} />
+
+        {/* Conferences List */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Your Conferences</h2>
+          
+          {conferences.length === 0 ? (
+            <div className="text-center py-12 bg-gray-900 rounded-lg">
+              <div className="text-6xl mb-4">📹</div>
+              <h3 className="text-xl font-semibold mb-2">No conferences yet</h3>
+              <p className="text-gray-400">Create your first video conference to get started</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {conferences.map(conference => (
+                <ConferenceCard
+                  key={conference.id}
+                  conference={conference}
+                  onJoin={() => joinConference(conference.id)}
+                  currentUser={user}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Conference Creator Component
+const ConferenceCreator = ({ onConferenceCreated }) => {
+  const { user, API } = useUser();
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    scheduled_time: '',
+    duration_minutes: 60,
+    max_participants: 10,
+    is_private: false,
+    require_approval: false
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await axios.post(`${API}/video-conferences`, {
+        ...formData,
+        host_id: user.id,
+        conference_id: uuidv4()
+      });
+      
+      onConferenceCreated(response.data);
+      setShowForm(false);
+      setFormData({
+        title: '',
+        description: '',
+        scheduled_time: '',
+        duration_minutes: 60,
+        max_participants: 10,
+        is_private: false,
+        require_approval: false
+      });
+    } catch (error) {
+      console.error('Error creating conference:', error);
+    }
+  };
+
+  return (
+    <div className="bg-gray-900 rounded-lg p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold">Create New Conference</h2>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+        >
+          {showForm ? 'Cancel' : 'New Conference'}
+        </button>
+      </div>
+
+      {showForm && (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Conference Title
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.title}
+                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                placeholder="Enter conference title"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Scheduled Time
+              </label>
+              <input
+                type="datetime-local"
+                value={formData.scheduled_time}
+                onChange={(e) => setFormData(prev => ({ ...prev, scheduled_time: e.target.value }))}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              rows={3}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              placeholder="Describe your conference"
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Duration (minutes)
+              </label>
+              <input
+                type="number"
+                min="15"
+                max="480"
+                value={formData.duration_minutes}
+                onChange={(e) => setFormData(prev => ({ ...prev, duration_minutes: parseInt(e.target.value) }))}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Max Participants
+              </label>
+              <input
+                type="number"
+                min="2"
+                max="50"
+                value={formData.max_participants}
+                onChange={(e) => setFormData(prev => ({ ...prev, max_participants: parseInt(e.target.value) }))}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              />
+            </div>
+          </div>
+
+          <div className="flex space-x-6">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.is_private}
+                onChange={(e) => setFormData(prev => ({ ...prev, is_private: e.target.checked }))}
+                className="text-pink-500 focus:ring-pink-500 rounded"
+              />
+              <span className="ml-2 text-sm text-gray-300">Private Conference</span>
+            </label>
+            
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.require_approval}
+                onChange={(e) => setFormData(prev => ({ ...prev, require_approval: e.target.checked }))}
+                className="text-pink-500 focus:ring-pink-500 rounded"
+              />
+              <span className="ml-2 text-sm text-gray-300">Require Approval</span>
+            </label>
+          </div>
+
+          <div className="flex space-x-3">
+            <button
+              type="button"
+              onClick={() => setShowForm(false)}
+              className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+            >
+              Create Conference
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+};
+
+// Conference Card Component
+const ConferenceCard = ({ conference, onJoin, currentUser }) => {
+  const isHost = conference.host_id === currentUser?.id;
+  const scheduledTime = new Date(conference.scheduled_time);
+  const isScheduled = conference.scheduled_time && scheduledTime > new Date();
+  const canJoin = !isScheduled || (isScheduled && new Date() >= new Date(scheduledTime.getTime() - 10 * 60 * 1000)); // 10 minutes before
+
+  return (
+    <div className="bg-gray-800 rounded-lg p-6">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <h3 className="text-lg font-semibold mb-1">{conference.title}</h3>
+          {isHost && (
+            <span className="inline-block px-2 py-1 bg-pink-500 text-white text-xs rounded">
+              Host
+            </span>
+          )}
+        </div>
+        <div className={`w-3 h-3 rounded-full ${conference.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}`} />
+      </div>
+
+      {conference.description && (
+        <p className="text-gray-400 text-sm mb-4">{conference.description}</p>
+      )}
+
+      <div className="space-y-2 text-sm text-gray-400 mb-4">
+        {conference.scheduled_time && (
+          <div className="flex items-center space-x-2">
+            <Calendar className="w-4 h-4" />
+            <span>{scheduledTime.toLocaleDateString()}</span>
+          </div>
+        )}
+        
+        <div className="flex items-center space-x-2">
+          <Clock className="w-4 h-4" />
+          <span>{conference.duration_minutes} minutes</span>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <Users className="w-4 h-4" />
+          <span>{conference.current_participants || 0}/{conference.max_participants} participants</span>
+        </div>
+      </div>
+
+      <button
+        onClick={onJoin}
+        disabled={!canJoin}
+        className="w-full py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isScheduled && !canJoin ? 'Scheduled' : 'Join Conference'}
+      </button>
     </div>
   );
 };
