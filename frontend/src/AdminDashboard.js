@@ -603,6 +603,7 @@ const AdminDashboard = () => {
         <div>
           {activeTab === 'overview' && renderOverview()}
           {activeTab === 'api-keys' && renderApiKeys()}
+          {activeTab === 'trial-management' && renderTrialManagement()}
           {activeTab === 'users' && renderPlaceholder('Users')}
           {activeTab === 'content' && renderPlaceholder('Content')}
           {activeTab === 'payments' && renderPlaceholder('Payments')}
