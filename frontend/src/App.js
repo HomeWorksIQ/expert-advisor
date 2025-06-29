@@ -32,6 +32,16 @@ import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
 
+// Profile Page with Access Control
+const ProfilePageWithAccessControl = () => {
+  const { id } = useParams();
+  return (
+    <ProfileAccessController performerId={id}>
+      <ProfilePage />
+    </ProfileAccessController>
+  );
+};
+
 // Global Context for User State Management
 const UserContext = createContext();
 
