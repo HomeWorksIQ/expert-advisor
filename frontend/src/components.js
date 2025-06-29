@@ -637,7 +637,7 @@ export const HomePage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600">
+      <section className="py-20 bg-gradient-to-r from-blue-500 to-indigo-600">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Join The Experts?
