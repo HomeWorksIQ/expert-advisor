@@ -341,7 +341,7 @@ frontend:
 
   - task: "Subscription Type Selector"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
@@ -353,6 +353,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The component is implemented in the code but not rendering on the page. The UI component is not visible when accessing the geo-location settings page directly."
+        -working: true
+        -agent: "testing"
+        -comment: "After fixing the circular dependency by extracting the useUser context into a separate file (UserContext.js), the Subscription Type Selector component is now rendering properly on the test-geolocation page. All subscription options (Free Access, Monthly Subscription, Pay Per Visit, Teaser Mode) are displayed correctly with their respective icons and descriptions."
 
   - task: "Teaser Settings Configuration"
     implemented: true
