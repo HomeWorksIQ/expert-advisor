@@ -637,6 +637,9 @@ frontend:
         -working: true
         -agent: "testing"
         -comment: "Comprehensive testing confirms the Discover page is now working perfectly. The page loads properly without redirecting to the homepage. All 18 performers are displayed correctly with pagination (12 per page). Gender filtering works exactly as required: Female filter shows exactly 6 performers (Isabella, Sophia, Luna, Maya, Aria, Victoria), Male filter shows exactly 6 performers (Alex Storm, Marcus, Dylan, Jake, Ryan, Ethan), and Trans filter shows exactly 6 performers (Zara, River, Phoenix, Casey, Jamie, Alex Dawn). Search functionality works correctly - searching for 'Zara' shows Zara Moon, searching for 'Phoenix' shows both Dylan Phoenix and Phoenix Vale, and searching for 'fitness' shows Alex Storm. Gender badges (♀️, ♂️, 🏳️‍⚧️) are displayed correctly on performer cards. Combined filters (e.g., Gender=Trans + Status=Online) work properly. The UI is smooth with consistent styling and no JavaScript errors."
+        -working: true
+        -agent: "testing"
+        -comment: "Additional testing of the Discover page route confirms it's working correctly. When accessing /discover, the page loads properly with status code 200. The page has the correct title 'Discover - Eye Candy' and displays performer profiles including Isabella, Phoenix, and Zara. The page includes 'View Profile' buttons for each performer. There is a 301 redirect from /discover to /discover/ which is normal behavior. The Discover page is being served correctly and is accessible to users."
 
   - task: "UI/UX Testing - Creator Cards"
     implemented: true
