@@ -20,6 +20,7 @@ from api_key_models import (
     UploadedFile, FileType,
     Product, Order, ProductType, ShippingProvider
 )
+from video_service import VideoConferencingService, VideoRecordingService
 
 
 ROOT_DIR = Path(__file__).parent
