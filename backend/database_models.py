@@ -36,6 +36,31 @@ class ContentType(str, Enum):
     TEXT = "text"
     STORY = "story"
 
+class ConsultationType(str, Enum):
+    DOCUMENT = "document"
+    VIDEO_CALL = "video_call"
+    AUDIO_CALL = "audio_call"
+    CHAT = "chat"
+    RESOURCE = "resource"
+
+class ExpertiseCategory(str, Enum):
+    LEGAL = "legal"
+    ACCOUNTING = "accounting"
+    MEDICAL = "medical"
+    FINANCIAL = "financial"
+    BUSINESS = "business"
+    TECHNOLOGY = "technology"
+    EDUCATION = "education"
+    MARKETING = "marketing"
+    REAL_ESTATE = "real_estate"
+    INSURANCE = "insurance"
+
+class ExpertiseLevel(str, Enum):
+    ENTRY = "entry"
+    INTERMEDIATE = "intermediate"
+    EXPERIENCED = "experienced"
+    EXPERT = "expert"
+
 class PrivacyLevel(str, Enum):
     PUBLIC = "public"
     PRIVATE = "private"
