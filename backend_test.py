@@ -580,5 +580,17 @@ class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
             self.assertFalse(session_data['active'])
             print(f"Expired teaser session test: {session_data['message']}")
 
+def run_individual_test(test_name):
+    """Run a single test by name"""
+    suite = unittest.TestSuite()
+    suite.addTest(TestGeoLocationAndAccessControlAPIs(test_name))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
+
 if __name__ == '__main__':
-    unittest.main(argv=['first-arg-is-ignored'], exit=False)
+    import sys
+    if len(sys.argv) > 1:
+        test_name = sys.argv[1]
+        run_individual_test(test_name)
+    else:
+        unittest.main(argv=['first-arg-is-ignored'], exit=False)
