@@ -11,6 +11,25 @@ import uuid
 from datetime import datetime, timedelta
 from enum import Enum
 import random
+from passlib.context import CryptContext
+from jose import JWTError, jwt
+from datetime import timedelta
+from models import UserCreate, User
+
+# Password hashing context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# JWT settings
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
 import sys
 sys.path.append('/app/backend')
 from api_key_models import (
