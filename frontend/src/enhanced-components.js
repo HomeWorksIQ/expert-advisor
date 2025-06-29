@@ -45,6 +45,22 @@ export const DiscoverPage = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+  // Fix: Add missing state variables
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    status: 'all',
+    subscriptionType: 'all',
+    sortBy: 'popularity',
+    gender: 'all',
+    ageRange: 'all'
+  });
+  const [performers, setPerformers] = useState([]);
+  const [filteredPerformers, setFilteredPerformers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const performersPerPage = 12;
 
   // Mock performers data
   const mockPerformers = [
