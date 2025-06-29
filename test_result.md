@@ -601,11 +601,11 @@ frontend:
 
   - task: "UI/UX Testing - Discover Page"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/App.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
         -working: "NA"
         -agent: "main"
@@ -619,6 +619,9 @@ frontend:
         -working: true
         -agent: "testing"
         -comment: "The Discover page is now working correctly after the import fix. The page loads properly and displays the 'Discover Amazing Creators' title. The search functionality works as expected - searching for 'Isabella' shows multiple creators including Isabella Rose, and searching for 'Sophia' correctly filters to show only Sophia Dreams. The filter options (status, subscription type, gender, age, sort) are all present and functional. Creator cards display properly with images, names, and details. The 'View Profile' buttons on creator cards work correctly and navigate to the appropriate profile page. No JavaScript errors were detected in the console."
+        -working: false
+        -agent: "testing"
+        -comment: "During testing, the Discover page is not rendering properly. When navigating to /discover, the user is redirected to the homepage. Multiple attempts to access the page directly or through navigation links failed. The route is defined correctly in App.js, but there might be an issue with how the DiscoverPage component is being exported or imported. The component code in enhanced-components.js looks correct with proper implementation of gender filtering including the 'Trans' option, but the page is not accessible for testing."
 
   - task: "UI/UX Testing - Creator Cards"
     implemented: true
