@@ -1742,17 +1742,7 @@ export const SettingsPage = () => (
   </div>
 );
 
-export const AdminDashboard = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
-    </div>
-  </div>
-);
+export { AdminDashboard };
 
 export const AdminLogin = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
