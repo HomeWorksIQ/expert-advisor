@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminDashboard from './AdminDashboard';
 import { useParams } from 'react-router-dom';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 import TrialStatusComponent from './TrialStatusComponent';
 import TrialWelcomeModal from './TrialWelcomeModal';
 
@@ -575,27 +575,32 @@ export const HomePage = () => {
           
           {isLoading ? (
             <div className="grid md:grid-cols-3 gap-8">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="bg-gray-800 rounded-lg p-6 animate-pulse">
-                  <div className="w-full h-48 bg-gray-700 rounded-lg mb-4"></div>
-                  <div className="h-4 bg-gray-700 rounded mb-2"></div>
-                  <div className="h-3 bg-gray-700 rounded w-3/4"></div>
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="bg-gray-800 rounded-lg overflow-hidden animate-pulse">
+                  <div className="w-full h-64 bg-gray-700"></div>
+                  <div className="p-6">
+                    <div className="h-6 bg-gray-700 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-700 rounded w-3/4 mb-4"></div>
+                    <div className="h-10 bg-gray-700 rounded"></div>
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-8">
               {featuredPerformers.map(performer => (
-                <div key={performer.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
+                <div key={performer.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all">
                   <div className="relative">
                     <img 
                       src={performer.coverImage} 
                       alt={performer.displayName}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-64 object-cover"
                     />
-                    <div className="absolute top-4 left-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        performer.isOnline ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'
+                    <div className="absolute top-4 right-4">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        performer.isOnline 
+                          ? 'bg-green-500 text-white' 
+                          : 'bg-gray-600 text-gray-300'
                       }`}>
                         {performer.isOnline ? 'Online' : 'Offline'}
                       </span>
@@ -604,35 +609,18 @@ export const HomePage = () => {
                       <img 
                         src={performer.profileImage} 
                         alt={performer.displayName}
-                        className="w-16 h-16 rounded-full border-4 border-white object-cover"
+                        className="w-16 h-16 rounded-full border-4 border-white"
                       />
                     </div>
                   </div>
-                  
                   <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-semibold">{performer.displayName}</h3>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-yellow-400">★</span>
-                        <span className="text-sm text-gray-400">{performer.rating}</span>
-                      </div>
-                    </div>
-                    
-                    <p className="text-gray-400 text-sm mb-2">{performer.username}</p>
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-2">{performer.bio}</p>
-                    
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-sm text-gray-400">
-                        <span>{performer.followers.toLocaleString()} followers</span>
-                        <span className="mx-2">•</span>
-                        <span>{performer.posts} posts</span>
-                      </div>
-                    </div>
-                    
+                    <h3 className="text-xl font-bold text-white mb-2">{performer.displayName}</h3>
+                    <p className="text-gray-400 text-sm mb-4">{performer.username}</p>
+                    <p className="text-gray-300 mb-4 line-clamp-2">{performer.bio}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-semibold text-pink-400">
-                        ${performer.monthlyFee}/month
-                      </span>
+                      <div className="text-sm text-gray-400">
+                        {(performer.followers / 1000).toFixed(0)}K followers
+                      </div>
                       <a 
                         href={`/profile/${performer.id}`}
                         className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
@@ -648,135 +636,38 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-pink-400 mb-2">1M+</div>
-              <div className="text-gray-400">Active Users</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-purple-400 mb-2">50K+</div>
-              <div className="text-gray-400">Content Creators</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-green-400 mb-2">$10M+</div>
-              <div className="text-gray-400">Creator Earnings</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-blue-400 mb-2">24/7</div>
-              <div className="text-gray-400">Support</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of creators and fans already earning and enjoying exclusive content on Eye Candy.
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Ready to Join Eye Candy?
+          </h2>
+          <p className="text-xl text-white mb-8 opacity-90">
+            Start your journey today and connect with thousands of amazing creators and fans
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
               href="/signup"
-              className="px-8 py-4 bg-white text-purple-600 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all"
+              className="px-8 py-4 bg-white text-purple-600 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105"
             >
-              Start Creating Today
+              Get Started Now
             </a>
             <a 
               href="/discover"
               className="px-8 py-4 border-2 border-white text-white rounded-lg text-lg font-semibold hover:bg-white hover:text-purple-600 transition-all"
             >
-              Explore Content
+              Browse Creators
             </a>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-black border-t border-gray-800 py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center justify-center space-x-3 mb-4">
-                <img 
-                  src="/eye-candy-logo.svg" 
-                  alt="Eye Candy - Interlocking Hearts Logo" 
-                  className="h-6 w-auto"
-                />
-                <div className="flex flex-col">
-                  <span className="text-red-500 font-bold text-lg leading-none italic" style={{fontFamily: 'cursive'}}>Eye Candy</span>
-                  <span className="text-gray-400 text-xs italic" style={{fontFamily: 'cursive'}}>Unwrap Me</span>
-                </div>
-              </div>
-              <p className="text-gray-400 mb-4">
-                The world's most exclusive content platform for creators and fans.
-              </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-pink-400">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-pink-400">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-pink-400">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.347-.091.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.758-1.378l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.624 0 11.99-5.367 11.99-11.989C24.007 5.367 18.641.001 12.017.001z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-semibold mb-4">For Creators</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="/creator-program" className="hover:text-white">Creator Program</a></li>
-                <li><a href="/monetization" className="hover:text-white">Monetization</a></li>
-                <li><a href="/analytics" className="hover:text-white">Analytics</a></li>
-                <li><a href="/resources" className="hover:text-white">Resources</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-semibold mb-4">For Fans</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="/discover" className="hover:text-white">Discover</a></li>
-                <li><a href="/categories" className="hover:text-white">Categories</a></li>
-                <li><a href="/live" className="hover:text-white">Live Streams</a></li>
-                <li><a href="/premium" className="hover:text-white">Premium</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="/help" className="hover:text-white">Help Center</a></li>
-                <li><a href="/contact" className="hover:text-white">Contact Us</a></li>
-                <li><a href="/safety" className="hover:text-white">Safety</a></li>
-                <li><a href="/privacy" className="hover:text-white">Privacy Policy</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-            <p className="text-gray-400">© 2025 Eye Candy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
 
-// Enhanced Login Page with Social Login
+// Enhanced Login Page
 export const LoginPage = () => {
-  const { login, socialLogin } = useUser();
+  const { login } = useUser();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -802,122 +693,108 @@ export const LoginPage = () => {
     setIsLoading(false);
   };
 
-  const handleSocialLogin = async (provider) => {
-    setIsLoading(true);
-    setError('');
-
-    try {
-      // Simulate social login process
-      // In real implementation, you'd integrate with Google/Facebook SDK
-      const mockToken = 'mock_social_token';
-      const result = await socialLogin(provider, mockToken);
-      
-      if (result.success) {
-        window.location.href = `/${result.user.userType}-dashboard`;
-      } else {
-        setError(result.message);
-      }
-    } catch (error) {
-      setError('Social login failed. Please try again.');
-    }
-    
-    setIsLoading(false);
-  };
-
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="max-w-md w-full mx-4">
-        <div className="bg-gray-900 rounded-lg shadow-xl p-8">
+    <div className="min-h-screen bg-black text-white">
+      <Header showSearch={false} />
+      
+      <div className="flex items-center justify-center min-h-[calc(100vh-64px)] py-12 px-4">
+        <div className="w-full max-w-md">
+          {/* Logo and Title */}
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <img 
-                src="/eye-candy-logo.svg" 
-                alt="Eye Candy - Interlocking Hearts Logo" 
-                className="h-10 w-auto"
-              />
-              <div className="flex flex-col">
-                <span className="text-red-500 font-bold text-xl leading-none italic" style={{fontFamily: 'cursive'}}>Eye Candy</span>
-                <span className="text-gray-400 text-sm italic" style={{fontFamily: 'cursive'}}>Unwrap Me</span>
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
-            <p className="text-gray-400">Sign in to your account</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-gray-400">Sign in to your Eye Candy account</p>
           </div>
 
+          {/* Error Display */}
           {error && (
-            <div className="mb-4 p-3 bg-red-600 bg-opacity-20 border border-red-600 rounded-lg text-red-400 text-sm">
-              {error}
+            <div className="mb-6 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
+              <p className="text-red-400 text-sm">{error}</p>
             </div>
           )}
 
+          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* User Type Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-3">
                 Account Type
               </label>
               <div className="grid grid-cols-2 gap-3">
-                <label className="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-pink-500 transition-colors">
+                <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
+                  formData.userType === 'member' 
+                    ? 'border-pink-500 bg-pink-500 bg-opacity-10' 
+                    : 'border-gray-600 hover:border-gray-500'
+                }`}>
                   <input
                     type="radio"
                     name="userType"
                     value="member"
                     checked={formData.userType === 'member'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="text-pink-500 focus:ring-pink-500"
+                    className="sr-only"
                   />
-                  <div className="ml-3">
-                    <div className="text-white font-medium">Member</div>
-                    <div className="text-gray-400 text-xs">$19.95/month</div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">👤</div>
+                    <div className="text-sm font-medium">Member</div>
                   </div>
                 </label>
-                <label className="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-pink-500 transition-colors">
+                
+                <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
+                  formData.userType === 'performer' 
+                    ? 'border-pink-500 bg-pink-500 bg-opacity-10' 
+                    : 'border-gray-600 hover:border-gray-500'
+                }`}>
                   <input
                     type="radio"
                     name="userType"
                     value="performer"
                     checked={formData.userType === 'performer'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="text-pink-500 focus:ring-pink-500"
+                    className="sr-only"
                   />
-                  <div className="ml-3">
-                    <div className="text-white font-medium">Performer</div>
-                    <div className="text-gray-400 text-xs">$50/month</div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">⭐</div>
+                    <div className="text-sm font-medium">Creator</div>
                   </div>
                 </label>
               </div>
             </div>
 
+            {/* Email Input */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email or Phone Number
+                Email Address
               </label>
               <input
-                type="text"
+                type="email"
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors"
-                placeholder="Enter your email or phone number"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
+                placeholder="Enter your email"
               />
             </div>
 
+            {/* Password Input */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors pr-12"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 pr-12"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-400 hover:text-white"
+                  className="absolute right-3 top-3 text-gray-400 hover:text-white transition-colors"
                 >
                   {showPassword ? (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -933,9 +810,13 @@ export const LoginPage = () => {
               </div>
             </div>
 
+            {/* Remember Me and Forgot Password */}
             <div className="flex items-center justify-between">
               <label className="flex items-center">
-                <input type="checkbox" className="text-pink-500 focus:ring-pink-500 rounded" />
+                <input
+                  type="checkbox"
+                  className="text-pink-500 focus:ring-pink-500 rounded"
+                />
                 <span className="ml-2 text-sm text-gray-400">Remember me</span>
               </label>
               <a href="/forgot-password" className="text-sm text-pink-400 hover:text-pink-300">
@@ -943,6 +824,7 @@ export const LoginPage = () => {
               </a>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -956,46 +838,39 @@ export const LoginPage = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700"></div>
+                <div className="w-full border-t border-gray-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-gray-900 px-2 text-gray-400">Or continue with</span>
+                <span className="px-2 bg-black text-gray-400">Or continue with</span>
               </div>
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button
-                onClick={() => handleSocialLogin('google')}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-lg bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 disabled:opacity-50"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <button className="w-full px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors flex items-center justify-center">
+                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                <span className="ml-2">Google</span>
+                Google
               </button>
-
-              <button
-                onClick={() => handleSocialLogin('facebook')}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-lg bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 disabled:opacity-50"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              
+              <button className="w-full px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors flex items-center justify-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-                <span className="ml-2">Facebook</span>
+                Facebook
               </button>
             </div>
           </div>
 
+          {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-gray-400">
               Don't have an account?{' '}
               <a href="/signup" className="text-pink-400 hover:text-pink-300 font-medium">
-                Sign up
+                Sign up now
               </a>
             </p>
           </div>
@@ -1005,8 +880,9 @@ export const LoginPage = () => {
   );
 };
 
-// Enhanced Sign Up Page with Terms & Conditions
+// Enhanced Sign Up Page
 export const SignUpPage = () => {
+  const { signup } = useUser();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -1020,6 +896,7 @@ export const SignUpPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -1027,6 +904,7 @@ export const SignUpPage = () => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setSuccess('');
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
@@ -1044,7 +922,11 @@ export const SignUpPage = () => {
     const result = await signup(formData);
     
     if (result.success) {
-      window.location.href = '/verify-otp';
+      setSuccess(result.message);
+      // Redirect to login after a delay
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
     } else {
       setError(result.message);
     }
@@ -1053,73 +935,84 @@ export const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center py-12">
-      <div className="max-w-md w-full mx-4">
-        <div className="bg-gray-900 rounded-lg shadow-xl p-8">
+    <div className="min-h-screen bg-black text-white">
+      <Header showSearch={false} />
+      
+      <div className="flex items-center justify-center min-h-[calc(100vh-64px)] py-12 px-4">
+        <div className="w-full max-w-lg">
+          {/* Logo and Title */}
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <img 
-                src="/eye-candy-logo.svg" 
-                alt="Eye Candy - Interlocking Hearts Logo" 
-                className="h-10 w-auto"
-              />
-              <div className="flex flex-col">
-                <span className="text-red-500 font-bold text-xl leading-none italic" style={{fontFamily: 'cursive'}}>Eye Candy</span>
-                <span className="text-gray-400 text-sm italic" style={{fontFamily: 'cursive'}}>Unwrap Me</span>
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white">Join Eye Candy</h2>
-            <p className="text-gray-400">Create your account today</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent mb-2">
+              Join Eye Candy
+            </h1>
+            <p className="text-gray-400">Create your account and start your journey</p>
           </div>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-600 bg-opacity-20 border border-red-600 rounded-lg text-red-400 text-sm">
-              {error}
+          {/* Success Message */}
+          {success && (
+            <div className="mb-6 p-4 bg-green-500 bg-opacity-20 border border-green-500 rounded-lg">
+              <p className="text-green-400 text-sm">{success}</p>
             </div>
           )}
 
+          {/* Error Display */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
+          {/* Sign Up Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* User Type Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-3">
                 Account Type
               </label>
               <div className="grid grid-cols-2 gap-3">
-                <label className="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-pink-500 transition-colors">
+                <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
+                  formData.userType === 'member' 
+                    ? 'border-pink-500 bg-pink-500 bg-opacity-10' 
+                    : 'border-gray-600 hover:border-gray-500'
+                }`}>
                   <input
                     type="radio"
                     name="userType"
                     value="member"
                     checked={formData.userType === 'member'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="text-pink-500 focus:ring-pink-500"
+                    className="sr-only"
                   />
-                  <div className="ml-3">
-                    <div className="text-white font-medium">Member</div>
-                    <div className="text-gray-400 text-xs">$19.95/month</div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">👤</div>
+                    <div className="text-sm font-medium">Member</div>
+                    <div className="text-xs text-gray-400 mt-1">View content</div>
                   </div>
                 </label>
-                <label className="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-pink-500 transition-colors">
+                
+                <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
+                  formData.userType === 'performer' 
+                    ? 'border-pink-500 bg-pink-500 bg-opacity-10' 
+                    : 'border-gray-600 hover:border-gray-500'
+                }`}>
                   <input
                     type="radio"
                     name="userType"
                     value="performer"
                     checked={formData.userType === 'performer'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="text-pink-500 focus:ring-pink-500"
+                    className="sr-only"
                   />
-                  <div className="ml-3">
-                    <div className="text-white font-medium">Performer</div>
-                    <div className="text-gray-400 text-xs">$50/month</div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">⭐</div>
+                    <div className="text-sm font-medium">Creator</div>
+                    <div className="text-xs text-gray-400 mt-1">Create content</div>
                   </div>
                 </label>
               </div>
-              <p className="text-sm text-gray-400 mt-2">
-                {formData.userType === 'member' 
-                  ? 'Access exclusive content from creators worldwide' 
-                  : 'Create and monetize your content, keep 60% of revenue'}
-              </p>
             </div>
 
+            {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -1130,10 +1023,11 @@ export const SignUpPage = () => {
                   required
                   value={formData.firstName}
                   onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
                   placeholder="First name"
                 />
               </div>
+              
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Last Name
@@ -1143,12 +1037,13 @@ export const SignUpPage = () => {
                   required
                   value={formData.lastName}
                   onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
                   placeholder="Last name"
                 />
               </div>
             </div>
 
+            {/* Email Input */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email Address
@@ -1158,42 +1053,30 @@ export const SignUpPage = () => {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
                 placeholder="Enter your email"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                required
-                value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors"
-                placeholder="+1 (555) 123-4567"
-              />
-            </div>
-
+            {/* Password Input */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors pr-12"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 pr-12"
                   placeholder="Create a password"
+                  minLength="8"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-400 hover:text-white"
+                  className="absolute right-3 top-3 text-gray-400 hover:text-white transition-colors"
                 >
                   {showPassword ? (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1209,23 +1092,24 @@ export const SignUpPage = () => {
               </div>
             </div>
 
+            {/* Confirm Password Input */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Confirm Password
               </label>
               <div className="relative">
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   required
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500 transition-colors pr-12"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 pr-12"
                   placeholder="Confirm your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-3 text-gray-400 hover:text-white"
+                  className="absolute right-3 top-3 text-gray-400 hover:text-white transition-colors"
                 >
                   {showConfirmPassword ? (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1485,50 +1369,24 @@ export const PerformerDashboard = () => {
             </div>
           )}
 
+          {activeTab === 'analytics' && (
+            <div className="bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Analytics & Insights</h3>
+              <p className="text-gray-400">View detailed analytics about your content performance and audience.</p>
+            </div>
+          )}
+
           {activeTab === 'earnings' && (
             <div className="bg-gray-800 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-white mb-4">Earnings Overview</h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                  <span className="text-gray-400">This Month</span>
-                  <span className="text-white font-semibold">$567.89</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                  <span className="text-gray-400">Last Month</span>
-                  <span className="text-white font-semibold">$1,234.56</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                  <span className="text-gray-400">Pending Payout</span>
-                  <span className="text-green-400 font-semibold">$345.67</span>
-                </div>
-              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Earnings & Payouts</h3>
+              <p className="text-gray-400">Track your earnings, manage payouts, and view transaction history.</p>
             </div>
           )}
 
           {activeTab === 'settings' && (
             <div className="bg-gray-800 rounded-lg p-6">
               <h3 className="text-xl font-semibold text-white mb-4">Account Settings</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-gray-300 mb-2">Display Name</label>
-                  <input 
-                    type="text" 
-                    defaultValue={user?.displayName || user?.firstName}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Bio</label>
-                  <textarea 
-                    rows={4}
-                    defaultValue="Your bio here..."
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
-                  />
-                </div>
-                <button className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-all">
-                  Save Changes
-                </button>
-              </div>
+              <p className="text-gray-400">Manage your account preferences, privacy settings, and profile information.</p>
             </div>
           )}
         </div>
@@ -1537,165 +1395,21 @@ export const PerformerDashboard = () => {
   );
 };
 
-// Enhanced Profile Page with Mock Data
-export const ProfilePage = () => {
-  const { id } = useParams();
-  const { user } = useUser();
-  
-  // Mock performer data for demonstration
-  const performer = {
-    id: id,
-    firstName: "Isabella",
-    lastName: "Rose",
-    displayName: "Isabella Rose",
-    username: "@isabella_rose",
-    bio: "Welcome to my exclusive world ✨ Premium content creator sharing intimate moments and lifestyle content.",
-    profileImage: "https://images.unsplash.com/photo-1701286618296-b40443dc63a9",
-    coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
-    location: "Los Angeles, CA",
-    followers: 125000,
-    following: 45,
-    posts: 247,
-    subscribers: 12500,
-    rating: 4.9,
-    subscriptionType: "paid",
-    monthlyFee: 19.99,
-    isOnline: true,
-    lastSeen: new Date().toISOString()
-  };
-
-  return (
-    <div className="min-h-screen bg-black">
-      <Header />
-      
-      <div className="relative">
-        {/* Cover Image */}
-        <div 
-          className="h-64 md:h-96 bg-cover bg-center relative"
-          style={{ backgroundImage: `url(${performer.coverImage})` }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        </div>
-        
-        {/* Profile Info */}
-        <div className="max-w-4xl mx-auto px-4 -mt-20 relative z-10">
-          <div className="bg-gray-900 rounded-lg p-6 shadow-xl">
-            <div className="flex flex-col md:flex-row items-start md:items-end space-y-4 md:space-y-0 md:space-x-6">
-              {/* Profile Image */}
-              <img
-                src={performer.profileImage}
-                alt={performer.displayName}
-                className="w-32 h-32 rounded-full border-4 border-pink-500 object-cover"
-              />
-              
-              {/* Basic Info */}
-              <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-2">
-                  <h1 className="text-3xl font-bold text-white">{performer.displayName}</h1>
-                  {performer.isOnline && (
-                    <span className="flex items-center text-green-400 text-sm">
-                      <span className="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
-                      Online
-                    </span>
-                  )}
-                </div>
-                <p className="text-pink-400 text-lg mb-2">{performer.username}</p>
-                <p className="text-gray-300 mb-4">{performer.bio}</p>
-                
-                {/* Stats */}
-                <div className="flex space-x-6 text-sm">
-                  <div className="text-center">
-                    <div className="text-white font-bold">{performer.followers.toLocaleString()}</div>
-                    <div className="text-gray-400">Followers</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-white font-bold">{performer.posts}</div>
-                    <div className="text-gray-400">Posts</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-white font-bold">{performer.subscribers.toLocaleString()}</div>
-                    <div className="text-gray-400">Subscribers</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-white font-bold">{performer.rating}/5</div>
-                    <div className="text-gray-400">Rating</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Action Buttons */}
-              <div className="flex flex-col space-y-3">
-                <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all">
-                  Subscribe for ${performer.monthlyFee}/month
-                </button>
-                <button className="px-6 py-3 border border-pink-500 text-pink-400 rounded-lg font-semibold hover:bg-pink-500 hover:text-white transition-all">
-                  Send Message
-                </button>
-                <button className="px-6 py-3 border border-gray-600 text-gray-400 rounded-lg font-semibold hover:bg-gray-600 hover:text-white transition-all">
-                  Send Tip
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Content Tabs */}
-        <div className="max-w-4xl mx-auto px-4 mt-8">
-          <div className="bg-gray-900 rounded-lg p-6">
-            <div className="border-b border-gray-700 mb-6">
-              <nav className="flex space-x-8">
-                <button className="py-2 px-1 border-b-2 border-pink-500 text-pink-400 font-medium">
-                  Posts
-                </button>
-                <button className="py-2 px-1 border-b-2 border-transparent text-gray-400 hover:text-white">
-                  Photos
-                </button>
-                <button className="py-2 px-1 border-b-2 border-transparent text-gray-400 hover:text-white">
-                  Videos
-                </button>
-                <button className="py-2 px-1 border-b-2 border-transparent text-gray-400 hover:text-white">
-                  Live
-                </button>
-              </nav>
-            </div>
-            
-            {/* Sample Content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map(item => (
-                <div key={item} className="bg-gray-800 rounded-lg overflow-hidden">
-                  <div className="h-48 bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
-                    <svg className="w-12 h-12 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-white font-medium mb-2">Exclusive Content #{item}</h3>
-                    <p className="text-gray-400 text-sm mb-3">Premium content available for subscribers only.</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-pink-400 font-semibold">$9.99</span>
-                      <button className="px-3 py-1 bg-pink-600 text-white rounded text-sm hover:bg-pink-700 transition-all">
-                        Unlock
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+// More placeholder components
+export const ProfilePage = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="text-center text-white">
+      <h1 className="text-2xl font-bold mb-4">Profile Page</h1>
+      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
     </div>
-  );
-};
+  </div>
+);
 
 export const StorePage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
     <div className="text-center text-white">
       <h1 className="text-2xl font-bold mb-4">Store Page</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
@@ -1705,9 +1419,6 @@ export const StreamingPage = () => (
     <div className="text-center text-white">
       <h1 className="text-2xl font-bold mb-4">Streaming Page</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
@@ -1715,11 +1426,8 @@ export const StreamingPage = () => (
 export const MessagingPage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
     <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Messaging</h1>
+      <h1 className="text-2xl font-bold mb-4">Messages</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
@@ -1729,23 +1437,15 @@ export const SettingsPage = () => (
     <div className="text-center text-white">
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
-
-export { AdminDashboard };
 
 export const AdminLogin = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
     <div className="text-center text-white">
       <h1 className="text-2xl font-bold mb-4">Admin Login</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
@@ -1753,11 +1453,8 @@ export const AdminLogin = () => (
 export const PostDetailPage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
     <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Post Detail</h1>
+      <h1 className="text-2xl font-bold mb-4">Post Details</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
@@ -1767,185 +1464,57 @@ export const SubscriptionPage = () => (
     <div className="text-center text-white">
       <h1 className="text-2xl font-bold mb-4">Subscription</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
     </div>
   </div>
 );
 
-// Re-export payment and wallet components
-export { PaymentPage } from './payment-components';
-export { WalletPage } from './wallet-components';
-
-// Payment Success Page
-export const PaymentSuccessPage = () => {
-  const [sessionId, setSessionId] = useState('');
-  const [paymentDetails, setPaymentDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const session = urlParams.get('session_id');
-    
-    if (session) {
-      setSessionId(session);
-      checkPaymentStatus(session);
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const checkPaymentStatus = async (sessionId) => {
-    try {
-      const response = await fetch(`/api/payments/status/${sessionId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-        }
-      });
-      
-      const result = await response.json();
-      setPaymentDetails(result);
-    } catch (error) {
-      console.error('Error checking payment status:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center text-white">
-          <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg">Confirming your payment...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <Header />
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <div className="bg-green-600 bg-opacity-20 border border-green-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-8">
-          <svg className="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        
-        <h1 className="text-4xl font-bold mb-4">Payment Successful!</h1>
-        <p className="text-xl text-gray-400 mb-8">
-          Thank you for your purchase. Your payment has been processed successfully.
-        </p>
-        
-        {paymentDetails && (
-          <div className="bg-gray-800 rounded-lg p-6 mb-8">
-            <h3 className="text-lg font-semibold mb-4">Payment Details</h3>
-            <div className="space-y-2 text-left">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Transaction ID:</span>
-                <span>{paymentDetails.transactionId}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Amount:</span>
-                <span>${paymentDetails.amount}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Date:</span>
-                <span>{new Date(paymentDetails.date).toLocaleDateString()}</span>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        <div className="space-y-4">
-          <a
-            href="/member-dashboard"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
-          >
-            Go to Dashboard
-          </a>
-          <div>
-            <a href="/discover" className="text-pink-400 hover:text-pink-300">
-              Discover More Content
-            </a>
-          </div>
-        </div>
-      </div>
+export const PaymentPage = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="text-center text-white">
+      <h1 className="text-2xl font-bold mb-4">Payment</h1>
+      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
     </div>
-  );
-};
+  </div>
+);
 
-// Payment Cancelled Page
-export const PaymentCancelledPage = () => {
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <Header />
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <div className="bg-yellow-600 bg-opacity-20 border border-yellow-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-8">
-          <svg className="w-12 h-12 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-          </svg>
-        </div>
-        
-        <h1 className="text-4xl font-bold mb-4">Payment Cancelled</h1>
-        <p className="text-xl text-gray-400 mb-8">
-          Your payment was cancelled. No charges have been made to your account.
-        </p>
-        
-        <div className="space-y-4">
-          <a
-            href="/payment"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
-          >
-            Try Again
-          </a>
-          <div>
-            <a href="/discover" className="text-pink-400 hover:text-pink-300">
-              Continue Browsing
-            </a>
-          </div>
-        </div>
-      </div>
+export const WalletPage = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="text-center text-white">
+      <h1 className="text-2xl font-bold mb-4">Wallet</h1>
+      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
     </div>
-  );
-};
+  </div>
+);
 
 export const NotificationsPage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
     <div className="text-center text-white">
       <h1 className="text-2xl font-bold mb-4">Notifications</h1>
       <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
+    </div>
+  </div>
+);
+
+export const PaymentSuccessPage = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="text-center text-white">
+      <h1 className="text-2xl font-bold mb-4 text-green-400">Payment Successful!</h1>
+      <p className="text-gray-400 mb-6">Your payment has been processed successfully.</p>
+      <a href="/" className="text-pink-400 hover:text-pink-300">
+        Return to Home
       </a>
     </div>
   </div>
 );
 
-export const HelpSupportPage = () => (
-  <div className="min-h-screen bg-black text-white">
-    <Header />
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Help & Support</h1>
-      <div className="bg-gray-800 rounded-lg p-6">
-        <p className="text-gray-400 mb-4">Need help? We're here to assist you!</p>
-        <div className="space-y-4">
-          <div className="bg-gray-700 rounded-lg p-4">
-            <h3 className="font-semibold mb-2">📧 Email Support</h3>
-            <p className="text-gray-400">support@eyecandy.com</p>
-          </div>
-          <div className="bg-gray-700 rounded-lg p-4">
-            <h3 className="font-semibold mb-2">💬 Live Chat</h3>
-            <p className="text-gray-400">Available 24/7 for premium members</p>
-          </div>
-          <div className="bg-gray-700 rounded-lg p-4">
-            <h3 className="font-semibold mb-2">📚 FAQ</h3>
-            <p className="text-gray-400">Check our frequently asked questions</p>
-          </div>
-        </div>
-      </div>
+export const PaymentCancelledPage = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="text-center text-white">
+      <h1 className="text-2xl font-bold mb-4 text-red-400">Payment Cancelled</h1>
+      <p className="text-gray-400 mb-6">Your payment has been cancelled.</p>
+      <a href="/" className="text-pink-400 hover:text-pink-300">
+        Return to Home
+      </a>
     </div>
   </div>
 );

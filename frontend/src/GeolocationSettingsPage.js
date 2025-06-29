@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 import { Header } from './components';
 import { GeolocationSettings } from './GeolocationComponents';
 
