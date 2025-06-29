@@ -161,7 +161,7 @@ const TrialStatusComponent = () => {
           )}
 
           <button
-            onClick={() => setShowUpgradeModal(true)}
+            onClick={() => setShowExpirationModal(true)}
             className={`w-full py-2 px-4 rounded-lg font-medium text-sm transition-all ${
               isExpiring 
                 ? 'bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white'
