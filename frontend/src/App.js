@@ -18,7 +18,6 @@ import {
   DiscoverPage,
   MessagingPage,
   SettingsPage,
-  AdminDashboard,
   AdminLogin,
   PostDetailPage,
   SubscriptionPage,
