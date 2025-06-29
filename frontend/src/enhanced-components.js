@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUser } from './App';
 import { Header } from './components';
+import TrialStatusComponent from './TrialStatusComponent';
 
 // Enhanced Discover Page with Advanced Features
 export const DiscoverPage = () => {
