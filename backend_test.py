@@ -676,6 +676,1115 @@ class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
             self.assertFalse(session_data['active'])
             print(f"Expired teaser session test: {session_data['message']}")
 
+
+class TestAPIKeyManagementSystem(unittest.TestCase):
+    """Test suite for API Key Management System"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+        
+        # Clean up any existing test data
+        self.cleanup_test_data()
+        
+        # Test API key data
+        self.test_api_key = {
+            "key_type": APIKeyType.AGORA,
+            "service_name": "Agora Video Conferencing",
+            "api_key": "test_api_key_123",
+            "api_secret": "test_api_secret_456",
+            "app_id": "test_app_id_789",
+            "environment": "development",
+            "description": "Test API key for Agora video conferencing"
+        }
+
+    def tearDown(self):
+        """Clean up after tests"""
+        self.cleanup_test_data()
+
+    def cleanup_test_data(self):
+        """Clean up test data created during tests"""
+        # Get all API keys and delete test ones
+        response = requests.get(f"{API_URL}/admin/api-keys")
+        if response.status_code == 200:
+            api_keys = response.json()
+            for key in api_keys:
+                if "Test API key" in key.get("description", ""):
+                    requests.delete(f"{API_URL}/admin/api-keys/{key['id']}")
+
+    def test_01_create_api_key(self):
+        """Test creating a new API key"""
+        print("\n=== Testing API Key Creation ===")
+        
+        response = requests.post(f"{API_URL}/admin/api-keys", json=self.test_api_key)
+        self.assertEqual(response.status_code, 200)
+        
+        api_key = response.json()
+        self.assertEqual(api_key["key_type"], APIKeyType.AGORA)
+        self.assertEqual(api_key["service_name"], "Agora Video Conferencing")
+        self.assertEqual(api_key["api_key"], "test_api_key_123")
+        self.assertEqual(api_key["api_secret"], "test_api_secret_456")
+        self.assertEqual(api_key["app_id"], "test_app_id_789")
+        self.assertEqual(api_key["environment"], "development")
+        self.assertEqual(api_key["status"], APIKeyStatus.ACTIVE)
+        
+        print(f"Created API key: {api_key['id']} for {api_key['service_name']}")
+        
+        # Save key ID for later tests
+        self.api_key_id = api_key["id"]
+        
+        # Create another API key for testing get all
+        twilio_key = {
+            "key_type": APIKeyType.TWILIO_VIDEO,
+            "service_name": "Twilio Video Service",
+            "account_sid": "test_account_sid_123",
+            "auth_token": "test_auth_token_456",
+            "environment": "development",
+            "description": "Test API key for Twilio video service"
+        }
+        
+        response = requests.post(f"{API_URL}/admin/api-keys", json=twilio_key)
+        self.assertEqual(response.status_code, 200)
+        twilio_api_key = response.json()
+        self.twilio_key_id = twilio_api_key["id"]
+        
+        print(f"Created second API key: {twilio_api_key['id']} for {twilio_api_key['service_name']}")
+
+    def test_02_get_all_api_keys(self):
+        """Test retrieving all API keys"""
+        print("\n=== Testing Get All API Keys ===")
+        
+        # First create a test key
+        response = requests.post(f"{API_URL}/admin/api-keys", json=self.test_api_key)
+        self.assertEqual(response.status_code, 200)
+        
+        # Get all API keys
+        response = requests.get(f"{API_URL}/admin/api-keys")
+        self.assertEqual(response.status_code, 200)
+        
+        api_keys = response.json()
+        self.assertIsInstance(api_keys, list)
+        
+        # Find our test key
+        test_key = next((k for k in api_keys if k.get("api_key") == "test_api_key_123"), None)
+        self.assertIsNotNone(test_key)
+        
+        print(f"Retrieved {len(api_keys)} API keys")
+        for key in api_keys:
+            print(f"- {key['service_name']} ({key['key_type']})")
+
+    def test_03_get_api_key_by_type(self):
+        """Test retrieving an API key by type"""
+        print("\n=== Testing Get API Key by Type ===")
+        
+        # First create a test key
+        response = requests.post(f"{API_URL}/admin/api-keys", json=self.test_api_key)
+        self.assertEqual(response.status_code, 200)
+        
+        # Get API key by type
+        response = requests.get(f"{API_URL}/admin/api-keys/{APIKeyType.AGORA}")
+        self.assertEqual(response.status_code, 200)
+        
+        api_key = response.json()
+        self.assertEqual(api_key["key_type"], APIKeyType.AGORA)
+        self.assertEqual(api_key["service_name"], "Agora Video Conferencing")
+        
+        print(f"Retrieved API key by type: {api_key['service_name']} ({api_key['key_type']})")
+        
+        # Test with non-existent type
+        response = requests.get(f"{API_URL}/admin/api-keys/nonexistent_type")
+        self.assertEqual(response.status_code, 422)  # Validation error for invalid enum
+        
+        print("Correctly handled invalid key type")
+
+    def test_04_update_api_key(self):
+        """Test updating an API key"""
+        print("\n=== Testing Update API Key ===")
+        
+        # First create a test key
+        response = requests.post(f"{API_URL}/admin/api-keys", json=self.test_api_key)
+        self.assertEqual(response.status_code, 200)
+        api_key = response.json()
+        key_id = api_key["id"]
+        
+        # Update the API key
+        update_data = {
+            "service_name": "Updated Agora Service",
+            "api_key": "updated_api_key_123",
+            "status": APIKeyStatus.INACTIVE,
+            "description": "Updated test API key description"
+        }
+        
+        response = requests.put(f"{API_URL}/admin/api-keys/{key_id}", json=update_data)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+        
+        print(f"Updated API key: {data['message']}")
+        
+        # Verify the update
+        response = requests.get(f"{API_URL}/admin/api-keys/{APIKeyType.AGORA}")
+        self.assertEqual(response.status_code, 200)
+        updated_key = response.json()
+        
+        self.assertEqual(updated_key["service_name"], "Updated Agora Service")
+        self.assertEqual(updated_key["api_key"], "updated_api_key_123")
+        self.assertEqual(updated_key["status"], APIKeyStatus.INACTIVE)
+        self.assertEqual(updated_key["description"], "Updated test API key description")
+        
+        print(f"Verified updated API key: {updated_key['service_name']} ({updated_key['status']})")
+        
+        # Test with non-existent key ID
+        response = requests.put(f"{API_URL}/admin/api-keys/nonexistent_id", json=update_data)
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent key ID")
+
+    def test_05_delete_api_key(self):
+        """Test deleting an API key"""
+        print("\n=== Testing Delete API Key ===")
+        
+        # First create a test key
+        response = requests.post(f"{API_URL}/admin/api-keys", json=self.test_api_key)
+        self.assertEqual(response.status_code, 200)
+        api_key = response.json()
+        key_id = api_key["id"]
+        
+        # Delete the API key
+        response = requests.delete(f"{API_URL}/admin/api-keys/{key_id}")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+        
+        print(f"Deleted API key: {data['message']}")
+        
+        # Verify the deletion
+        response = requests.get(f"{API_URL}/admin/api-keys")
+        self.assertEqual(response.status_code, 200)
+        api_keys = response.json()
+        
+        deleted_key = next((k for k in api_keys if k["id"] == key_id), None)
+        self.assertIsNone(deleted_key)
+        
+        print("Verified API key deletion")
+        
+        # Test with non-existent key ID
+        response = requests.delete(f"{API_URL}/admin/api-keys/nonexistent_id")
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent key ID")
+
+
+class TestAppointmentBookingSystem(unittest.TestCase):
+    """Test suite for Appointment Booking System"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+        
+        # Clean up any existing test data
+        self.cleanup_test_data()
+        
+        # Test appointment data
+        self.test_appointment = {
+            "performer_id": TEST_PERFORMER_ID,
+            "member_id": TEST_MEMBER_ID,
+            "title": "Test Video Consultation",
+            "description": "Test video consultation appointment",
+            "appointment_type": AppointmentType.VIDEO_CALL,
+            "scheduled_start": (datetime.utcnow() + timedelta(days=1)).isoformat(),
+            "scheduled_end": (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
+            "timezone": "America/New_York",
+            "price": 50.00,
+            "currency": "USD"
+        }
+        
+        # Test availability data
+        self.test_availability = {
+            "performer_id": TEST_PERFORMER_ID,
+            "day_of_week": 1,  # Monday
+            "start_time": "09:00",
+            "end_time": "17:00",
+            "timezone": "America/New_York",
+            "available_types": [
+                AppointmentType.VIDEO_CALL,
+                AppointmentType.PHONE_CALL,
+                AppointmentType.CHAT_SESSION
+            ],
+            "pricing": {
+                AppointmentType.VIDEO_CALL: 50.00,
+                AppointmentType.PHONE_CALL: 30.00,
+                AppointmentType.CHAT_SESSION: 20.00
+            }
+        }
+
+    def tearDown(self):
+        """Clean up after tests"""
+        self.cleanup_test_data()
+
+    def cleanup_test_data(self):
+        """Clean up test data created during tests"""
+        # We can't easily delete appointments, but we can mark them as cancelled
+        # Get performer appointments
+        response = requests.get(f"{API_URL}/performer/{TEST_PERFORMER_ID}/appointments")
+        if response.status_code == 200:
+            appointments = response.json()
+            for appointment in appointments:
+                if "Test" in appointment.get("title", ""):
+                    requests.put(
+                        f"{API_URL}/appointments/{appointment['id']}/status",
+                        json=AppointmentStatus.CANCELLED
+                    )
+
+    def test_01_create_appointment(self):
+        """Test creating a new appointment"""
+        print("\n=== Testing Appointment Creation ===")
+        
+        response = requests.post(f"{API_URL}/appointments", json=self.test_appointment)
+        self.assertEqual(response.status_code, 200)
+        
+        appointment = response.json()
+        self.assertEqual(appointment["performer_id"], TEST_PERFORMER_ID)
+        self.assertEqual(appointment["member_id"], TEST_MEMBER_ID)
+        self.assertEqual(appointment["title"], "Test Video Consultation")
+        self.assertEqual(appointment["appointment_type"], AppointmentType.VIDEO_CALL)
+        self.assertEqual(appointment["status"], AppointmentStatus.SCHEDULED)
+        self.assertEqual(appointment["price"], 50.00)
+        
+        print(f"Created appointment: {appointment['id']} - {appointment['title']}")
+        
+        # Save appointment ID for later tests
+        self.appointment_id = appointment["id"]
+
+    def test_02_get_performer_appointments(self):
+        """Test retrieving performer appointments"""
+        print("\n=== Testing Get Performer Appointments ===")
+        
+        # First create a test appointment
+        response = requests.post(f"{API_URL}/appointments", json=self.test_appointment)
+        self.assertEqual(response.status_code, 200)
+        
+        # Get performer appointments
+        response = requests.get(f"{API_URL}/performer/{TEST_PERFORMER_ID}/appointments")
+        self.assertEqual(response.status_code, 200)
+        
+        appointments = response.json()
+        self.assertIsInstance(appointments, list)
+        
+        # Find our test appointment
+        test_appointment = next((a for a in appointments if a.get("title") == "Test Video Consultation"), None)
+        self.assertIsNotNone(test_appointment)
+        
+        print(f"Retrieved {len(appointments)} appointments for performer")
+        for appointment in appointments:
+            print(f"- {appointment['title']} ({appointment['status']})")
+
+    def test_03_get_member_appointments(self):
+        """Test retrieving member appointments"""
+        print("\n=== Testing Get Member Appointments ===")
+        
+        # First create a test appointment
+        response = requests.post(f"{API_URL}/appointments", json=self.test_appointment)
+        self.assertEqual(response.status_code, 200)
+        
+        # Get member appointments
+        response = requests.get(f"{API_URL}/member/{TEST_MEMBER_ID}/appointments")
+        self.assertEqual(response.status_code, 200)
+        
+        appointments = response.json()
+        self.assertIsInstance(appointments, list)
+        
+        # Find our test appointment
+        test_appointment = next((a for a in appointments if a.get("title") == "Test Video Consultation"), None)
+        self.assertIsNotNone(test_appointment)
+        
+        print(f"Retrieved {len(appointments)} appointments for member")
+        for appointment in appointments:
+            print(f"- {appointment['title']} ({appointment['status']})")
+
+    def test_04_update_appointment_status(self):
+        """Test updating appointment status"""
+        print("\n=== Testing Update Appointment Status ===")
+        
+        # First create a test appointment
+        response = requests.post(f"{API_URL}/appointments", json=self.test_appointment)
+        self.assertEqual(response.status_code, 200)
+        appointment = response.json()
+        appointment_id = appointment["id"]
+        
+        # Update appointment status to CONFIRMED
+        response = requests.put(
+            f"{API_URL}/appointments/{appointment_id}/status",
+            json=AppointmentStatus.CONFIRMED
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+        
+        print(f"Updated appointment status to CONFIRMED: {data['message']}")
+        
+        # Verify the update
+        response = requests.get(f"{API_URL}/performer/{TEST_PERFORMER_ID}/appointments")
+        self.assertEqual(response.status_code, 200)
+        appointments = response.json()
+        
+        updated_appointment = next((a for a in appointments if a["id"] == appointment_id), None)
+        self.assertIsNotNone(updated_appointment)
+        self.assertEqual(updated_appointment["status"], AppointmentStatus.CONFIRMED)
+        
+        print(f"Verified updated appointment status: {updated_appointment['status']}")
+        
+        # Update to IN_PROGRESS
+        response = requests.put(
+            f"{API_URL}/appointments/{appointment_id}/status",
+            json=AppointmentStatus.IN_PROGRESS
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        # Update to COMPLETED
+        response = requests.put(
+            f"{API_URL}/appointments/{appointment_id}/status",
+            json=AppointmentStatus.COMPLETED
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        print("Successfully updated appointment through status workflow")
+        
+        # Test with non-existent appointment ID
+        response = requests.put(
+            f"{API_URL}/appointments/nonexistent_id/status",
+            json=AppointmentStatus.CONFIRMED
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent appointment ID")
+
+    def test_05_create_availability(self):
+        """Test creating performer availability"""
+        print("\n=== Testing Create Performer Availability ===")
+        
+        response = requests.post(
+            f"{API_URL}/performer/{TEST_PERFORMER_ID}/availability",
+            json=self.test_availability
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        availability = response.json()
+        self.assertEqual(availability["performer_id"], TEST_PERFORMER_ID)
+        self.assertEqual(availability["day_of_week"], 1)
+        self.assertEqual(availability["start_time"], "09:00")
+        self.assertEqual(availability["end_time"], "17:00")
+        self.assertEqual(availability["timezone"], "America/New_York")
+        self.assertIn(AppointmentType.VIDEO_CALL, availability["available_types"])
+        self.assertIn(AppointmentType.PHONE_CALL, availability["available_types"])
+        self.assertIn(AppointmentType.CHAT_SESSION, availability["available_types"])
+        self.assertEqual(availability["pricing"][AppointmentType.VIDEO_CALL], 50.00)
+        
+        print(f"Created availability: {availability['id']} for day {availability['day_of_week']}")
+        
+        # Create another availability for a different day
+        weekend_availability = self.test_availability.copy()
+        weekend_availability["day_of_week"] = 6  # Saturday
+        weekend_availability["start_time"] = "10:00"
+        weekend_availability["end_time"] = "15:00"
+        
+        response = requests.post(
+            f"{API_URL}/performer/{TEST_PERFORMER_ID}/availability",
+            json=weekend_availability
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        print(f"Created second availability for weekend")
+
+    def test_06_get_performer_availability(self):
+        """Test retrieving performer availability"""
+        print("\n=== Testing Get Performer Availability ===")
+        
+        # First create test availabilities
+        response = requests.post(
+            f"{API_URL}/performer/{TEST_PERFORMER_ID}/availability",
+            json=self.test_availability
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        weekend_availability = self.test_availability.copy()
+        weekend_availability["day_of_week"] = 6  # Saturday
+        weekend_availability["start_time"] = "10:00"
+        weekend_availability["end_time"] = "15:00"
+        
+        response = requests.post(
+            f"{API_URL}/performer/{TEST_PERFORMER_ID}/availability",
+            json=weekend_availability
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        # Get performer availability
+        response = requests.get(f"{API_URL}/performer/{TEST_PERFORMER_ID}/availability")
+        self.assertEqual(response.status_code, 200)
+        
+        availabilities = response.json()
+        self.assertIsInstance(availabilities, list)
+        self.assertGreaterEqual(len(availabilities), 2)
+        
+        # Find our test availabilities
+        weekday_avail = next((a for a in availabilities if a["day_of_week"] == 1), None)
+        self.assertIsNotNone(weekday_avail)
+        
+        weekend_avail = next((a for a in availabilities if a["day_of_week"] == 6), None)
+        self.assertIsNotNone(weekend_avail)
+        
+        print(f"Retrieved {len(availabilities)} availability slots for performer")
+        for avail in availabilities:
+            day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            day_name = day_names[avail["day_of_week"]] if 0 <= avail["day_of_week"] < 7 else f"Day {avail['day_of_week']}"
+            print(f"- {day_name}: {avail['start_time']} to {avail['end_time']} ({avail['timezone']})")
+
+
+class TestChatSystem(unittest.TestCase):
+    """Test suite for Chat System APIs"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+        
+        # Test chat room data
+        self.test_chat_room = {
+            "chat_type": ChatType.DIRECT_MESSAGE,
+            "participants": [TEST_PERFORMER_ID, TEST_MEMBER_ID],
+            "creator_id": TEST_PERFORMER_ID,
+            "name": "Test Chat Room",
+            "description": "Test chat room for API testing"
+        }
+        
+        # Test message data
+        self.test_message = {
+            "sender_id": TEST_PERFORMER_ID,
+            "message_type": MessageType.TEXT,
+            "content": "Hello, this is a test message!"
+        }
+        
+        # Clean up is not needed as we can't easily delete chat rooms and messages
+        # We'll just create new ones for each test
+
+    def test_01_create_chat_room(self):
+        """Test creating a new chat room"""
+        print("\n=== Testing Chat Room Creation ===")
+        
+        response = requests.post(f"{API_URL}/chat/rooms", json=self.test_chat_room)
+        self.assertEqual(response.status_code, 200)
+        
+        chat_room = response.json()
+        self.assertEqual(chat_room["chat_type"], ChatType.DIRECT_MESSAGE)
+        self.assertEqual(chat_room["participants"], [TEST_PERFORMER_ID, TEST_MEMBER_ID])
+        self.assertEqual(chat_room["creator_id"], TEST_PERFORMER_ID)
+        self.assertEqual(chat_room["name"], "Test Chat Room")
+        self.assertEqual(chat_room["description"], "Test chat room for API testing")
+        self.assertTrue(chat_room["is_active"])
+        
+        print(f"Created chat room: {chat_room['id']} - {chat_room['name']}")
+        
+        # Save chat room ID for later tests
+        self.chat_room_id = chat_room["id"]
+        
+        # Create a group chat room
+        group_chat_room = {
+            "chat_type": ChatType.GROUP_CHAT,
+            "participants": [TEST_PERFORMER_ID, TEST_MEMBER_ID, "another-user-123"],
+            "creator_id": TEST_PERFORMER_ID,
+            "name": "Test Group Chat",
+            "description": "Test group chat for API testing"
+        }
+        
+        response = requests.post(f"{API_URL}/chat/rooms", json=group_chat_room)
+        self.assertEqual(response.status_code, 200)
+        
+        group_room = response.json()
+        self.assertEqual(group_room["chat_type"], ChatType.GROUP_CHAT)
+        self.assertEqual(len(group_room["participants"]), 3)
+        
+        print(f"Created group chat room: {group_room['id']} - {group_room['name']}")
+
+    def test_02_get_user_chat_rooms(self):
+        """Test retrieving user chat rooms"""
+        print("\n=== Testing Get User Chat Rooms ===")
+        
+        # First create a test chat room
+        response = requests.post(f"{API_URL}/chat/rooms", json=self.test_chat_room)
+        self.assertEqual(response.status_code, 200)
+        chat_room = response.json()
+        
+        # Get performer's chat rooms
+        response = requests.get(f"{API_URL}/chat/rooms/{TEST_PERFORMER_ID}")
+        self.assertEqual(response.status_code, 200)
+        
+        chat_rooms = response.json()
+        self.assertIsInstance(chat_rooms, list)
+        
+        # Find our test chat room
+        test_room = next((r for r in chat_rooms if r.get("name") == "Test Chat Room"), None)
+        self.assertIsNotNone(test_room)
+        
+        print(f"Retrieved {len(chat_rooms)} chat rooms for performer")
+        for room in chat_rooms:
+            print(f"- {room['name']} ({room['chat_type']})")
+        
+        # Get member's chat rooms
+        response = requests.get(f"{API_URL}/chat/rooms/{TEST_MEMBER_ID}")
+        self.assertEqual(response.status_code, 200)
+        
+        member_rooms = response.json()
+        self.assertIsInstance(member_rooms, list)
+        
+        # Find our test chat room
+        test_room = next((r for r in member_rooms if r.get("name") == "Test Chat Room"), None)
+        self.assertIsNotNone(test_room)
+        
+        print(f"Retrieved {len(member_rooms)} chat rooms for member")
+
+    def test_03_send_message(self):
+        """Test sending a message to a chat room"""
+        print("\n=== Testing Send Message ===")
+        
+        # First create a test chat room
+        response = requests.post(f"{API_URL}/chat/rooms", json=self.test_chat_room)
+        self.assertEqual(response.status_code, 200)
+        chat_room = response.json()
+        room_id = chat_room["id"]
+        
+        # Send a text message
+        response = requests.post(
+            f"{API_URL}/chat/rooms/{room_id}/messages",
+            json=self.test_message
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        message = response.json()
+        self.assertEqual(message["chat_room_id"], room_id)
+        self.assertEqual(message["sender_id"], TEST_PERFORMER_ID)
+        self.assertEqual(message["message_type"], MessageType.TEXT)
+        self.assertEqual(message["content"], "Hello, this is a test message!")
+        
+        print(f"Sent message: {message['id']} to chat room {room_id}")
+        
+        # Save message ID for later tests
+        self.message_id = message["id"]
+        
+        # Send an image message
+        image_message = {
+            "sender_id": TEST_MEMBER_ID,
+            "message_type": MessageType.IMAGE,
+            "content": "Check out this image!",
+            "media_url": "https://example.com/test-image.jpg",
+            "media_type": "image/jpeg",
+            "media_size": 1024000,
+            "thumbnail_url": "https://example.com/test-image-thumb.jpg"
+        }
+        
+        response = requests.post(
+            f"{API_URL}/chat/rooms/{room_id}/messages",
+            json=image_message
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        image_msg = response.json()
+        self.assertEqual(image_msg["message_type"], MessageType.IMAGE)
+        self.assertEqual(image_msg["media_url"], "https://example.com/test-image.jpg")
+        
+        print(f"Sent image message: {image_msg['id']}")
+
+    def test_04_get_chat_messages(self):
+        """Test retrieving messages from a chat room"""
+        print("\n=== Testing Get Chat Messages ===")
+        
+        # First create a test chat room and send messages
+        response = requests.post(f"{API_URL}/chat/rooms", json=self.test_chat_room)
+        self.assertEqual(response.status_code, 200)
+        chat_room = response.json()
+        room_id = chat_room["id"]
+        
+        # Send a few messages
+        for i in range(3):
+            message = self.test_message.copy()
+            message["content"] = f"Test message {i+1}"
+            response = requests.post(
+                f"{API_URL}/chat/rooms/{room_id}/messages",
+                json=message
+            )
+            self.assertEqual(response.status_code, 200)
+        
+        # Get chat messages
+        response = requests.get(f"{API_URL}/chat/rooms/{room_id}/messages")
+        self.assertEqual(response.status_code, 200)
+        
+        messages = response.json()
+        self.assertIsInstance(messages, list)
+        self.assertEqual(len(messages), 3)
+        
+        # Messages should be in chronological order (oldest first)
+        self.assertEqual(messages[0]["content"], "Test message 1")
+        self.assertEqual(messages[1]["content"], "Test message 2")
+        self.assertEqual(messages[2]["content"], "Test message 3")
+        
+        print(f"Retrieved {len(messages)} messages from chat room")
+        for msg in messages:
+            print(f"- {msg['sender_id']}: {msg['content']} ({msg['message_type']})")
+        
+        # Test pagination with limit
+        response = requests.get(f"{API_URL}/chat/rooms/{room_id}/messages?limit=2")
+        self.assertEqual(response.status_code, 200)
+        
+        limited_messages = response.json()
+        self.assertEqual(len(limited_messages), 2)
+        
+        print(f"Retrieved {len(limited_messages)} messages with limit=2")
+
+    def test_05_mark_message_read(self):
+        """Test marking a message as read"""
+        print("\n=== Testing Mark Message Read ===")
+        
+        # First create a test chat room and send a message
+        response = requests.post(f"{API_URL}/chat/rooms", json=self.test_chat_room)
+        self.assertEqual(response.status_code, 200)
+        chat_room = response.json()
+        room_id = chat_room["id"]
+        
+        response = requests.post(
+            f"{API_URL}/chat/rooms/{room_id}/messages",
+            json=self.test_message
+        )
+        self.assertEqual(response.status_code, 200)
+        message = response.json()
+        message_id = message["id"]
+        
+        # Mark message as read by member
+        response = requests.put(
+            f"{API_URL}/chat/messages/{message_id}/read",
+            json=TEST_MEMBER_ID
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+        
+        print(f"Marked message as read: {data['message']}")
+        
+        # Get the message to verify read status
+        response = requests.get(f"{API_URL}/chat/rooms/{room_id}/messages")
+        self.assertEqual(response.status_code, 200)
+        
+        messages = response.json()
+        updated_message = next((m for m in messages if m["id"] == message_id), None)
+        self.assertIsNotNone(updated_message)
+        self.assertIn(TEST_MEMBER_ID, updated_message["read_by"])
+        
+        print(f"Verified message read status: {updated_message['read_by']}")
+        
+        # Test with non-existent message ID
+        response = requests.put(
+            f"{API_URL}/chat/messages/nonexistent_id/read",
+            json=TEST_MEMBER_ID
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent message ID")
+
+
+class TestFileUploadSystem(unittest.TestCase):
+    """Test suite for File Upload/Download System"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+        
+        # Test file data
+        self.test_file = {
+            "uploader_id": TEST_PERFORMER_ID,
+            "original_filename": "test_image.jpg",
+            "file_type": FileType.IMAGE,
+            "mime_type": "image/jpeg",
+            "file_size": 1024000,
+            "storage_path": "https://example.com/storage/test_image.jpg",
+            "thumbnail_path": "https://example.com/storage/test_image_thumb.jpg",
+            "is_private": True,
+            "is_paid_content": False,
+            "metadata": {
+                "width": 1920,
+                "height": 1080,
+                "created_date": "2023-01-01"
+            },
+            "tags": ["test", "image", "api"]
+        }
+        
+        # Test paid file data
+        self.test_paid_file = {
+            "uploader_id": TEST_PERFORMER_ID,
+            "original_filename": "premium_video.mp4",
+            "file_type": FileType.VIDEO,
+            "mime_type": "video/mp4",
+            "file_size": 50000000,
+            "storage_path": "https://example.com/storage/premium_video.mp4",
+            "thumbnail_path": "https://example.com/storage/premium_video_thumb.jpg",
+            "is_private": True,
+            "is_paid_content": True,
+            "price": 9.99,
+            "currency": "USD",
+            "metadata": {
+                "duration": 600,
+                "resolution": "1080p",
+                "created_date": "2023-01-15"
+            },
+            "tags": ["premium", "video", "paid"]
+        }
+
+    def test_01_upload_file(self):
+        """Test uploading a file"""
+        print("\n=== Testing File Upload ===")
+        
+        response = requests.post(f"{API_URL}/files/upload", json=self.test_file)
+        self.assertEqual(response.status_code, 200)
+        
+        file = response.json()
+        self.assertEqual(file["uploader_id"], TEST_PERFORMER_ID)
+        self.assertEqual(file["original_filename"], "test_image.jpg")
+        self.assertEqual(file["file_type"], FileType.IMAGE)
+        self.assertEqual(file["mime_type"], "image/jpeg")
+        self.assertEqual(file["file_size"], 1024000)
+        self.assertEqual(file["storage_path"], "https://example.com/storage/test_image.jpg")
+        self.assertTrue(file["is_private"])
+        self.assertFalse(file["is_paid_content"])
+        
+        print(f"Uploaded file: {file['id']} - {file['original_filename']}")
+        
+        # Save file ID for later tests
+        self.file_id = file["id"]
+        
+        # Upload a paid file
+        response = requests.post(f"{API_URL}/files/upload", json=self.test_paid_file)
+        self.assertEqual(response.status_code, 200)
+        
+        paid_file = response.json()
+        self.assertEqual(paid_file["file_type"], FileType.VIDEO)
+        self.assertTrue(paid_file["is_paid_content"])
+        self.assertEqual(paid_file["price"], 9.99)
+        
+        print(f"Uploaded paid file: {paid_file['id']} - {paid_file['original_filename']}")
+        
+        # Save paid file ID for later tests
+        self.paid_file_id = paid_file["id"]
+
+    def test_02_get_file_info(self):
+        """Test retrieving file information"""
+        print("\n=== Testing Get File Info ===")
+        
+        # First upload a test file
+        response = requests.post(f"{API_URL}/files/upload", json=self.test_file)
+        self.assertEqual(response.status_code, 200)
+        file = response.json()
+        file_id = file["id"]
+        
+        # Get file info
+        response = requests.get(f"{API_URL}/files/{file_id}")
+        self.assertEqual(response.status_code, 200)
+        
+        file_info = response.json()
+        self.assertEqual(file_info["id"], file_id)
+        self.assertEqual(file_info["uploader_id"], TEST_PERFORMER_ID)
+        self.assertEqual(file_info["original_filename"], "test_image.jpg")
+        self.assertEqual(file_info["file_type"], FileType.IMAGE)
+        
+        print(f"Retrieved file info: {file_info['original_filename']} ({file_info['file_type']})")
+        
+        # Test with non-existent file ID
+        response = requests.get(f"{API_URL}/files/nonexistent_id")
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent file ID")
+
+    def test_03_download_file(self):
+        """Test downloading a file"""
+        print("\n=== Testing File Download ===")
+        
+        # First upload a test file
+        response = requests.post(f"{API_URL}/files/upload", json=self.test_file)
+        self.assertEqual(response.status_code, 200)
+        file = response.json()
+        file_id = file["id"]
+        
+        # Download file as uploader (should always work)
+        response = requests.get(f"{API_URL}/files/{file_id}/download?user_id={TEST_PERFORMER_ID}")
+        self.assertEqual(response.status_code, 200)
+        
+        download_info = response.json()
+        self.assertEqual(download_info["download_url"], "https://example.com/storage/test_image.jpg")
+        self.assertEqual(download_info["filename"], "test_image.jpg")
+        
+        print(f"Downloaded file as uploader: {download_info['filename']}")
+        
+        # Upload a paid file
+        response = requests.post(f"{API_URL}/files/upload", json=self.test_paid_file)
+        self.assertEqual(response.status_code, 200)
+        paid_file = response.json()
+        paid_file_id = paid_file["id"]
+        
+        # Try to download paid file as another user (should fail)
+        response = requests.get(f"{API_URL}/files/{paid_file_id}/download?user_id={TEST_MEMBER_ID}")
+        self.assertEqual(response.status_code, 403)
+        
+        print("Correctly denied access to paid file for non-paying user")
+        
+        # Test with non-existent file ID
+        response = requests.get(f"{API_URL}/files/nonexistent_id/download?user_id={TEST_PERFORMER_ID}")
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent file ID")
+
+
+class TestStoreAndProductsManagement(unittest.TestCase):
+    """Test suite for Store and Products Management"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+        
+        # Test product data
+        self.test_physical_product = {
+            "performer_id": TEST_PERFORMER_ID,
+            "name": "Test T-Shirt",
+            "description": "A high-quality test t-shirt with Eye Candy logo",
+            "product_type": ProductType.PHYSICAL,
+            "price": 29.99,
+            "currency": "USD",
+            "stock_quantity": 100,
+            "sku": "TS-001",
+            "images": ["https://example.com/tshirt1.jpg", "https://example.com/tshirt2.jpg"],
+            "requires_shipping": True,
+            "weight": 0.5,
+            "dimensions": {"length": 12, "width": 8, "height": 1},
+            "shipping_providers": [ShippingProvider.USPS, ShippingProvider.UPS]
+        }
+        
+        # Test digital product data
+        self.test_digital_product = {
+            "performer_id": TEST_PERFORMER_ID,
+            "name": "Premium Photo Collection",
+            "description": "Exclusive collection of 50 high-resolution photos",
+            "product_type": ProductType.DIGITAL,
+            "price": 19.99,
+            "currency": "USD",
+            "images": ["https://example.com/photos-preview.jpg"],
+            "files": ["https://example.com/storage/photo-collection.zip"],
+            "requires_shipping": False
+        }
+        
+        # Test order data
+        self.test_order = {
+            "customer_id": TEST_MEMBER_ID,
+            "performer_id": TEST_PERFORMER_ID,
+            "product_id": "",  # Will be set after creating a product
+            "quantity": 1,
+            "unit_price": 29.99,
+            "total_price": 29.99,
+            "currency": "USD",
+            "payment_status": "paid",
+            "transaction_id": "test-transaction-123",
+            "shipping_address": {
+                "name": "John Doe",
+                "street": "123 Main St",
+                "city": "New York",
+                "state": "NY",
+                "zip": "10001",
+                "country": "US",
+                "phone": "555-123-4567"
+            }
+        }
+
+    def test_01_create_product(self):
+        """Test creating a new product"""
+        print("\n=== Testing Product Creation ===")
+        
+        # Create a physical product
+        response = requests.post(f"{API_URL}/store/products", json=self.test_physical_product)
+        self.assertEqual(response.status_code, 200)
+        
+        product = response.json()
+        self.assertEqual(product["performer_id"], TEST_PERFORMER_ID)
+        self.assertEqual(product["name"], "Test T-Shirt")
+        self.assertEqual(product["product_type"], ProductType.PHYSICAL)
+        self.assertEqual(product["price"], 29.99)
+        self.assertEqual(product["stock_quantity"], 100)
+        self.assertTrue(product["requires_shipping"])
+        
+        print(f"Created physical product: {product['id']} - {product['name']}")
+        
+        # Save product ID for later tests
+        self.physical_product_id = product["id"]
+        
+        # Create a digital product
+        response = requests.post(f"{API_URL}/store/products", json=self.test_digital_product)
+        self.assertEqual(response.status_code, 200)
+        
+        digital_product = response.json()
+        self.assertEqual(digital_product["name"], "Premium Photo Collection")
+        self.assertEqual(digital_product["product_type"], ProductType.DIGITAL)
+        self.assertFalse(digital_product["requires_shipping"])
+        
+        print(f"Created digital product: {digital_product['id']} - {digital_product['name']}")
+        
+        # Save digital product ID for later tests
+        self.digital_product_id = digital_product["id"]
+
+    def test_02_get_performer_products(self):
+        """Test retrieving performer products"""
+        print("\n=== Testing Get Performer Products ===")
+        
+        # First create test products
+        response = requests.post(f"{API_URL}/store/products", json=self.test_physical_product)
+        self.assertEqual(response.status_code, 200)
+        
+        response = requests.post(f"{API_URL}/store/products", json=self.test_digital_product)
+        self.assertEqual(response.status_code, 200)
+        
+        # Get performer products
+        response = requests.get(f"{API_URL}/store/performer/{TEST_PERFORMER_ID}/products")
+        self.assertEqual(response.status_code, 200)
+        
+        products = response.json()
+        self.assertIsInstance(products, list)
+        self.assertGreaterEqual(len(products), 2)
+        
+        # Find our test products
+        physical_product = next((p for p in products if p.get("name") == "Test T-Shirt"), None)
+        self.assertIsNotNone(physical_product)
+        
+        digital_product = next((p for p in products if p.get("name") == "Premium Photo Collection"), None)
+        self.assertIsNotNone(digital_product)
+        
+        print(f"Retrieved {len(products)} products for performer")
+        for product in products:
+            print(f"- {product['name']} ({product['product_type']}) - ${product['price']} {product['currency']}")
+
+    def test_03_create_order(self):
+        """Test creating a new order"""
+        print("\n=== Testing Order Creation ===")
+        
+        # First create a test product
+        response = requests.post(f"{API_URL}/store/products", json=self.test_physical_product)
+        self.assertEqual(response.status_code, 200)
+        product = response.json()
+        
+        # Set the product ID in the order data
+        self.test_order["product_id"] = product["id"]
+        
+        # Create an order
+        response = requests.post(f"{API_URL}/store/orders", json=self.test_order)
+        self.assertEqual(response.status_code, 200)
+        
+        order = response.json()
+        self.assertEqual(order["customer_id"], TEST_MEMBER_ID)
+        self.assertEqual(order["performer_id"], TEST_PERFORMER_ID)
+        self.assertEqual(order["product_id"], product["id"])
+        self.assertEqual(order["quantity"], 1)
+        self.assertEqual(order["unit_price"], 29.99)
+        self.assertEqual(order["total_price"], 29.99)
+        self.assertEqual(order["payment_status"], "paid")
+        self.assertEqual(order["status"], "pending")
+        
+        print(f"Created order: {order['id']} for product {product['name']}")
+        
+        # Save order ID for later tests
+        self.order_id = order["id"]
+
+    def test_04_get_order(self):
+        """Test retrieving order details"""
+        print("\n=== Testing Get Order Details ===")
+        
+        # First create a test product and order
+        response = requests.post(f"{API_URL}/store/products", json=self.test_physical_product)
+        self.assertEqual(response.status_code, 200)
+        product = response.json()
+        
+        self.test_order["product_id"] = product["id"]
+        response = requests.post(f"{API_URL}/store/orders", json=self.test_order)
+        self.assertEqual(response.status_code, 200)
+        order = response.json()
+        order_id = order["id"]
+        
+        # Get order details
+        response = requests.get(f"{API_URL}/store/orders/{order_id}")
+        self.assertEqual(response.status_code, 200)
+        
+        order_details = response.json()
+        self.assertEqual(order_details["id"], order_id)
+        self.assertEqual(order_details["customer_id"], TEST_MEMBER_ID)
+        self.assertEqual(order_details["performer_id"], TEST_PERFORMER_ID)
+        self.assertEqual(order_details["product_id"], product["id"])
+        
+        print(f"Retrieved order details: {order_details['id']}")
+        print(f"- Customer: {order_details['customer_id']}")
+        print(f"- Product: {order_details['product_id']}")
+        print(f"- Status: {order_details['status']}")
+        print(f"- Payment: {order_details['payment_status']}")
+        
+        # Test with non-existent order ID
+        response = requests.get(f"{API_URL}/store/orders/nonexistent_id")
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent order ID")
+
+    def test_05_update_order_shipping(self):
+        """Test updating order shipping information"""
+        print("\n=== Testing Update Order Shipping ===")
+        
+        # First create a test product and order
+        response = requests.post(f"{API_URL}/store/products", json=self.test_physical_product)
+        self.assertEqual(response.status_code, 200)
+        product = response.json()
+        
+        self.test_order["product_id"] = product["id"]
+        response = requests.post(f"{API_URL}/store/orders", json=self.test_order)
+        self.assertEqual(response.status_code, 200)
+        order = response.json()
+        order_id = order["id"]
+        
+        # Update shipping information
+        shipping_update = {
+            "shipping_provider": ShippingProvider.USPS,
+            "tracking_number": "USPS1234567890",
+            "shipping_cost": 5.99,
+            "shipping_label_url": "https://example.com/shipping-labels/label123.pdf",
+            "status": "shipped",
+            "shipped_at": datetime.utcnow().isoformat()
+        }
+        
+        response = requests.put(f"{API_URL}/store/orders/{order_id}/shipping", json=shipping_update)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+        
+        print(f"Updated order shipping: {data['message']}")
+        
+        # Verify the update
+        response = requests.get(f"{API_URL}/store/orders/{order_id}")
+        self.assertEqual(response.status_code, 200)
+        
+        updated_order = response.json()
+        self.assertEqual(updated_order["shipping_provider"], ShippingProvider.USPS)
+        self.assertEqual(updated_order["tracking_number"], "USPS1234567890")
+        self.assertEqual(updated_order["shipping_cost"], 5.99)
+        self.assertEqual(updated_order["status"], "shipped")
+        self.assertIsNotNone(updated_order["shipped_at"])
+        
+        print(f"Verified updated shipping information:")
+        print(f"- Provider: {updated_order['shipping_provider']}")
+        print(f"- Tracking: {updated_order['tracking_number']}")
+        print(f"- Status: {updated_order['status']}")
+        
+        # Test with non-existent order ID
+        response = requests.put(f"{API_URL}/store/orders/nonexistent_id/shipping", json=shipping_update)
+        self.assertEqual(response.status_code, 404)
+        
+        print("Correctly handled non-existent order ID")
+
+
 def run_individual_test(test_name):
     """Run a single test by name"""
     suite = unittest.TestSuite()
