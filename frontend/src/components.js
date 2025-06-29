@@ -481,15 +481,15 @@ export const HomePage = () => {
         />
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl">
-            Eye Candy
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-indigo-600 bg-clip-text text-transparent drop-shadow-2xl">
+            The Experts
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-lg">
-            Premium Content. Exclusive Experiences. Waiting for you.
+            Professional Advisory. Expert Guidance. Available for you.
           </p>
           <p className="text-lg mb-8 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
-            Join thousands of creators and fans in the world's most exclusive content platform. 
-            Create, share, and monetize your content with our advanced features and secure payment system.
+            Connect with certified professionals across law, medicine, finance, and business. 
+            Get expert advice from qualified advisors you can trust.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
