@@ -755,14 +755,7 @@ test_plan:
     - "Real-time Chat System Interface"
     - "Appointment Booking System Interface"
     - "App Router Integration for New Features"
-  stuck_tasks: 
-    - "Location Selector Component"
-    - "Subscription Type Selector"
-    - "Teaser Settings Configuration"
-    - "User Blocking Management"
-    - "Profile Access Control Components"
-    - "Enhanced Performer Dashboard"
-    - "Geo-location Settings Page"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
