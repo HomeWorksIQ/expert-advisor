@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 // Location Selection Component
 export const LocationSelector = ({ onLocationSelect, selectedLocations = [], excludeMode = false }) => {
