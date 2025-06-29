@@ -78,26 +78,26 @@ const EnhancedSignUpPage = () => {
   };
 
   const getTrialDays = () => {
-    return formData.userType === 'performer' 
-      ? trialSettings.performer_trial_days 
-      : trialSettings.member_trial_days;
+    return formData.userType === 'expert' 
+      ? trialSettings.expert_trial_days 
+      : trialSettings.client_trial_days;
   };
 
   const getTrialBenefits = () => {
-    if (formData.userType === 'performer') {
+    if (formData.userType === 'expert') {
       return [
         'Premium Analytics & Insights',
         'Advanced Messaging Tools',
-        'Live Streaming Capabilities',
-        'Content Monetization',
+        'Video Consultation Tools',
+        'Service Monetization',
         'Priority Support',
         'Custom Branding'
       ];
     } else {
       return [
-        'Premium Content Access',
-        'HD Streaming Quality',
-        'Download Content',
+        'Premium Expert Access',
+        'HD Video Consultations',
+        'Document Sharing',
         'Advanced Search',
         'Priority Messaging',
         'Ad-Free Experience'
