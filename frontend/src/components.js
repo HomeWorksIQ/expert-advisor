@@ -493,16 +493,16 @@ export const HomePage = () => {
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
-              href="/signup"
-              className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-2xl"
+              href="/signup" 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              Start Your Journey
+              Start Consulting
             </a>
             <a 
-              href="/discover"
-              className="px-8 py-4 border-2 border-pink-500 text-pink-400 rounded-lg text-lg font-semibold hover:bg-pink-500 hover:text-white transition-all shadow-lg backdrop-blur-sm bg-black/20"
+              href="/discover" 
+              className="border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105"
             >
-              Explore Creators
+              Find Experts
             </a>
           </div>
         </div>
