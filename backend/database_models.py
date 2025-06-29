@@ -5,8 +5,8 @@ from enum import Enum
 
 # Enums for better type safety
 class UserType(str, Enum):
-    MEMBER = "member"
-    PERFORMER = "performer"
+    CLIENT = "client"
+    EXPERT = "expert"
     ADMIN = "admin"
 
 class TransactionStatus(str, Enum):
