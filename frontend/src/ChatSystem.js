@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 const ChatSystem = () => {
   const { user, API } = useUser();
