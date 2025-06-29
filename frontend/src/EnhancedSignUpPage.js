@@ -108,7 +108,7 @@ const EnhancedSignUpPage = () => {
   return (
     <div className="min-h-screen bg-black flex">
       {/* Left Side - Trial Offer */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-pink-900 via-purple-900 to-indigo-900 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-900 via-indigo-900 to-blue-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-black bg-opacity-30"></div>
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           
