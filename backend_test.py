@@ -1795,7 +1795,11 @@ def run_individual_test(test_name):
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
-        test_name = sys.argv[1]
-        run_individual_test(test_name)
+        if sys.argv[1] == '-v':
+            # Run all tests with verbose output
+            unittest.main(argv=['first-arg-is-ignored'], verbosity=2)
+        else:
+            test_name = sys.argv[1]
+            run_individual_test(test_name)
     else:
         unittest.main(argv=['first-arg-is-ignored'], exit=False)
