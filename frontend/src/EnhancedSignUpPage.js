@@ -121,7 +121,7 @@ const EnhancedSignUpPage = () => {
             
             <h1 className="text-5xl font-bold mb-4 leading-tight">
               Start Your
-              <span className="block bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                 {getTrialDays()}-Day FREE Trial
               </span>
             </h1>
