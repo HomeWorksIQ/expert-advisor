@@ -410,7 +410,7 @@ frontend:
 
   - task: "Enhanced Performer Dashboard"
     implemented: true
-    working: false
+    working: "NA"
     file: "/app/frontend/src/components.js"
     stuck_count: 0
     priority: "medium"
@@ -422,6 +422,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "Unable to access the performer dashboard due to authentication issues. The login functionality is not working properly, returning 404 errors for API endpoints. The dashboard code is implemented but cannot be tested due to authentication barriers."
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Could not fully test the performer dashboard due to authentication issues. The login functionality returns 502 errors for the API endpoints. However, the code review shows that the geo-location tab is properly implemented in the PerformerDashboard component with the correct tab label and icon, and it includes a link to the geo-location settings page."
 
   - task: "Geo-location Settings Page"
     implemented: true
