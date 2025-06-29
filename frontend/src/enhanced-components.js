@@ -297,8 +297,8 @@ export const DiscoverPage = () => {
         break;
     }
 
-    setFilteredPerformers(filtered);
-    setTotalPages(Math.ceil(filtered.length / performersPerPage));
+    setFilteredExperts(filtered);
+    setTotalPages(Math.ceil(filtered.length / expertsPerPage));
     setCurrentPage(1);
   };
 
