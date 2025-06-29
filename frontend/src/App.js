@@ -399,8 +399,17 @@ function App() {
             {/* Profile Access with Geo-Location Control */}
             {/* Duplicate route removed - already defined above */}
 
-            {/* Catch-all route - temporarily disabled for testing */}
-            {/* <Route path="*" element={<Navigate to="/" />} /> */}
+            {/* Catch-all route - modified to exclude /discover */}
+            <Route path="*" element={
+              (location) => {
+                // Don't redirect /discover to homepage
+                if (location.pathname === '/discover') {
+                  return <DiscoverPageNew />;
+                }
+                // Redirect all other non-existent routes to homepage
+                return <Navigate to="/" />;
+              }
+            } />
           </Routes>
         </BrowserRouter>
       </div>
