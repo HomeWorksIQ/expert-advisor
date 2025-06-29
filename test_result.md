@@ -213,15 +213,18 @@ frontend:
 
   - task: "Subscription Type Selector"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented subscription type selector with visual options for Free, Monthly, Pay Per Visit, and Teaser modes with descriptions and icons."
+        -working: false
+        -agent: "testing"
+        -comment: "The component is implemented in the code but not rendering on the page. The UI component is not visible when accessing the geo-location settings page directly."
 
   - task: "Teaser Settings Configuration"
     implemented: true
