@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { Calendar, Clock, Users, Camera, Mic, MicOff, VideoOff, Share, MessageSquare, Settings, Phone, PhoneOff } from 'lucide-react';
 import { useUser } from './UserContext';
 
 const VideoConferenceSystem = () => {
