@@ -169,15 +169,18 @@ backend:
 
   - task: "Store and Products Management API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented store and products management system with support for physical and digital products. Includes order management, shipping integration with multiple providers (USPS, UPS, FedEx), and inventory tracking."
+        -working: true
+        -agent: "testing"
+        -comment: "Store and Products Management API tested successfully. All endpoints work as expected. Can create products, retrieve performer products, create orders, retrieve order details, and update shipping information. The system properly handles different product types (physical/digital) and shipping providers."
 
   - task: "Mock Geo IP Detection Service"
     implemented: true
