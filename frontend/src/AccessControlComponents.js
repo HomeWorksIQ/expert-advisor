@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 
 // Teaser Countdown Component
 export const TeaserCountdown = ({ remainingSeconds, onExpired, message }) => {
