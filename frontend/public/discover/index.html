@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover - Eye Candy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #ec4899, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-black border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="flex flex-col">
+                            <span class="text-red-500 font-bold text-lg leading-none italic">Eye Candy</span>
+                            <span class="text-gray-400 text-xs italic">Unwrap Me</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="/discover" class="text-gray-300 hover:text-white transition-colors">
+                        Discover
+                    </a>
+                    <a href="/categories" class="text-gray-300 hover:text-white transition-colors">
+                        Categories
+                    </a>
+                    <a href="/live" class="text-gray-300 hover:text-white transition-colors">
+                        Live
+                    </a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex space-x-3">
+                        <a 
+                            href="/login"
+                            class="px-4 py-2 text-white hover:text-pink-400 transition-colors"
+                        >
+                            Login
+                        </a>
+                        <a 
+                            href="/signup"
+                            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
+                        >
+                            Sign Up
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-4 gradient-text">
+                Discover Amazing Creators
+            </h1>
+            <p class="text-gray-400 text-lg">
+                Find your favorite content creators and explore exclusive content
+            </p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="bg-gray-900 rounded-lg p-6 mb-8">
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <div class="relative">
+                    <input
+                        type="text"
+                        placeholder="Search by name, username, or bio..."
+                        class="w-full px-4 py-3 pl-12 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
+                    />
+                    <div class="absolute left-4 top-3.5">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <!-- Status Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                    <select
+                        class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                    >
+                        <option value="all">All</option>
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                    </select>
+                </div>
+
+                <!-- Gender Filter - WITH TRANS OPTION -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Gender</label>
+                    <select
+                        class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                    >
+                        <option value="all">All</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="trans">Trans</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Female Performers -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                <div class="relative">
+                    <img 
+                        src="https://images.unsplash.com/photo-1701286618296-b40443dc63a9" 
+                        alt="Isabella Rose"
+                        class="w-full h-48 object-cover"
+                    />
+                    
+                    <!-- Status Indicator -->
+                    <div class="absolute top-3 left-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-500 text-white">
+                            Online
+                        </span>
+                    </div>
+
+                    <!-- Gender Badge -->
+                    <div class="absolute top-3 right-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-pink-500 text-white">
+                            ♀️
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white truncate">
+                        Isabella Rose
+                    </h3>
+                    <p class="text-gray-400 text-sm mb-1">@isabella_rose</p>
+                    <p class="text-gray-300 text-sm mb-3 line-clamp-2 h-10">
+                        Welcome to my exclusive world ✨
+                    </p>
+                    
+                    <a 
+                        href="/profile/1"
+                        class="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all text-sm font-medium block text-center"
+                    >
+                        View Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Male Performer -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                <div class="relative">
+                    <img 
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" 
+                        alt="Alex Storm"
+                        class="w-full h-48 object-cover"
+                    />
+                    
+                    <!-- Status Indicator -->
+                    <div class="absolute top-3 left-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-gray-600 text-gray-300">
+                            Offline
+                        </span>
+                    </div>
+
+                    <!-- Gender Badge -->
+                    <div class="absolute top-3 right-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-blue-500 text-white">
+                            ♂️
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white truncate">
+                        Alex Storm
+                    </h3>
+                    <p class="text-gray-400 text-sm mb-1">@alex_storm</p>
+                    <p class="text-gray-300 text-sm mb-3 line-clamp-2 h-10">
+                        Fitness enthusiast and lifestyle content creator 💪
+                    </p>
+                    
+                    <a 
+                        href="/profile/7"
+                        class="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all text-sm font-medium block text-center"
+                    >
+                        View Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Trans Performer -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                <div class="relative">
+                    <img 
+                        src="https://images.unsplash.com/photo-1494790108755-2616c6c0c15b" 
+                        alt="Zara Moon"
+                        class="w-full h-48 object-cover"
+                    />
+                    
+                    <!-- Status Indicator -->
+                    <div class="absolute top-3 left-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-500 text-white">
+                            Online
+                        </span>
+                    </div>
+
+                    <!-- Gender Badge -->
+                    <div class="absolute top-3 right-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 text-white">
+                            🏳️‍⚧️
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white truncate">
+                        Zara Moon
+                    </h3>
+                    <p class="text-gray-400 text-sm mb-1">@zara_moon</p>
+                    <p class="text-gray-300 text-sm mb-3 line-clamp-2 h-10">
+                        Authentic self-expression and empowerment 🌈
+                    </p>
+                    
+                    <a 
+                        href="/profile/13"
+                        class="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all text-sm font-medium block text-center"
+                    >
+                        View Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Trans Performer - Phoenix Vale -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                <div class="relative">
+                    <img 
+                        src="https://images.unsplash.com/photo-1463453091185-61582044d556" 
+                        alt="Phoenix Vale"
+                        class="w-full h-48 object-cover"
+                    />
+                    
+                    <!-- Status Indicator -->
+                    <div class="absolute top-3 left-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-500 text-white">
+                            Online
+                        </span>
+                    </div>
+
+                    <!-- Gender Badge -->
+                    <div class="absolute top-3 right-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 text-white">
+                            🏳️‍⚧️
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white truncate">
+                        Phoenix Vale
+                    </h3>
+                    <p class="text-gray-400 text-sm mb-1">@phoenix_vale</p>
+                    <p class="text-gray-300 text-sm mb-3 line-clamp-2 h-10">
+                        Drag performer and entertainer ✨
+                    </p>
+                    
+                    <a 
+                        href="/profile/15"
+                        class="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all text-sm font-medium block text-center"
+                    >
+                        View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
