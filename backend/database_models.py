@@ -81,7 +81,18 @@ class User(BaseModel):
     coverImage: Optional[str] = Field(None, description="Cover image URL")
     bio: Optional[str] = Field(None, description="User biography", max_length=1000)
     location: Optional[Dict[str, str]] = Field(None, description="User location details")
-    gender: Optional[str] = Field(None, description="User gender")
+    
+    # Expert-specific fields
+    expertiseCategory: Optional[ExpertiseCategory] = Field(None, description="Primary expertise category")
+    expertiseLevel: Optional[ExpertiseLevel] = Field(None, description="Professional expertise level")
+    specializations: Optional[List[str]] = Field(None, description="Specialized areas within expertise")
+    credentials: Optional[List[str]] = Field(None, description="Professional credentials and certifications")
+    yearsOfExperience: Optional[int] = Field(None, description="Years of professional experience")
+    education: Optional[List[Dict[str, str]]] = Field(None, description="Educational background")
+    licenses: Optional[List[Dict[str, str]]] = Field(None, description="Professional licenses")
+    
+    # Replaced gender field (keeping for backward compatibility)
+    gender: Optional[str] = Field(None, description="User gender (deprecated - use expertiseCategory for experts)")
     age: Optional[int] = Field(None, description="User age", ge=18)
     dateOfBirth: Optional[datetime] = Field(None, description="User date of birth")
     
