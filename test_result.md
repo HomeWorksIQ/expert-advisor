@@ -601,9 +601,9 @@ frontend:
 
   - task: "UI/UX Testing - Discover Page"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/enhanced-components.js"
-    stuck_count: 1
+    stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
