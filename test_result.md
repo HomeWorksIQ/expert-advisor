@@ -124,15 +124,18 @@ backend:
 
   - task: "Appointment Booking System API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented comprehensive appointment booking system with CRUD operations for appointments and availability management. Supports multiple appointment types (video_call, phone_call, chat_session, custom_service, in_person), status management, and pricing."
+        -working: true
+        -agent: "testing"
+        -comment: "Appointment Booking System API tested successfully. All endpoints work as expected. Can create appointments, retrieve performer/member appointments, update appointment status, and manage availability schedules. The system properly handles different appointment types and validation."
 
   - task: "Real-time Chat System API"
     implemented: true
