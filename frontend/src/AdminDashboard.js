@@ -60,6 +60,44 @@ const AdminDashboard = () => {
     }
   }, [activeTab]);
 
+  const fetchTrialSettings = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/trial-settings`);
+      if (response.data.success) {
+        setTrialSettings(response.data.settings);
+      }
+    } catch (error) {
+      console.error('Failed to fetch trial settings:', error);
+    }
+  };
+
+  const fetchTrialStats = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/trials/stats`);
+      if (response.data.success) {
+        setTrialStats(response.data.statistics);
+      }
+    } catch (error) {
+      console.error('Failed to fetch trial stats:', error);
+    }
+  };
+
+  const updateTrialSettings = async (settings) => {
+    try {
+      setLoading(true);
+      const response = await axios.put(`${API_BASE_URL}/api/admin/trial-settings`, settings);
+      if (response.data.success) {
+        setTrialSettings(settings);
+        alert('Trial settings updated successfully!');
+      }
+    } catch (error) {
+      console.error('Failed to update trial settings:', error);
+      alert('Failed to update trial settings. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchApiKeys = async () => {
     try {
       setLoading(true);
