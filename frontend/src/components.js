@@ -1541,17 +1541,156 @@ export const PerformerDashboard = () => {
   );
 };
 
-export const ProfilePage = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Profile Page</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
+// Enhanced Profile Page with Mock Data
+export const ProfilePage = () => {
+  const { id } = useParams();
+  const { user } = useUser();
+  
+  // Mock performer data for demonstration
+  const performer = {
+    id: id,
+    firstName: "Isabella",
+    lastName: "Rose",
+    displayName: "Isabella Rose",
+    username: "@isabella_rose",
+    bio: "Welcome to my exclusive world ✨ Premium content creator sharing intimate moments and lifestyle content.",
+    profileImage: "https://images.unsplash.com/photo-1701286618296-b40443dc63a9",
+    coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
+    location: "Los Angeles, CA",
+    followers: 125000,
+    following: 45,
+    posts: 247,
+    subscribers: 12500,
+    rating: 4.9,
+    subscriptionType: "paid",
+    monthlyFee: 19.99,
+    isOnline: true,
+    lastSeen: new Date().toISOString()
+  };
+
+  return (
+    <div className="min-h-screen bg-black">
+      <Header />
+      
+      <div className="relative">
+        {/* Cover Image */}
+        <div 
+          className="h-64 md:h-96 bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${performer.coverImage})` }}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        </div>
+        
+        {/* Profile Info */}
+        <div className="max-w-4xl mx-auto px-4 -mt-20 relative z-10">
+          <div className="bg-gray-900 rounded-lg p-6 shadow-xl">
+            <div className="flex flex-col md:flex-row items-start md:items-end space-y-4 md:space-y-0 md:space-x-6">
+              {/* Profile Image */}
+              <img
+                src={performer.profileImage}
+                alt={performer.displayName}
+                className="w-32 h-32 rounded-full border-4 border-pink-500 object-cover"
+              />
+              
+              {/* Basic Info */}
+              <div className="flex-1">
+                <div className="flex items-center space-x-3 mb-2">
+                  <h1 className="text-3xl font-bold text-white">{performer.displayName}</h1>
+                  {performer.isOnline && (
+                    <span className="flex items-center text-green-400 text-sm">
+                      <span className="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
+                      Online
+                    </span>
+                  )}
+                </div>
+                <p className="text-pink-400 text-lg mb-2">{performer.username}</p>
+                <p className="text-gray-300 mb-4">{performer.bio}</p>
+                
+                {/* Stats */}
+                <div className="flex space-x-6 text-sm">
+                  <div className="text-center">
+                    <div className="text-white font-bold">{performer.followers.toLocaleString()}</div>
+                    <div className="text-gray-400">Followers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-white font-bold">{performer.posts}</div>
+                    <div className="text-gray-400">Posts</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-white font-bold">{performer.subscribers.toLocaleString()}</div>
+                    <div className="text-gray-400">Subscribers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-white font-bold">{performer.rating}/5</div>
+                    <div className="text-gray-400">Rating</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex flex-col space-y-3">
+                <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all">
+                  Subscribe for ${performer.monthlyFee}/month
+                </button>
+                <button className="px-6 py-3 border border-pink-500 text-pink-400 rounded-lg font-semibold hover:bg-pink-500 hover:text-white transition-all">
+                  Send Message
+                </button>
+                <button className="px-6 py-3 border border-gray-600 text-gray-400 rounded-lg font-semibold hover:bg-gray-600 hover:text-white transition-all">
+                  Send Tip
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Content Tabs */}
+        <div className="max-w-4xl mx-auto px-4 mt-8">
+          <div className="bg-gray-900 rounded-lg p-6">
+            <div className="border-b border-gray-700 mb-6">
+              <nav className="flex space-x-8">
+                <button className="py-2 px-1 border-b-2 border-pink-500 text-pink-400 font-medium">
+                  Posts
+                </button>
+                <button className="py-2 px-1 border-b-2 border-transparent text-gray-400 hover:text-white">
+                  Photos
+                </button>
+                <button className="py-2 px-1 border-b-2 border-transparent text-gray-400 hover:text-white">
+                  Videos
+                </button>
+                <button className="py-2 px-1 border-b-2 border-transparent text-gray-400 hover:text-white">
+                  Live
+                </button>
+              </nav>
+            </div>
+            
+            {/* Sample Content */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map(item => (
+                <div key={item} className="bg-gray-800 rounded-lg overflow-hidden">
+                  <div className="h-48 bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+                    <svg className="w-12 h-12 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-white font-medium mb-2">Exclusive Content #{item}</h3>
+                    <p className="text-gray-400 text-sm mb-3">Premium content available for subscribers only.</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-pink-400 font-semibold">$9.99</span>
+                      <button className="px-3 py-1 bg-pink-600 text-white rounded text-sm hover:bg-pink-700 transition-all">
+                        Unlock
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const StorePage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
