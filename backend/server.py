@@ -880,6 +880,138 @@ async def save_label_image(shipping_id: str, label_image_base64: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to save label image: {str(e)}")
 
+# Trial Management API Routes
+@api_router.post("/trials/create")
+async def create_trial(user_id: str, trial_type: str, trial_duration_days: int = 7):
+    """Create a new trial for a user"""
+    try:
+        trial = await trial_service.create_trial(user_id, trial_type, trial_duration_days)
+        return {
+            "success": True,
+            "trial": trial.dict(),
+            "message": f"7-day free trial activated for {trial_type}!"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to create trial: {str(e)}")
+
+@api_router.get("/trials/{user_id}")
+async def get_user_trial(user_id: str):
+    """Get user's current trial status"""
+    try:
+        trial = await trial_service.get_user_trial(user_id)
+        if trial:
+            return {
+                "success": True,
+                "trial": trial.dict()
+            }
+        else:
+            return {
+                "success": True,
+                "trial": None,
+                "message": "No active trial found"
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get trial: {str(e)}")
+
+@api_router.get("/trials/{user_id}/access")
+async def check_trial_access(user_id: str, feature: str = None):
+    """Check user's trial access to features"""
+    try:
+        access_info = await trial_service.check_trial_access(user_id, feature)
+        return {
+            "success": True,
+            "access": access_info
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to check access: {str(e)}")
+
+@api_router.post("/trials/{user_id}/convert")
+async def convert_trial_to_paid(user_id: str, subscription_type: str):
+    """Convert trial to paid subscription"""
+    try:
+        success = await trial_service.convert_trial_to_paid(user_id, subscription_type)
+        return {
+            "success": success,
+            "message": "Trial successfully converted to paid subscription!"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to convert trial: {str(e)}")
+
+@api_router.post("/trials/{user_id}/extend")
+async def extend_trial(user_id: str, additional_days: int):
+    """Extend a trial by additional days"""
+    try:
+        trial = await trial_service.extend_trial(user_id, additional_days)
+        return {
+            "success": True,
+            "trial": trial.dict(),
+            "message": f"Trial extended by {additional_days} days!"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to extend trial: {str(e)}")
+
+@api_router.post("/trials/{user_id}/expire")
+async def expire_trial(user_id: str):
+    """Manually expire a trial"""
+    try:
+        success = await trial_service.expire_trial(user_id)
+        return {
+            "success": success,
+            "message": "Trial expired successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to expire trial: {str(e)}")
+
+@api_router.get("/admin/trials/stats")
+async def get_trial_statistics(trial_type: str = None):
+    """Get trial statistics for admin"""
+    try:
+        stats = await trial_service.get_trial_statistics(trial_type)
+        return {
+            "success": True,
+            "statistics": stats
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get statistics: {str(e)}")
+
+@api_router.get("/admin/trials/expiring")
+async def get_expiring_trials(days_threshold: int = 1):
+    """Get trials expiring within specified days"""
+    try:
+        trials = await trial_service.get_expiring_trials(days_threshold)
+        return {
+            "success": True,
+            "expiring_trials": [trial.dict() for trial in trials],
+            "count": len(trials)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get expiring trials: {str(e)}")
+
+@api_router.post("/trials/{user_id}/reminder")
+async def send_trial_reminder(user_id: str, reminder_type: str):
+    """Send trial reminder notification"""
+    try:
+        success = await trial_service.send_trial_reminder(user_id, reminder_type)
+        return {
+            "success": success,
+            "message": "Reminder sent successfully" if success else "Failed to send reminder"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to send reminder: {str(e)}")
+
+@api_router.post("/admin/trials/cleanup")
+async def cleanup_expired_trials():
+    """Clean up expired trials"""
+    try:
+        count = await trial_service.cleanup_expired_trials()
+        return {
+            "success": True,
+            "cleaned_up": count,
+            "message": f"Cleaned up {count} expired trials"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to cleanup trials: {str(e)}")
+
 @api_router.get("/video/recordings/{recording_id}/download")
 async def download_recording(recording_id: str):
     """Download a recording file"""
