@@ -709,13 +709,24 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Location Detection API"
-    - "Location Preferences API"
-    - "Teaser Settings API"
-    - "User Blocking API"
-    - "Profile Access Control API"
-  stuck_tasks: []
-  test_all: true
+    - "API Key Management System"
+    - "Appointment Booking System API"
+    - "Real-time Chat System API"
+    - "File Upload/Download System API"
+    - "Store and Products Management API"
+    - "Enhanced Admin Dashboard with API Key Management"
+    - "Real-time Chat System Interface"
+    - "Appointment Booking System Interface"
+    - "App Router Integration for New Features"
+  stuck_tasks: 
+    - "Location Selector Component"
+    - "Subscription Type Selector"
+    - "Teaser Settings Configuration"
+    - "User Blocking Management"
+    - "Profile Access Control Components"
+    - "Enhanced Performer Dashboard"
+    - "Geo-location Settings Page"
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
