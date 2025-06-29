@@ -332,13 +332,13 @@ export const Header = ({ showSearch = true, className = "" }) => {
           {/* Navigation */}
           <nav className="hidden md:flex space-x-6">
             <a href="/discover" className="text-gray-300 hover:text-white transition-colors">
-              Discover
+              Find Experts
             </a>
             <a href="/categories" className="text-gray-300 hover:text-white transition-colors">
-              Categories
+              Specialties
             </a>
-            <a href="/live" className="text-gray-300 hover:text-white transition-colors">
-              Live
+            <a href="/consultations" className="text-gray-300 hover:text-white transition-colors">
+              Consultations
             </a>
           </nav>
 
