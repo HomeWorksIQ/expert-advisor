@@ -425,7 +425,7 @@ frontend:
 
   - task: "Geo-location Settings Page"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/GeolocationSettingsPage.js"
     stuck_count: 0
     priority: "high"
@@ -437,6 +437,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The page is accessible but the geo-location components are not rendering. The page structure is implemented but the actual components (Location Selector, Subscription Type Selector, Teaser Settings, User Blocking) are not visible on the page."
+        -working: true
+        -agent: "testing"
+        -comment: "After fixing the circular dependency by extracting the useUser context into a separate file (UserContext.js), the Geo-location Settings Page is now rendering properly. The test-geolocation page shows all components correctly: Location Selector, Subscription Type Selector, Teaser Settings, and User Blocking Management. The Save Settings button is also visible at the bottom of the page."
 
   - task: "App Router Integration"
     implemented: true
