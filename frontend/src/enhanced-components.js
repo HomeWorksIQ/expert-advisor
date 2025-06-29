@@ -319,10 +319,10 @@ export const DiscoverPage = () => {
     }, 800);
   };
 
-  const getCurrentPagePerformers = () => {
-    const startIndex = (currentPage - 1) * performersPerPage;
-    const endIndex = startIndex + performersPerPage;
-    return filteredPerformers.slice(startIndex, endIndex);
+  const getCurrentPageExperts = () => {
+    const startIndex = (currentPage - 1) * expertsPerPage;
+    const endIndex = startIndex + expertsPerPage;
+    return filteredExperts.slice(startIndex, endIndex);
   };
 
   return (
