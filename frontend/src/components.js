@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminDashboard from './AdminDashboard';
 import { useParams } from 'react-router-dom';
 import { useUser } from './App';
+import TrialStatusComponent from './TrialStatusComponent';
 
 // Utility functions for optimization
 const debounce = (func, delay) => {
