@@ -317,6 +317,8 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/verify-otp" element={<VerifyOTPPage />} />
             <Route path="/discover" element={<DiscoverPage />} />
+            <Route path="/search" element={<EnhancedPerformerSearch />} />
+            <Route path="/performer-search" element={<EnhancedPerformerSearch />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="/post/:id" element={<PostDetailPage />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
