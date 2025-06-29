@@ -22,7 +22,7 @@ class CalendarIntegrationService:
     def _get_cipher(self):
         """Initialize encryption cipher"""
         # Use a default key for development - should be from environment in production
-        key = base64.urlsafe_b64encode(b'default_calendar_key_32_chars_1234')
+        key = Fernet.generate_key()  # Generate a proper 32-byte key
         return Fernet(key)
     
     async def get_google_credentials(self) -> Optional[Dict[str, str]]:
