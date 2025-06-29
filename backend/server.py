@@ -42,6 +42,7 @@ from video_service import VideoConferencingService, VideoRecordingService
 from calendar_service import CalendarIntegrationService
 from shipping_service import ShippingLabelService
 from trial_service import TrialService
+from performer_search_service import PerformerSearchService
 
 
 ROOT_DIR = Path(__file__).parent
