@@ -160,6 +160,7 @@ const AdminDashboard = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'api-keys', label: 'API Keys', icon: '🔑' },
+    { id: 'trial-management', label: 'Trial Management', icon: '⏱️' },
     { id: 'users', label: 'Users', icon: '👥' },
     { id: 'content', label: 'Content', icon: '📱' },
     { id: 'payments', label: 'Payments', icon: '💳' },
