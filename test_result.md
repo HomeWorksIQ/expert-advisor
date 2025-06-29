@@ -102,7 +102,9 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Add Geo location for the models to select where they want to share their profile, also exclude where they want to share their profile. Create locations by country, state, city or even zip code. Include performer controls with enable switches for different subscription models (Free, monthly, per visit, teaser), teaser functionality with configurable time limits (15-300 seconds), and user blocking system for harassment/inappropriate behavior."
+user_problem_statement: "Add Geo location for the models to select where they want to share their profile, also exclude where they want to share their profile. Create locations by country, state, city or even zip code. Include performer controls with enable switches for different subscription models (Free, monthly, per visit, teaser), teaser functionality with configurable time limits (15-300 seconds), and user blocking system for harassment/inappropriate behavior.
+
+CONTINUATION TASK: Build another way from the performer to make appointments, text chat with members that have questions about anything pertaining to the specific field, go live with a video presentation like zoom with some of the same features, member upload and performer download features, either free or for a fee. Also connect the store feature where the performer can send items purchase through the store. Also need a label to print based on either usps or ups."
 
 backend:
   - task: "Mock Geo IP Detection Service"
