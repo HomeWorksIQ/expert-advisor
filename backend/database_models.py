@@ -188,15 +188,16 @@ class Subscription(BaseModel):
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
     canceledAt: Optional[datetime] = Field(None, description="Cancellation timestamp")
 
-# Content Models
+# Content Models (now includes consultations and professional resources)
 class Content(BaseModel):
     id: str = Field(..., description="Unique content identifier")
-    performerId: str = Field(..., description="Creator user ID")
+    expertId: str = Field(..., description="Expert user ID")
     
     # Content Details
     title: str = Field(..., description="Content title")
     description: str = Field(..., description="Content description")
     contentType: ContentType = Field(..., description="Type of content")
+    consultationType: Optional[ConsultationType] = Field(None, description="Type of consultation if applicable")
     
     # Media Information
     mediaUrl: str = Field(..., description="Primary media URL")
