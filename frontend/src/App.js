@@ -302,13 +302,12 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Public Routes */}
-            <Route path="/discover" element={<DiscoverPageNew />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={!user ? <EnhancedSignUpPage /> : <Navigate to="/dashboard" />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/verify-otp" element={<VerifyOTPPage />} />
-            <Route path="/discover" element={<DiscoverPageNew />} />
+            <Route path="/discover" element={<DiscoverPage />} />
             <Route path="/search" element={<EnhancedPerformerSearch />} />
             <Route path="/performer-search" element={<EnhancedPerformerSearch />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
