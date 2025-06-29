@@ -29,6 +29,7 @@ import {
 } from './components';
 import { DiscoverPage } from './enhanced-components';
 import DiscoverPageSimple from './DiscoverPage';
+import DiscoverPageNew from './DiscoverPageNew';
 import AdminDashboard from './AdminDashboard';
 import ChatSystem from './ChatSystem';
 import AppointmentSystem from './AppointmentSystem';
