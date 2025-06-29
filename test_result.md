@@ -580,9 +580,9 @@ frontend:
 
   - task: "UI/UX Testing - Discover Page"
     implemented: true
-    working: false
-    file: "/app/frontend/src/components.js"
-    stuck_count: 1
+    working: true
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
     priority: "medium"
     needs_retesting: false
     status_history:
@@ -595,6 +595,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The Discover page is not rendering properly. When navigating to /discover, the user is redirected to the homepage. The DiscoverPage component is imported from './enhanced-components.js' in components.js, but there might be an issue with how it's being exported or imported. The component itself has the necessary state variables (searchTerm, filters, filteredPerformers, currentPage, etc.) but is not being rendered."
+        -working: true
+        -agent: "testing"
+        -comment: "The Discover page is now working correctly after the import fix. The page loads properly and displays the 'Discover Amazing Creators' title. The search functionality works as expected - searching for 'Isabella' shows multiple creators including Isabella Rose, and searching for 'Sophia' correctly filters to show only Sophia Dreams. The filter options (status, subscription type, gender, age, sort) are all present and functional. Creator cards display properly with images, names, and details. The 'View Profile' buttons on creator cards work correctly and navigate to the appropriate profile page. No JavaScript errors were detected in the console."
 
   - task: "UI/UX Testing - Creator Cards"
     implemented: true
