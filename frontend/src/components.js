@@ -3,6 +3,7 @@ import AdminDashboard from './AdminDashboard';
 import { useParams } from 'react-router-dom';
 import { useUser } from './App';
 import TrialStatusComponent from './TrialStatusComponent';
+import TrialWelcomeModal from './TrialWelcomeModal';
 
 // Utility functions for optimization
 const debounce = (func, delay) => {
