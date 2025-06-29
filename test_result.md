@@ -625,6 +625,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "After extensive testing and multiple fix attempts, the Discover page is still not rendering properly. When navigating to /discover, the user is redirected to the homepage. We tried several approaches: 1) Created a standalone DiscoverPage component that doesn't rely on enhanced-components.js, 2) Commented out the catch-all route in App.js, 3) Tried clicking the Discover link in the header and the Explore Creators button. None of these approaches worked. The issue might be deeper than initially thought, possibly related to routing configuration, circular dependencies, or JavaScript errors in the component."
+        -working: false
+        -agent: "testing"
+        -comment: "The Discover page issue persists. When navigating to /discover, the user is redirected to the homepage. Git history shows multiple attempts to fix the issue by changing the import statement between 'import { DiscoverPage } from './enhanced-components';' and 'import DiscoverPage from './DiscoverPage';', as well as toggling the catch-all route. The mockPerformers data in enhanced-components.js has been optimized for performance, but the page still doesn't render. The DiscoverPage component in enhanced-components.js has the correct implementation of gender filtering including the 'Trans' option, but we cannot test it because the page is not accessible."
 
   - task: "UI/UX Testing - Creator Cards"
     implemented: true
