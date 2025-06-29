@@ -1030,6 +1030,90 @@ async def cleanup_expired_trials():
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to cleanup trials: {str(e)}")
 
+# Trial Settings Management
+@api_router.get("/admin/trial-settings")
+async def get_trial_settings():
+    """Get current trial settings"""
+    try:
+        settings = await db.trial_settings.find_one({"setting_type": "global"})
+        if not settings:
+            # Create default settings
+            default_settings = {
+                "setting_type": "global",
+                "performer_trial_days": 7,
+                "member_trial_days": 7,
+                "trial_enabled": True,
+                "auto_remind_days": [3, 1],
+                "trial_benefits_performer": [
+                    "premium_analytics",
+                    "advanced_messaging", 
+                    "live_streaming",
+                    "video_calls",
+                    "content_monetization",
+                    "priority_support"
+                ],
+                "trial_benefits_member": [
+                    "premium_content_access",
+                    "hd_streaming",
+                    "download_content",
+                    "advanced_search",
+                    "priority_messaging",
+                    "ad_free_experience"
+                ],
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            await db.trial_settings.insert_one(default_settings)
+            settings = default_settings
+        
+        return {
+            "success": True,
+            "settings": settings
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get trial settings: {str(e)}")
+
+@api_router.put("/admin/trial-settings")
+async def update_trial_settings(settings_data: dict):
+    """Update trial settings"""
+    try:
+        settings_data["updated_at"] = datetime.utcnow()
+        
+        result = await db.trial_settings.update_one(
+            {"setting_type": "global"},
+            {"$set": settings_data},
+            upsert=True
+        )
+        
+        return {
+            "success": True,
+            "message": "Trial settings updated successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update trial settings: {str(e)}")
+
+@api_router.get("/trial-settings/public")
+async def get_public_trial_settings():
+    """Get public trial settings for join page"""
+    try:
+        settings = await db.trial_settings.find_one({"setting_type": "global"})
+        if not settings:
+            return {
+                "success": True,
+                "trial_enabled": True,
+                "performer_trial_days": 7,
+                "member_trial_days": 7
+            }
+        
+        return {
+            "success": True,
+            "trial_enabled": settings.get("trial_enabled", True),
+            "performer_trial_days": settings.get("performer_trial_days", 7),
+            "member_trial_days": settings.get("member_trial_days", 7)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get public trial settings: {str(e)}")
+
 @api_router.get("/video/recordings/{recording_id}/download")
 async def download_recording(recording_id: str):
     """Download a recording file"""
