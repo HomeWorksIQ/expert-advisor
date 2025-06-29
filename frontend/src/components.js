@@ -519,11 +519,11 @@ export const HomePage = () => {
       <section className="py-20 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">
-            Why Choose <span className="text-pink-400">Eye Candy</span>?
+            Why Choose <span className="text-blue-400">The Experts</span>?
           </h2>
           <p className="text-xl text-gray-400 text-center mb-16 max-w-3xl mx-auto">
-            We provide the most advanced platform for content creators and fans to connect, 
-            share, and monetize exclusive content with industry-leading features.
+            We provide the most advanced platform for professionals and clients to connect, 
+            consult, and solve complex challenges with industry-leading expertise.
           </p>
           
           <div className="grid md:grid-cols-3 gap-8">
