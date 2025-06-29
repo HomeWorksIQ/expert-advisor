@@ -439,7 +439,7 @@ export const DiscoverPage = () => {
           {/* Filter Actions */}
           <div className="flex items-center justify-between mt-6">
             <div className="text-sm text-gray-400">
-              {filteredPerformers.length} creators found
+              {filteredExperts.length} experts found
             </div>
             <button
               onClick={refreshSuggestions}
