@@ -567,10 +567,10 @@ export const HomePage = () => {
       <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">
-            Featured <span className="text-pink-400">Creators</span>
+            Featured <span className="text-blue-400">Experts</span>
           </h2>
           <p className="text-xl text-gray-400 text-center mb-16">
-            Discover amazing creators and exclusive content
+            Discover certified professionals and trusted advisors
           </p>
           
           {isLoading ? (
