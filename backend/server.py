@@ -122,7 +122,235 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
-# Add your routes to the router instead of directly to app
+# Mock Geo-IP Detection Service
+async def mock_detect_location_from_ip(ip_address: str) -> Location:
+    """Mock implementation of IP geolocation - replace with real Google Geo IP API"""
+    # Mock data for different IP ranges
+    mock_locations = [
+        Location(
+            country="United States",
+            country_code="US", 
+            state="California",
+            state_code="CA",
+            city="Los Angeles",
+            zip_code="90210",
+            latitude=34.0522,
+            longitude=-118.2437
+        ),
+        Location(
+            country="United States",
+            country_code="US",
+            state="New York", 
+            state_code="NY",
+            city="New York",
+            zip_code="10001",
+            latitude=40.7128,
+            longitude=-74.0060
+        ),
+        Location(
+            country="Canada",
+            country_code="CA",
+            state="Ontario",
+            state_code="ON", 
+            city="Toronto",
+            zip_code="M5V 3A8",
+            latitude=43.6532,
+            longitude=-79.3832
+        ),
+        Location(
+            country="United Kingdom",
+            country_code="GB",
+            state="England",
+            state_code="ENG",
+            city="London",
+            zip_code="SW1A 1AA",
+            latitude=51.5074,
+            longitude=-0.1278
+        )
+    ]
+    
+    # Return random location based on IP hash for consistency
+    location_index = hash(ip_address) % len(mock_locations)
+    return mock_locations[location_index]
+
+# Access Control Service
+class AccessControlService:
+    def __init__(self):
+        pass
+    
+    async def get_user_location(self, request: Request) -> Location:
+        """Get user location from IP address"""
+        user_ip = request.client.host
+        # Handle localhost/development IPs
+        if user_ip in ["127.0.0.1", "::1", "localhost"]:
+            user_ip = "192.168.1.100"  # Mock IP for development
+        
+        return await mock_detect_location_from_ip(user_ip)
+    
+    async def check_location_access(self, performer_id: str, user_location: Location) -> tuple[bool, SubscriptionType, str]:
+        """Check if user's location is allowed to access performer's profile"""
+        # Get performer's location preferences
+        preferences = await db.location_preferences.find({"performer_id": performer_id}).to_list(1000)
+        
+        if not preferences:
+            # No preferences set - default to free access globally
+            return True, SubscriptionType.FREE, "Global access allowed"
+        
+        # Check each location preference
+        for pref in preferences:
+            pref_obj = LocationPreference(**pref)
+            location_match = False
+            
+            # Check location match based on preference type
+            if pref_obj.location_type == "country" and pref_obj.location_value.lower() == user_location.country_code.lower():
+                location_match = True
+            elif pref_obj.location_type == "state" and pref_obj.location_value.lower() == user_location.state_code.lower():
+                location_match = True
+            elif pref_obj.location_type == "city" and pref_obj.location_value.lower() == user_location.city.lower():
+                location_match = True
+            elif pref_obj.location_type == "zip_code" and pref_obj.location_value == user_location.zip_code:
+                location_match = True
+            
+            if location_match:
+                if pref_obj.is_allowed:
+                    return True, pref_obj.subscription_type, f"Access allowed for {pref_obj.location_type}: {pref_obj.location_value}"
+                else:
+                    return False, None, f"Access blocked for {pref_obj.location_type}: {pref_obj.location_value}"
+        
+        # No matching preferences found - default behavior
+        return False, None, "Location not in allowed regions"
+    
+    async def check_user_blocked(self, performer_id: str, user_id: Optional[str], user_ip: str) -> tuple[bool, str]:
+        """Check if user is blocked by the performer"""
+        # Check by user ID if available
+        if user_id:
+            blocked = await db.blocked_users.find_one({
+                "performer_id": performer_id,
+                "blocked_user_id": user_id
+            })
+            if blocked:
+                blocked_obj = BlockedUser(**blocked)
+                return True, f"User blocked: {blocked_obj.reason.value}"
+        
+        # Check by IP address
+        blocked = await db.blocked_users.find_one({
+            "performer_id": performer_id,
+            "blocked_user_ip": user_ip
+        })
+        if blocked:
+            blocked_obj = BlockedUser(**blocked)
+            return True, f"IP blocked: {blocked_obj.reason.value}"
+        
+        return False, ""
+    
+    async def get_or_create_teaser_session(self, performer_id: str, user_id: Optional[str], user_ip: str) -> Optional[TeaserSession]:
+        """Get existing teaser session or create new one"""
+        # Get teaser settings
+        teaser_settings = await db.teaser_settings.find_one({"performer_id": performer_id})
+        if not teaser_settings or not teaser_settings.get("enabled", False):
+            return None
+        
+        settings = TeaserSettings(**teaser_settings)
+        
+        # Check for existing active session
+        query = {"performer_id": performer_id, "user_ip": user_ip, "is_active": True}
+        if user_id:
+            query["user_id"] = user_id
+        
+        existing_session = await db.teaser_sessions.find_one(query)
+        if existing_session:
+            session = TeaserSession(**existing_session)
+            if session.expires_at > datetime.utcnow():
+                return session
+            else:
+                # Deactivate expired session
+                await db.teaser_sessions.update_one(
+                    {"id": session.id},
+                    {"$set": {"is_active": False}}
+                )
+        
+        # Create new teaser session
+        new_session = TeaserSession(
+            performer_id=performer_id,
+            user_id=user_id or "",
+            user_ip=user_ip,
+            expires_at=datetime.utcnow() + timedelta(seconds=settings.duration_seconds)
+        )
+        
+        await db.teaser_sessions.insert_one(new_session.dict())
+        return new_session
+    
+    async def check_profile_access(self, access_request: AccessRequest) -> AccessResponse:
+        """Main access control logic"""
+        performer_id = access_request.performer_id
+        user_id = access_request.user_id
+        user_ip = access_request.user_ip
+        location = access_request.location
+        
+        # 1. Check if user is blocked
+        is_blocked, block_reason = await self.check_user_blocked(performer_id, user_id, user_ip)
+        if is_blocked:
+            return AccessResponse(
+                access_level=AccessLevel.BLOCKED,
+                allowed=False,
+                reason=block_reason,
+                message="You are blocked from accessing this profile."
+            )
+        
+        # 2. Check location access
+        location_allowed, subscription_type, location_reason = await self.check_location_access(performer_id, location)
+        if not location_allowed:
+            return AccessResponse(
+                access_level=AccessLevel.BLOCKED,
+                allowed=False,
+                reason=location_reason,
+                message="This profile is not available in your location."
+            )
+        
+        # 3. Handle subscription types
+        if subscription_type == SubscriptionType.FREE:
+            return AccessResponse(
+                access_level=AccessLevel.FULL,
+                allowed=True,
+                reason="Free access granted",
+                message="Welcome! Enjoy full access to this profile."
+            )
+        
+        elif subscription_type == SubscriptionType.TEASER:
+            # Check/create teaser session
+            teaser_session = await self.get_or_create_teaser_session(performer_id, user_id, user_ip)
+            if teaser_session and teaser_session.expires_at > datetime.utcnow():
+                remaining_seconds = int((teaser_session.expires_at - datetime.utcnow()).total_seconds())
+                return AccessResponse(
+                    access_level=AccessLevel.TEASER,
+                    allowed=True,
+                    reason="Teaser access active",
+                    teaser_remaining_seconds=remaining_seconds,
+                    message=f"Preview mode - {remaining_seconds} seconds remaining"
+                )
+            else:
+                return AccessResponse(
+                    access_level=AccessLevel.BLOCKED,
+                    allowed=False,
+                    reason="Teaser expired",
+                    subscription_required=SubscriptionType.MONTHLY,
+                    message="Preview time expired! Subscribe to continue viewing this profile."
+                )
+        
+        else:  # MONTHLY or PER_VISIT
+            # TODO: Check if user has active subscription/payment
+            # For now, return subscription required
+            return AccessResponse(
+                access_level=AccessLevel.BLOCKED,
+                allowed=False,
+                reason="Subscription required",
+                subscription_required=subscription_type,
+                message=f"This profile requires a {subscription_type.value} subscription."
+            )
+
+access_control = AccessControlService()
+
+# API Routes
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
