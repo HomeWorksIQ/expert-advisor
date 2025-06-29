@@ -359,7 +359,7 @@ frontend:
 
   - task: "Teaser Settings Configuration"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
@@ -371,6 +371,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The component is implemented in the code but not rendering on the page. API endpoint for teaser settings is working (returns 200), but the UI component is not visible when accessing the geo-location settings page directly."
+        -working: true
+        -agent: "testing"
+        -comment: "After fixing the circular dependency by extracting the useUser context into a separate file (UserContext.js), the Teaser Settings component is now rendering properly when Teaser Mode is selected. The component shows the enable/disable checkbox, duration dropdown, expiry message field, and info box with the selected duration."
 
   - task: "User Blocking Management"
     implemented: true
