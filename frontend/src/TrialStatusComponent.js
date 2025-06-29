@@ -177,13 +177,20 @@ const TrialStatusComponent = () => {
         <div className="text-center">
           <div className="text-red-400 mb-2">Your trial has expired</div>
           <button
-            onClick={() => setShowUpgradeModal(true)}
+            onClick={() => setShowExpirationModal(true)}
             className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white py-2 px-4 rounded-lg font-medium text-sm"
           >
             Restore Access - Upgrade Now
           </button>
         </div>
       )}
+
+      {/* Trial Expiration Modal */}
+      <TrialExpirationModal
+        isOpen={showExpirationModal}
+        onClose={() => setShowExpirationModal(false)}
+        trialData={trialData}
+      />
 
       {/* Upgrade Modal */}
       {showUpgradeModal && (
