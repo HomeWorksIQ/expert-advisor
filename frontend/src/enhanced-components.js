@@ -5,18 +5,639 @@ import TrialStatusComponent from './TrialStatusComponent';
 
 // Enhanced Discover Page with Advanced Features
 export const DiscoverPage = () => {
+  const { user } = useUser();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    status: 'all',
+    subscriptionType: 'all',
+    sortBy: 'popularity',
+    gender: 'all',
+    ageRange: 'all'
+  });
+  const [performers, setPerformers] = useState([]);
+  const [filteredPerformers, setFilteredPerformers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const performersPerPage = 12;
+
+  // Complete diverse performer dataset
+  const mockPerformers = [
+    // FEMALE PERFORMERS (6 total)
+    {
+      id: 1, firstName: "Isabella", lastName: "Rose", displayName: "Isabella Rose", username: "@isabella_rose",
+      bio: "Welcome to my exclusive world ✨ Premium content creator sharing intimate moments and lifestyle content.",
+      profileImage: "https://images.unsplash.com/photo-1701286618296-b40443dc63a9", 
+      coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
+      gender: "female", age: 25, isOnline: true, followers: 125000, posts: 247, subscribers: 12500, rating: 4.9,
+      subscriptionType: "paid", monthlyFee: 19.99, isVerified: true, joinedDate: "2023-01-15", 
+      totalLikes: 450000, totalMedia: 890, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 54.99, discount: 8 }, { months: 6, price: 99.99, discount: 17 }, { months: 12, price: 179.99, discount: 25 }]
+    },
+    {
+      id: 2, firstName: "Sophia", lastName: "Dreams", displayName: "Sophia Dreams", username: "@sophia_dreams",
+      bio: "Your favorite girl next door 💕 Custom content available. Let's chat!",
+      profileImage: "https://images.unsplash.com/photo-1701286842710-5f37edc4b8b4", 
+      coverImage: "https://images.pexels.com/photos/2330137/pexels-photo-2330137.jpeg",
+      gender: "female", age: 23, isOnline: false, followers: 89000, posts: 189, subscribers: 8900, rating: 4.7,
+      subscriptionType: "paid", monthlyFee: 24.99, isVerified: true, joinedDate: "2023-03-22", 
+      totalLikes: 287000, totalMedia: 567, lastSeen: "2024-01-20T14:45:00Z",
+      bundles: [{ months: 3, price: 69.99, discount: 7 }, { months: 6, price: 129.99, discount: 13 }, { months: 12, price: 239.99, discount: 20 }]
+    },
+    {
+      id: 3, firstName: "Luna", lastName: "Nights", displayName: "Luna Nights", username: "@luna_nights",
+      bio: "Late night adventures and exclusive content 🌙 VIP experience guaranteed.",
+      profileImage: "https://images.pexels.com/photos/1983035/pexels-photo-1983035.jpeg", 
+      coverImage: "https://images.unsplash.com/photo-1717295248358-4b8f2c8989d6",
+      gender: "female", age: 28, isOnline: true, followers: 156000, posts: 312, subscribers: 15600, rating: 4.8,
+      subscriptionType: "paid", monthlyFee: 29.99, isVerified: true, joinedDate: "2022-11-08", 
+      totalLikes: 678000, totalMedia: 1240, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 79.99, discount: 11 }, { months: 6, price: 149.99, discount: 17 }, { months: 12, price: 269.99, discount: 25 }]
+    },
+    {
+      id: 4, firstName: "Maya", lastName: "Divine", displayName: "Maya Divine", username: "@maya_divine",
+      bio: "Spiritual content and meditation sessions. Find your inner peace with me ✨",
+      profileImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", 
+      coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
+      gender: "female", age: 26, isOnline: true, followers: 45000, posts: 98, subscribers: 3200, rating: 4.9,
+      subscriptionType: "paid", monthlyFee: 15.99, isVerified: false, joinedDate: "2023-09-03", 
+      totalLikes: 89000, totalMedia: 234, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 42.99, discount: 10 }, { months: 6, price: 79.99, discount: 17 }, { months: 12, price: 149.99, discount: 22 }]
+    },
+    {
+      id: 5, firstName: "Aria", lastName: "Star", displayName: "Aria Star", username: "@aria_star",
+      bio: "Pop culture enthusiast and gaming streamer 🎮 Join me for fun conversations and exclusive content!",
+      profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80", 
+      coverImage: "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5",
+      gender: "female", age: 22, isOnline: false, followers: 72000, posts: 156, subscribers: 6800, rating: 4.6,
+      subscriptionType: "paid", monthlyFee: 18.99, isVerified: true, joinedDate: "2023-05-14", 
+      totalLikes: 198000, totalMedia: 423, lastSeen: "2024-01-21T10:30:00Z",
+      bundles: [{ months: 3, price: 49.99, discount: 12 }, { months: 6, price: 89.99, discount: 21 }, { months: 12, price: 159.99, discount: 30 }]
+    },
+    {
+      id: 6, firstName: "Victoria", lastName: "Grace", displayName: "Victoria Grace", username: "@victoria_grace",
+      bio: "Fashion model and lifestyle creator 👗 Behind-the-scenes content from photoshoots and events.",
+      profileImage: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb", 
+      coverImage: "https://images.unsplash.com/photo-1509631179647-0177331693ae",
+      gender: "female", age: 29, isOnline: true, followers: 203000, posts: 387, subscribers: 18900, rating: 4.8,
+      subscriptionType: "paid", monthlyFee: 34.99, isVerified: true, joinedDate: "2022-08-20", 
+      totalLikes: 892000, totalMedia: 1156, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 94.99, discount: 9 }, { months: 6, price: 179.99, discount: 14 }, { months: 12, price: 329.99, discount: 22 }]
+    },
+
+    // MALE PERFORMERS (6 total)
+    {
+      id: 7, firstName: "Alex", lastName: "Storm", displayName: "Alex Storm", username: "@alex_storm",
+      bio: "Fitness enthusiast and lifestyle content creator. Join my journey to wellness! 💪",
+      profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", 
+      coverImage: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+      gender: "male", age: 30, isOnline: false, followers: 67000, posts: 145, subscribers: 5400, rating: 4.6,
+      subscriptionType: "free", monthlyFee: 0, isVerified: true, joinedDate: "2023-06-12", 
+      totalLikes: 123000, totalMedia: 345, lastSeen: "2024-01-19T18:30:00Z", bundles: []
+    },
+    {
+      id: 8, firstName: "Marcus", lastName: "King", displayName: "Marcus King", username: "@marcus_king",
+      bio: "Chef and culinary artist 👨‍🍳 Cooking tutorials, kitchen adventures, and exclusive recipes!",
+      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e", 
+      coverImage: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136",
+      gender: "male", age: 27, isOnline: true, followers: 91000, posts: 203, subscribers: 8700, rating: 4.7,
+      subscriptionType: "paid", monthlyFee: 22.99, isVerified: true, joinedDate: "2023-02-18", 
+      totalLikes: 267000, totalMedia: 578, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 62.99, discount: 8 }, { months: 6, price: 119.99, discount: 13 }, { months: 12, price: 219.99, discount: 20 }]
+    },
+    {
+      id: 9, firstName: "Dylan", lastName: "Phoenix", displayName: "Dylan Phoenix", username: "@dylan_phoenix",
+      bio: "Musician and songwriter 🎸 Original music, studio sessions, and intimate acoustic performances.",
+      profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e", 
+      coverImage: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
+      gender: "male", age: 24, isOnline: false, followers: 134000, posts: 167, subscribers: 12300, rating: 4.8,
+      subscriptionType: "paid", monthlyFee: 16.99, isVerified: true, joinedDate: "2023-04-07", 
+      totalLikes: 378000, totalMedia: 445, lastSeen: "2024-01-20T22:15:00Z",
+      bundles: [{ months: 3, price: 45.99, discount: 10 }, { months: 6, price: 84.99, discount: 17 }, { months: 12, price: 159.99, discount: 22 }]
+    },
+    {
+      id: 10, firstName: "Jake", lastName: "Rivers", displayName: "Jake Rivers", username: "@jake_rivers",
+      bio: "Adventure seeker and travel vlogger 🌍 Sharing my journeys and outdoor experiences worldwide!",
+      profileImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", 
+      coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+      gender: "male", age: 32, isOnline: true, followers: 187000, posts: 289, subscribers: 16800, rating: 4.9,
+      subscriptionType: "paid", monthlyFee: 28.99, isVerified: true, joinedDate: "2022-10-12", 
+      totalLikes: 567000, totalMedia: 823, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 79.99, discount: 8 }, { months: 6, price: 149.99, discount: 14 }, { months: 12, price: 279.99, discount: 20 }]
+    },
+    {
+      id: 11, firstName: "Ryan", lastName: "Blake", displayName: "Ryan Blake", username: "@ryan_blake",
+      bio: "Tech entrepreneur and lifestyle content 💻 Behind-the-scenes of startup life and tech reviews.",
+      profileImage: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7", 
+      coverImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
+      gender: "male", age: 28, isOnline: false, followers: 78000, posts: 134, subscribers: 7200, rating: 4.5,
+      subscriptionType: "paid", monthlyFee: 19.99, isVerified: false, joinedDate: "2023-07-30", 
+      totalLikes: 156000, totalMedia: 367, lastSeen: "2024-01-21T14:20:00Z",
+      bundles: [{ months: 3, price: 54.99, discount: 8 }, { months: 6, price: 99.99, discount: 17 }, { months: 12, price: 179.99, discount: 25 }]
+    },
+    {
+      id: 12, firstName: "Ethan", lastName: "Cross", displayName: "Ethan Cross", username: "@ethan_cross",
+      bio: "Personal trainer and wellness coach 🏋️ Workout routines, nutrition tips, and motivation!",
+      profileImage: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", 
+      coverImage: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48",
+      gender: "male", age: 26, isOnline: true, followers: 112000, posts: 223, subscribers: 9800, rating: 4.7,
+      subscriptionType: "paid", monthlyFee: 21.99, isVerified: true, joinedDate: "2023-01-28", 
+      totalLikes: 298000, totalMedia: 612, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 59.99, discount: 9 }, { months: 6, price: 109.99, discount: 17 }, { months: 12, price: 199.99, discount: 24 }]
+    },
+
+    // TRANS PERFORMERS (6 total)
+    {
+      id: 13, firstName: "Zara", lastName: "Moon", displayName: "Zara Moon", username: "@zara_moon",
+      bio: "Authentic self-expression and empowerment 🌈 Sharing my journey and creating safe spaces for everyone.",
+      profileImage: "https://images.unsplash.com/photo-1494790108755-2616c6c0c15b", 
+      coverImage: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b",
+      gender: "trans", age: 25, isOnline: true, followers: 143000, posts: 198, subscribers: 11900, rating: 4.9,
+      subscriptionType: "paid", monthlyFee: 26.99, isVerified: true, joinedDate: "2022-12-05", 
+      totalLikes: 423000, totalMedia: 567, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 72.99, discount: 10 }, { months: 6, price: 134.99, discount: 17 }, { months: 12, price: 249.99, discount: 23 }]
+    },
+    {
+      id: 14, firstName: "River", lastName: "Sky", displayName: "River Sky", username: "@river_sky",
+      bio: "Artist and creative soul 🎨 Exploring identity through art, fashion, and self-discovery.",
+      profileImage: "https://images.unsplash.com/photo-1509967419530-da38b4704bc6", 
+      coverImage: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0",
+      gender: "trans", age: 23, isOnline: false, followers: 87000, posts: 156, subscribers: 7800, rating: 4.8,
+      subscriptionType: "paid", monthlyFee: 20.99, isVerified: true, joinedDate: "2023-03-17", 
+      totalLikes: 234000, totalMedia: 445, lastSeen: "2024-01-20T16:45:00Z",
+      bundles: [{ months: 3, price: 56.99, discount: 9 }, { months: 6, price: 104.99, discount: 16 }, { months: 12, price: 189.99, discount: 24 }]
+    },
+    {
+      id: 15, firstName: "Phoenix", lastName: "Vale", displayName: "Phoenix Vale", username: "@phoenix_vale",
+      bio: "Drag performer and entertainer ✨ Glamour, performances, and behind-the-scenes magic!",
+      profileImage: "https://images.unsplash.com/photo-1463453091185-61582044d556", 
+      coverImage: "https://images.unsplash.com/photo-1471436968665-2dd5ad2f1e82",
+      gender: "trans", age: 27, isOnline: true, followers: 176000, posts: 267, subscribers: 14500, rating: 4.9,
+      subscriptionType: "paid", monthlyFee: 31.99, isVerified: true, joinedDate: "2022-09-14", 
+      totalLikes: 612000, totalMedia: 789, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 86.99, discount: 9 }, { months: 6, price: 159.99, discount: 17 }, { months: 12, price: 289.99, discount: 24 }]
+    },
+    {
+      id: 16, firstName: "Casey", lastName: "Nova", displayName: "Casey Nova", username: "@casey_nova",
+      bio: "Fashion influencer and style icon 👗 Breaking boundaries with fashion and self-expression.",
+      profileImage: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453", 
+      coverImage: "https://images.unsplash.com/photo-1445205170230-053b83016050",
+      gender: "trans", age: 30, isOnline: false, followers: 198000, posts: 342, subscribers: 17200, rating: 4.8,
+      subscriptionType: "paid", monthlyFee: 29.99, isVerified: true, joinedDate: "2022-11-22", 
+      totalLikes: 567000, totalMedia: 923, lastSeen: "2024-01-21T11:30:00Z",
+      bundles: [{ months: 3, price: 81.99, discount: 8 }, { months: 6, price: 149.99, discount: 17 }, { months: 12, price: 269.99, discount: 25 }]
+    },
+    {
+      id: 17, firstName: "Jamie", lastName: "Star", displayName: "Jamie Star", username: "@jamie_star",
+      bio: "Activist and content creator 🏳️‍⚧️ Advocating for trans rights while sharing life's beautiful moments.",
+      profileImage: "https://images.unsplash.com/photo-1491349174775-aaafddd81942", 
+      coverImage: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6",
+      gender: "trans", age: 24, isOnline: true, followers: 76000, posts: 134, subscribers: 6500, rating: 4.7,
+      subscriptionType: "paid", monthlyFee: 18.99, isVerified: false, joinedDate: "2023-05-08", 
+      totalLikes: 189000, totalMedia: 387, lastSeen: new Date().toISOString(),
+      bundles: [{ months: 3, price: 51.99, discount: 8 }, { months: 6, price: 94.99, discount: 17 }, { months: 12, price: 169.99, discount: 25 }]
+    },
+    {
+      id: 18, firstName: "Alex", lastName: "Dawn", displayName: "Alex Dawn", username: "@alex_dawn",
+      bio: "Photographer and visual storyteller 📸 Capturing authentic moments and celebrating diversity.",
+      profileImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", 
+      coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+      gender: "trans", age: 28, isOnline: false, followers: 129000, posts: 201, subscribers: 10200, rating: 4.8,
+      subscriptionType: "paid", monthlyFee: 24.99, isVerified: true, joinedDate: "2022-12-30", 
+      totalLikes: 345000, totalMedia: 634, lastSeen: "2024-01-20T20:15:00Z",
+      bundles: [{ months: 3, price: 67.99, discount: 9 }, { months: 6, price: 124.99, discount: 17 }, { months: 12, price: 224.99, discount: 25 }]
+    }
+  ];
+
+  // Debounce utility function
+  function debounce(func, delay) {
+    let debounceTimer;
+    return function(...args) {
+      const context = this;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+  }
+
+  // Filter and search logic
+  useEffect(() => {
+    setIsLoading(true);
+    // Simulate API loading
+    setTimeout(() => {
+      setPerformers(mockPerformers);
+      applyFilters(mockPerformers, searchTerm, filters);
+      setIsLoading(false);
+    }, 800);
+  }, []);
+
+  useEffect(() => {
+    applyFilters(performers, searchTerm, filters);
+  }, [searchTerm, filters, performers]);
+
+  const applyFilters = (allPerformers, search, currentFilters) => {
+    let filtered = [...allPerformers];
+
+    // Apply search filter
+    if (search.length > 0) {
+      filtered = filtered.filter(performer =>
+        performer.displayName.toLowerCase().includes(search.toLowerCase()) ||
+        performer.username.toLowerCase().includes(search.toLowerCase()) ||
+        performer.bio.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // Apply status filter
+    if (currentFilters.status !== 'all') {
+      filtered = filtered.filter(performer =>
+        currentFilters.status === 'online' ? performer.isOnline : !performer.isOnline
+      );
+    }
+
+    // Apply subscription type filter
+    if (currentFilters.subscriptionType !== 'all') {
+      filtered = filtered.filter(performer =>
+        currentFilters.subscriptionType === 'free' 
+          ? performer.subscriptionType === 'free' 
+          : performer.subscriptionType === 'paid'
+      );
+    }
+
+    // Apply gender filter
+    if (currentFilters.gender !== 'all') {
+      filtered = filtered.filter(performer => performer.gender === currentFilters.gender);
+    }
+
+    // Apply age range filter
+    if (currentFilters.ageRange !== 'all') {
+      filtered = filtered.filter(performer => {
+        const age = performer.age;
+        switch (currentFilters.ageRange) {
+          case '18-25': return age >= 18 && age <= 25;
+          case '26-35': return age >= 26 && age <= 35;
+          case '36+': return age >= 36;
+          default: return true;
+        }
+      });
+    }
+
+    // Apply sorting
+    switch (currentFilters.sortBy) {
+      case 'newest':
+        filtered.sort((a, b) => new Date(b.joinedDate) - new Date(a.joinedDate));
+        break;
+      case 'price_low':
+        filtered.sort((a, b) => a.monthlyFee - b.monthlyFee);
+        break;
+      case 'price_high':
+        filtered.sort((a, b) => b.monthlyFee - a.monthlyFee);
+        break;
+      case 'popularity':
+      default:
+        filtered.sort((a, b) => b.followers - a.followers);
+        break;
+    }
+
+    setFilteredPerformers(filtered);
+    setTotalPages(Math.ceil(filtered.length / performersPerPage));
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+  };
+
+  const refreshSuggestions = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const shuffled = [...mockPerformers].sort(() => 0.5 - Math.random());
+      setPerformers(shuffled);
+      applyFilters(shuffled, searchTerm, filters);
+      setIsLoading(false);
+    }, 800);
+  };
+
+  const getCurrentPagePerformers = () => {
+    const startIndex = (currentPage - 1) * performersPerPage;
+    const endIndex = startIndex + performersPerPage;
+    return filteredPerformers.slice(startIndex, endIndex);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
+      <Header />
+      
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent">
-          Discover Amazing Creators
-        </h1>
-        <p className="text-gray-400 text-lg">
-          Find your favorite content creators and explore exclusive content
-        </p>
-        <div className="mt-8">
-          <p className="text-white">Test page - Discover functionality coming soon!</p>
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent">
+            Discover Amazing Creators
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Find your favorite content creators and explore exclusive content from diverse performers
+          </p>
         </div>
+
+        {/* Search and Filters */}
+        <div className="bg-gray-900 rounded-lg p-6 mb-8">
+          {/* Search Bar */}
+          <div className="mb-6">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by name, username, or bio..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 pl-12 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500"
+              />
+              <div className="absolute left-4 top-3.5">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="grid md:grid-cols-5 gap-4">
+            {/* Status Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+              <select
+                value={filters.status}
+                onChange={(e) => handleFilterChange('status', e.target.value)}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              >
+                <option value="all">All</option>
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+              </select>
+            </div>
+
+            {/* Subscription Type Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Type</label>
+              <select
+                value={filters.subscriptionType}
+                onChange={(e) => handleFilterChange('subscriptionType', e.target.value)}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              >
+                <option value="all">All</option>
+                <option value="free">Free</option>
+                <option value="paid">Premium</option>
+              </select>
+            </div>
+
+            {/* Gender Filter - NOW WITH TRANS OPTION */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Gender</label>
+              <select
+                value={filters.gender}
+                onChange={(e) => handleFilterChange('gender', e.target.value)}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              >
+                <option value="all">All</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="trans">Trans</option>
+              </select>
+            </div>
+
+            {/* Age Range Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Age</label>
+              <select
+                value={filters.ageRange}
+                onChange={(e) => handleFilterChange('ageRange', e.target.value)}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              >
+                <option value="all">All Ages</option>
+                <option value="18-25">18-25</option>
+                <option value="26-35">26-35</option>
+                <option value="36+">36+</option>
+              </select>
+            </div>
+
+            {/* Sort Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Sort By</label>
+              <select
+                value={filters.sortBy}
+                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-pink-500"
+              >
+                <option value="popularity">Most Popular</option>
+                <option value="newest">Newest</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Filter Actions */}
+          <div className="flex items-center justify-between mt-6">
+            <div className="text-sm text-gray-400">
+              {filteredPerformers.length} creators found
+            </div>
+            <button
+              onClick={refreshSuggestions}
+              className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all flex items-center space-x-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Results Grid */}
+        {isLoading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-gray-800 rounded-lg overflow-hidden animate-pulse">
+                <div className="w-full h-48 bg-gray-700"></div>
+                <div className="p-4">
+                  <div className="h-4 bg-gray-700 rounded mb-2"></div>
+                  <div className="h-3 bg-gray-700 rounded w-3/4 mb-4"></div>
+                  <div className="h-8 bg-gray-700 rounded"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredPerformers.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold mb-2">No creators found</h3>
+            <p className="text-gray-400 mb-4">Try adjusting your search criteria or filters</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setFilters({
+                  status: 'all',
+                  subscriptionType: 'all',
+                  sortBy: 'popularity',
+                  gender: 'all',
+                  ageRange: 'all'
+                });
+              }}
+              className="px-6 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+            >
+              Clear All Filters
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {getCurrentPagePerformers().map(performer => (
+                <div key={performer.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300 group">
+                  <div className="relative">
+                    <img 
+                      src={performer.coverImage} 
+                      alt={performer.displayName}
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    
+                    {/* Status Indicator */}
+                    <div className="absolute top-3 left-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        performer.isOnline 
+                          ? 'bg-green-500 text-white' 
+                          : 'bg-gray-600 text-gray-300'
+                      }`}>
+                        {performer.isOnline ? 'Online' : 'Offline'}
+                      </span>
+                    </div>
+
+                    {/* Verification Badge */}
+                    {performer.isVerified && (
+                      <div className="absolute top-3 right-3">
+                        <div className="bg-blue-500 rounded-full p-1">
+                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Profile Image */}
+                    <div className="absolute bottom-3 left-3">
+                      <img 
+                        src={performer.profileImage} 
+                        alt={performer.displayName}
+                        className="w-12 h-12 rounded-full border-3 border-white object-cover"
+                      />
+                    </div>
+
+                    {/* Subscription Type Badge */}
+                    <div className="absolute bottom-3 right-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        performer.subscriptionType === 'free'
+                          ? 'bg-green-500 text-white'
+                          : 'bg-purple-500 text-white'
+                      }`}>
+                        {performer.subscriptionType === 'free' ? 'Free' : 'Premium'}
+                      </span>
+                    </div>
+
+                    {/* Gender Badge */}
+                    <div className="absolute top-3 left-1/2 transform -translate-x-1/2">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        performer.gender === 'female' ? 'bg-pink-500 text-white' :
+                        performer.gender === 'male' ? 'bg-blue-500 text-white' :
+                        'bg-rainbow bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 text-white'
+                      }`}>
+                        {performer.gender === 'female' ? '♀️' : performer.gender === 'male' ? '♂️' : '🏳️‍⚧️'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-lg font-semibold text-white truncate">
+                        {performer.displayName}
+                      </h3>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-yellow-400">★</span>
+                        <span className="text-sm text-gray-400">{performer.rating}</span>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-400 text-sm mb-1">{performer.username}</p>
+                    <p className="text-gray-300 text-sm mb-3 line-clamp-2 h-10">
+                      {performer.bio}
+                    </p>
+                    
+                    {/* Stats */}
+                    <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
+                      <span>{(performer.followers / 1000).toFixed(0)}K followers</span>
+                      <span>{performer.posts} posts</span>
+                      <span>{(performer.totalLikes / 1000).toFixed(0)}K likes</span>
+                    </div>
+                    
+                    {/* Price and Action */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        {performer.subscriptionType === 'paid' ? (
+                          <span className="text-lg font-semibold text-pink-400">
+                            ${performer.monthlyFee}/month
+                          </span>
+                        ) : (
+                          <span className="text-lg font-semibold text-green-400">
+                            Free
+                          </span>
+                        )}
+                      </div>
+                      <a 
+                        href={`/profile/${performer.id}`}
+                        className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all text-sm font-medium"
+                      >
+                        View Profile
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center space-x-2 mt-8">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-4 py-2 rounded-lg ${
+                      currentPage === i + 1
+                        ? 'bg-pink-500 text-white'
+                        : 'bg-gray-800 text-white hover:bg-gray-700'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
