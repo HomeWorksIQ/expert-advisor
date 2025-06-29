@@ -9,12 +9,12 @@ const EnhancedSignUpPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    userType: 'member'
+    userType: 'client'
   });
   const [trialSettings, setTrialSettings] = useState({
     trial_enabled: true,
-    performer_trial_days: 7,
-    member_trial_days: 7
+    expert_trial_days: 7,
+    client_trial_days: 7
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
