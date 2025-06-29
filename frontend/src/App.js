@@ -32,6 +32,7 @@ import ChatSystem from './ChatSystem';
 import AppointmentSystem from './AppointmentSystem';
 import VideoConferenceSystem from './VideoConferenceSystem';
 import EnhancedSignUpPage from './EnhancedSignUpPage';
+import EnhancedPerformerSearch from './EnhancedPerformerSearch';
 import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
