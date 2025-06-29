@@ -158,7 +158,8 @@ class Transaction(BaseModel):
 class Subscription(BaseModel):
     id: str = Field(..., description="Unique subscription identifier")
     subscriberId: str = Field(..., description="User ID of the subscriber")
-    performerId: str = Field(..., description="User ID of the performer")
+    clientId: str = Field(..., description="User ID of the client")
+    expertId: str = Field(..., description="User ID of the expert")
     packageId: str = Field(..., description="Subscription package ID")
     
     # Subscription Details
