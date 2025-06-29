@@ -605,6 +605,12 @@ api_key_service = APIKeyService()
 video_service = VideoConferencingService(api_key_service)
 recording_service = VideoRecordingService(db)
 
+# Initialize calendar service
+calendar_service = CalendarIntegrationService(api_key_service, db)
+
+# Initialize shipping service
+shipping_service = ShippingLabelService(api_key_service, db)
+
 # Video Conferencing API Routes
 @api_router.post("/video/agora/token")
 async def generate_agora_token(channel: str, uid: int = 0, role: int = 1):
