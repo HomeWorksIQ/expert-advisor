@@ -20,6 +20,14 @@ def test_teaser_session():
     """Test teaser session functionality"""
     print("\n=== Testing Teaser Session API ===")
     
+    # 0. Clean up existing preferences
+    response = requests.get(f"{API_URL}/performer/{TEST_PERFORMER_ID}/location-preferences")
+    if response.status_code == 200:
+        preferences = response.json()
+        for pref in preferences:
+            requests.delete(f"{API_URL}/performer/{TEST_PERFORMER_ID}/location-preferences/{pref['id']}")
+    print("Cleaned up existing preferences")
+    
     # 1. Set up teaser settings with short duration for testing
     teaser_settings = {
         "performer_id": TEST_PERFORMER_ID,
@@ -30,7 +38,7 @@ def test_teaser_session():
     response = requests.post(f"{API_URL}/performer/{TEST_PERFORMER_ID}/teaser-settings", json=teaser_settings)
     print(f"Updated teaser settings: {response.status_code}")
     
-    # 2. Set up location preference for NY with TEASER access
+    # 2. Set up location preference for NY with TEASER access (only this preference)
     ny_preference = {
         "performer_id": TEST_PERFORMER_ID,
         "location_type": "state",
