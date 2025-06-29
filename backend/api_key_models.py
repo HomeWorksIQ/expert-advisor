@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 import uuid
 
-
+# Legacy enums for backward compatibility
 class SexualPreference(str, Enum):
     STRAIGHT = "straight"
     BISEXUAL = "bisexual"
@@ -12,7 +12,6 @@ class SexualPreference(str, Enum):
     LESBIAN = "lesbian"
     PANSEXUAL = "pansexual"
     OTHER = "other"
-
 
 class Gender(str, Enum):
     MALE = "male"
@@ -22,6 +21,24 @@ class Gender(str, Enum):
     NON_BINARY = "non_binary"
     OTHER = "other"
 
+# Professional enums for expert platform
+class ExpertiseCategory(str, Enum):
+    LEGAL = "legal"
+    ACCOUNTING = "accounting"
+    MEDICAL = "medical"
+    FINANCIAL = "financial"
+    BUSINESS = "business"
+    TECHNOLOGY = "technology"
+    EDUCATION = "education"
+    MARKETING = "marketing"
+    REAL_ESTATE = "real_estate"
+    INSURANCE = "insurance"
+
+class ExpertiseLevel(str, Enum):
+    ENTRY = "entry"
+    INTERMEDIATE = "intermediate"
+    EXPERIENCED = "experienced"
+    EXPERT = "expert"
 
 class Ethnicity(str, Enum):
     WHITE = "white"
