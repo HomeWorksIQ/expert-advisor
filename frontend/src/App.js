@@ -302,6 +302,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Public Routes */}
+            <Route path="/discover" element={<DiscoverPageNew />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={!user ? <EnhancedSignUpPage /> : <Navigate to="/dashboard" />} />
