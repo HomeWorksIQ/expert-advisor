@@ -393,6 +393,178 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const renderTrialManagement = () => (
+    <div className="space-y-6">
+      {/* Trial Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Total Trials</p>
+              <p className="text-2xl font-bold text-white">{trialStats?.total_trials || 0}</p>
+            </div>
+            <div className="text-3xl">🆓</div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Active Trials</p>
+              <p className="text-2xl font-bold text-white">
+                {trialStats?.status_breakdown?.find(s => s._id === 'active')?.count || 0}
+              </p>
+            </div>
+            <div className="text-3xl">✨</div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Conversions</p>
+              <p className="text-2xl font-bold text-white">{trialStats?.converted_trials || 0}</p>
+            </div>
+            <div className="text-3xl">💰</div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Conversion Rate</p>
+              <p className="text-2xl font-bold text-white">{trialStats?.conversion_rate || 0}%</p>
+            </div>
+            <div className="text-3xl">📈</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Trial Settings */}
+      <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <h3 className="text-xl font-semibold text-white mb-6">Trial Period Settings</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Performer Trial Settings */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-medium text-pink-400">Performer Trial</h4>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Trial Duration (Days)</label>
+              <input
+                type="number"
+                min="1"
+                max="30"
+                value={trialSettings.performer_trial_days}
+                onChange={(e) => setTrialSettings({
+                  ...trialSettings,
+                  performer_trial_days: parseInt(e.target.value)
+                })}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <h5 className="text-sm font-medium text-gray-300 mb-2">Performer Benefits</h5>
+              <div className="text-xs text-gray-400 space-y-1">
+                <div>✓ Premium Analytics & Insights</div>
+                <div>✓ Advanced Messaging Tools</div>
+                <div>✓ Live Streaming Capabilities</div>
+                <div>✓ Video Call Features</div>
+                <div>✓ Content Monetization Tools</div>
+                <div>✓ Priority Customer Support</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Member Trial Settings */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-medium text-purple-400">Member Trial</h4>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Trial Duration (Days)</label>
+              <input
+                type="number"
+                min="1"
+                max="30"
+                value={trialSettings.member_trial_days}
+                onChange={(e) => setTrialSettings({
+                  ...trialSettings,
+                  member_trial_days: parseInt(e.target.value)
+                })}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <h5 className="text-sm font-medium text-gray-300 mb-2">Member Benefits</h5>
+              <div className="text-xs text-gray-400 space-y-1">
+                <div>✓ Premium Content Access</div>
+                <div>✓ HD Streaming Quality</div>
+                <div>✓ Download Content</div>
+                <div>✓ Advanced Search & Filters</div>
+                <div>✓ Priority Messaging</div>
+                <div>✓ Ad-Free Experience</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Global Trial Settings */}
+        <div className="mt-6 pt-6 border-t border-gray-700">
+          <h4 className="text-lg font-medium text-white mb-4">Global Settings</h4>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+              <div>
+                <div className="font-medium text-white">Enable Free Trials</div>
+                <div className="text-sm text-gray-400">Allow new users to start free trials</div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={trialSettings.trial_enabled}
+                  onChange={(e) => setTrialSettings({
+                    ...trialSettings,
+                    trial_enabled: e.target.checked
+                  })}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
+              </label>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Reminder Days</label>
+              <input
+                type="text"
+                value={trialSettings.auto_remind_days.join(', ')}
+                onChange={(e) => setTrialSettings({
+                  ...trialSettings,
+                  auto_remind_days: e.target.value.split(',').map(d => parseInt(d.trim())).filter(d => !isNaN(d))
+                })}
+                placeholder="3, 1"
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              />
+              <p className="text-xs text-gray-400 mt-1">Days before expiry to send reminders (comma-separated)</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="mt-6">
+          <button
+            onClick={() => updateTrialSettings(trialSettings)}
+            disabled={loading}
+            className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-pink-600 hover:to-purple-700 disabled:opacity-50"
+          >
+            {loading ? 'Saving...' : 'Save Trial Settings'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-black">
       <div className="bg-gradient-to-r from-pink-900/20 to-purple-900/20 border-b border-gray-800">
