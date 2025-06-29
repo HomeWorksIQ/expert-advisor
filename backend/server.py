@@ -351,6 +351,9 @@ class AccessControlService:
 access_control = AccessControlService()
 
 # API Routes
+# API Routes
+
+# Original routes
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -366,6 +369,177 @@ async def create_status_check(input: StatusCheckCreate):
 async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
+
+# Location Detection API
+@api_router.post("/detect-location")
+async def detect_user_location(request: Request):
+    """Detect user's location from IP address"""
+    try:
+        location = await access_control.get_user_location(request)
+        return {
+            "success": True,
+            "location": location.dict(),
+            "ip": request.client.host
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Location detection failed: {str(e)}")
+
+# Location Preferences API
+@api_router.post("/performer/{performer_id}/location-preferences")
+async def create_location_preference(performer_id: str, preference: LocationPreference):
+    """Create or update location preference for a performer"""
+    preference.performer_id = performer_id
+    preference.updated_at = datetime.utcnow()
+    
+    # Check if preference already exists
+    existing = await db.location_preferences.find_one({
+        "performer_id": performer_id,
+        "location_type": preference.location_type,
+        "location_value": preference.location_value
+    })
+    
+    if existing:
+        # Update existing preference
+        await db.location_preferences.update_one(
+            {"id": existing["id"]},
+            {"$set": preference.dict()}
+        )
+        return {"success": True, "message": "Location preference updated"}
+    else:
+        # Create new preference
+        await db.location_preferences.insert_one(preference.dict())
+        return {"success": True, "message": "Location preference created"}
+
+@api_router.get("/performer/{performer_id}/location-preferences")
+async def get_location_preferences(performer_id: str):
+    """Get all location preferences for a performer"""
+    preferences = await db.location_preferences.find({"performer_id": performer_id}).to_list(1000)
+    return [LocationPreference(**pref) for pref in preferences]
+
+@api_router.delete("/performer/{performer_id}/location-preferences/{preference_id}")
+async def delete_location_preference(performer_id: str, preference_id: str):
+    """Delete a location preference"""
+    result = await db.location_preferences.delete_one({
+        "id": preference_id,
+        "performer_id": performer_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Location preference not found")
+    
+    return {"success": True, "message": "Location preference deleted"}
+
+# Teaser Settings API
+@api_router.post("/performer/{performer_id}/teaser-settings")
+async def update_teaser_settings(performer_id: str, settings: TeaserSettings):
+    """Update teaser settings for a performer"""
+    settings.performer_id = performer_id
+    settings.updated_at = datetime.utcnow()
+    
+    # Upsert teaser settings
+    await db.teaser_settings.update_one(
+        {"performer_id": performer_id},
+        {"$set": settings.dict()},
+        upsert=True
+    )
+    
+    return {"success": True, "message": "Teaser settings updated"}
+
+@api_router.get("/performer/{performer_id}/teaser-settings")
+async def get_teaser_settings(performer_id: str):
+    """Get teaser settings for a performer"""
+    settings = await db.teaser_settings.find_one({"performer_id": performer_id})
+    if not settings:
+        # Return default settings
+        return TeaserSettings(performer_id=performer_id, enabled=False)
+    return TeaserSettings(**settings)
+
+# User Blocking API
+@api_router.post("/performer/{performer_id}/block-user")
+async def block_user(performer_id: str, block_data: BlockedUser):
+    """Block a user from accessing performer's profile"""
+    block_data.performer_id = performer_id
+    
+    # Check if user is already blocked
+    existing = await db.blocked_users.find_one({
+        "performer_id": performer_id,
+        "blocked_user_id": block_data.blocked_user_id
+    })
+    
+    if existing:
+        return {"success": False, "message": "User is already blocked"}
+    
+    await db.blocked_users.insert_one(block_data.dict())
+    return {"success": True, "message": "User blocked successfully"}
+
+@api_router.get("/performer/{performer_id}/blocked-users")
+async def get_blocked_users(performer_id: str):
+    """Get all blocked users for a performer"""
+    blocked_users = await db.blocked_users.find({"performer_id": performer_id}).to_list(1000)
+    return [BlockedUser(**user) for user in blocked_users]
+
+@api_router.delete("/performer/{performer_id}/unblock-user/{blocked_user_id}")
+async def unblock_user(performer_id: str, blocked_user_id: str):
+    """Unblock a user"""
+    result = await db.blocked_users.delete_one({
+        "performer_id": performer_id,
+        "blocked_user_id": blocked_user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Blocked user not found")
+    
+    return {"success": True, "message": "User unblocked successfully"}
+
+# Profile Access Control API
+@api_router.post("/check-profile-access")
+async def check_profile_access(request: Request, access_request: AccessRequest):
+    """Check if user can access a performer's profile"""
+    try:
+        # Get user location if not provided
+        if not hasattr(access_request, 'location') or not access_request.location:
+            access_request.location = await access_control.get_user_location(request)
+        
+        # Set user IP
+        access_request.user_ip = request.client.host
+        
+        # Check access
+        access_response = await access_control.check_profile_access(access_request)
+        return access_response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Access check failed: {str(e)}")
+
+# Teaser Session API
+@api_router.get("/teaser-session/{performer_id}")
+async def get_teaser_session_status(performer_id: str, request: Request, user_id: Optional[str] = None):
+    """Get current teaser session status for a user"""
+    user_ip = request.client.host
+    
+    # Find active teaser session
+    query = {"performer_id": performer_id, "user_ip": user_ip, "is_active": True}
+    if user_id:
+        query["user_id"] = user_id
+    
+    session = await db.teaser_sessions.find_one(query)
+    if not session:
+        return {"active": False, "message": "No active teaser session"}
+    
+    session_obj = TeaserSession(**session)
+    if session_obj.expires_at <= datetime.utcnow():
+        # Deactivate expired session
+        await db.teaser_sessions.update_one(
+            {"id": session_obj.id},
+            {"$set": {"is_active": False}}
+        )
+        return {"active": False, "message": "Teaser session expired"}
+    
+    remaining_seconds = int((session_obj.expires_at - datetime.utcnow()).total_seconds())
+    return {
+        "active": True,
+        "remaining_seconds": remaining_seconds,
+        "expires_at": session_obj.expires_at.isoformat(),
+        "message": f"Teaser active - {remaining_seconds} seconds remaining"
+    }
 
 # Include the router in the main app
 app.include_router(api_router)
