@@ -3,6 +3,222 @@ import { useUser } from './UserContext';
 import { Header } from './components';
 import TrialStatusComponent from './TrialStatusComponent';
 
+// Client Dashboard Component
+export const MemberDashboard = () => {
+  const { user } = useUser();
+  const [activeTab, setActiveTab] = useState('overview');
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white">
+      <Header />
+      
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold">Client Dashboard</h1>
+          <div className="flex items-center space-x-2">
+            <span className="text-gray-400">Welcome back,</span>
+            <span className="font-semibold">{user?.firstName || 'Client'}</span>
+          </div>
+        </div>
+        
+        {/* Dashboard Tabs */}
+        <div className="mb-8 border-b border-gray-700">
+          <div className="flex overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('consultations')}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'consultations'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              My Consultations
+            </button>
+            <button
+              onClick={() => setActiveTab('experts')}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'experts'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              My Experts
+            </button>
+            <button
+              onClick={() => setActiveTab('messages')}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'messages'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Messages
+            </button>
+            <button
+              onClick={() => setActiveTab('payments')}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'payments'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Payments
+            </button>
+          </div>
+        </div>
+        
+        {/* Dashboard Content */}
+        <div className="bg-gray-800 rounded-lg p-6">
+          {activeTab === 'overview' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Dashboard Overview</h2>
+              <p className="text-gray-400 mb-6">
+                Welcome to your client dashboard. Here you can manage your consultations, 
+                messages, and payments with professional experts.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <div className="text-blue-400 text-lg font-semibold mb-2">Upcoming Consultations</div>
+                  <div className="text-3xl font-bold mb-1">0</div>
+                  <div className="text-sm text-gray-400">No upcoming consultations</div>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <div className="text-blue-400 text-lg font-semibold mb-2">Unread Messages</div>
+                  <div className="text-3xl font-bold mb-1">0</div>
+                  <div className="text-sm text-gray-400">No unread messages</div>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <div className="text-blue-400 text-lg font-semibold mb-2">Expert Connections</div>
+                  <div className="text-3xl font-bold mb-1">0</div>
+                  <div className="text-sm text-gray-400">No expert connections yet</div>
+                </div>
+              </div>
+              
+              <div className="text-center py-8">
+                <h3 className="text-xl font-semibold mb-4">Ready to get expert advice?</h3>
+                <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+                  Browse our network of verified professionals and book your first consultation today.
+                </p>
+                <a 
+                  href="/discover" 
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Find an Expert
+                </a>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'consultations' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">My Consultations</h2>
+              <p className="text-gray-400 mb-6">
+                View and manage your scheduled consultations with experts.
+              </p>
+              
+              <div className="text-center py-12">
+                <div className="text-5xl mb-4">📅</div>
+                <h3 className="text-xl font-semibold mb-2">No consultations yet</h3>
+                <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                  You haven't booked any consultations yet. Browse our experts and schedule your first consultation.
+                </p>
+                <a 
+                  href="/discover" 
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Find an Expert
+                </a>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'experts' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">My Experts</h2>
+              <p className="text-gray-400 mb-6">
+                View and manage your connections with professional experts.
+              </p>
+              
+              <div className="text-center py-12">
+                <div className="text-5xl mb-4">👥</div>
+                <h3 className="text-xl font-semibold mb-2">No expert connections yet</h3>
+                <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                  You haven't connected with any experts yet. Browse our experts and start building your professional network.
+                </p>
+                <a 
+                  href="/discover" 
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Find an Expert
+                </a>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'messages' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Messages</h2>
+              <p className="text-gray-400 mb-6">
+                View and manage your messages with experts.
+              </p>
+              
+              <div className="text-center py-12">
+                <div className="text-5xl mb-4">💬</div>
+                <h3 className="text-xl font-semibold mb-2">No messages yet</h3>
+                <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                  You haven't exchanged any messages yet. Connect with an expert to start a conversation.
+                </p>
+                <a 
+                  href="/discover" 
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Find an Expert
+                </a>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'payments' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Payments</h2>
+              <p className="text-gray-400 mb-6">
+                View and manage your payment history and billing information.
+              </p>
+              
+              <div className="text-center py-12">
+                <div className="text-5xl mb-4">💳</div>
+                <h3 className="text-xl font-semibold mb-2">No payment history</h3>
+                <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                  You haven't made any payments yet. Book a consultation to get started.
+                </p>
+                <a 
+                  href="/discover" 
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Find an Expert
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Enhanced Discover Page with Advanced Features - Professional Expert Platform
 export const DiscoverPage = () => {
   const { user } = useUser();
