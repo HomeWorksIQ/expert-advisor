@@ -377,7 +377,7 @@ frontend:
 
   - task: "User Blocking Management"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
@@ -389,6 +389,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The component is implemented in the code but not rendering on the page. API endpoint for blocked users is working (returns 200), but the UI component is not visible when accessing the geo-location settings page directly."
+        -working: true
+        -agent: "testing"
+        -comment: "After fixing the circular dependency by extracting the useUser context into a separate file (UserContext.js), the User Blocking Management component is now rendering properly on the test-geolocation page. The component displays the user ID input field, reason dropdown, notes textarea, and Block User button. There's also a 'No blocked users' message displayed when no users are blocked."
 
   - task: "Profile Access Control Components"
     implemented: true
