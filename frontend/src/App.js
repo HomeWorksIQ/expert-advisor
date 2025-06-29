@@ -1,7 +1,8 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
+import { UserContext, useUser } from './UserContext';
 import { 
   HomePage, 
   LoginPage, 
