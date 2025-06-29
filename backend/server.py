@@ -551,6 +551,266 @@ async def get_teaser_session_status(performer_id: str, request: Request, user_id
 # Include the router in the main app
 app.include_router(api_router)
 
+# API Key Management Service
+class APIKeyService:
+    def __init__(self):
+        pass
+    
+    async def create_api_key(self, key_data: APIKeyCreate, created_by: str) -> APIKey:
+        """Create a new API key"""
+        api_key = APIKey(**key_data.dict(), created_by=created_by)
+        await db.api_keys.insert_one(api_key.dict())
+        return api_key
+    
+    async def get_api_key(self, key_type: APIKeyType, active_only: bool = True) -> Optional[APIKey]:
+        """Get API key by type"""
+        query = {"key_type": key_type.value}
+        if active_only:
+            query["status"] = APIKeyStatus.ACTIVE.value
+        
+        key_doc = await db.api_keys.find_one(query)
+        if key_doc:
+            return APIKey(**key_doc)
+        return None
+    
+    async def get_all_api_keys(self) -> list[APIKey]:
+        """Get all API keys"""
+        keys = await db.api_keys.find().to_list(1000)
+        return [APIKey(**key) for key in keys]
+    
+    async def update_api_key(self, key_id: str, update_data: APIKeyUpdate) -> bool:
+        """Update an API key"""
+        update_dict = {k: v for k, v in update_data.dict().items() if v is not None}
+        update_dict["updated_at"] = datetime.utcnow()
+        
+        result = await db.api_keys.update_one(
+            {"id": key_id},
+            {"$set": update_dict}
+        )
+        return result.modified_count > 0
+    
+    async def delete_api_key(self, key_id: str) -> bool:
+        """Delete an API key"""
+        result = await db.api_keys.delete_one({"id": key_id})
+        return result.deleted_count > 0
+
+api_key_service = APIKeyService()
+
+# Admin API Routes
+@api_router.post("/admin/api-keys", response_model=APIKey)
+async def create_api_key(key_data: APIKeyCreate, created_by: str = "admin"):
+    """Create a new API key"""
+    return await api_key_service.create_api_key(key_data, created_by)
+
+@api_router.get("/admin/api-keys", response_model=list[APIKey])
+async def get_all_api_keys():
+    """Get all API keys"""
+    return await api_key_service.get_all_api_keys()
+
+@api_router.get("/admin/api-keys/{key_type}", response_model=APIKey)
+async def get_api_key_by_type(key_type: APIKeyType):
+    """Get API key by type"""
+    key = await api_key_service.get_api_key(key_type)
+    if not key:
+        raise HTTPException(status_code=404, detail="API key not found")
+    return key
+
+@api_router.put("/admin/api-keys/{key_id}", response_model=dict)
+async def update_api_key(key_id: str, update_data: APIKeyUpdate):
+    """Update an API key"""
+    success = await api_key_service.update_api_key(key_id, update_data)
+    if not success:
+        raise HTTPException(status_code=404, detail="API key not found")
+    return {"success": True, "message": "API key updated successfully"}
+
+@api_router.delete("/admin/api-keys/{key_id}", response_model=dict)
+async def delete_api_key(key_id: str):
+    """Delete an API key"""
+    success = await api_key_service.delete_api_key(key_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="API key not found")
+    return {"success": True, "message": "API key deleted successfully"}
+
+# Appointment Booking API Routes
+@api_router.post("/appointments", response_model=Appointment)
+async def create_appointment(appointment_data: dict):
+    """Create a new appointment"""
+    appointment = Appointment(**appointment_data)
+    await db.appointments.insert_one(appointment.dict())
+    return appointment
+
+@api_router.get("/performer/{performer_id}/appointments", response_model=list[Appointment])
+async def get_performer_appointments(performer_id: str):
+    """Get all appointments for a performer"""
+    appointments = await db.appointments.find({"performer_id": performer_id}).to_list(1000)
+    return [Appointment(**apt) for apt in appointments]
+
+@api_router.get("/member/{member_id}/appointments", response_model=list[Appointment])
+async def get_member_appointments(member_id: str):
+    """Get all appointments for a member"""
+    appointments = await db.appointments.find({"member_id": member_id}).to_list(1000)
+    return [Appointment(**apt) for apt in appointments]
+
+@api_router.put("/appointments/{appointment_id}/status")
+async def update_appointment_status(appointment_id: str, status: AppointmentStatus):
+    """Update appointment status"""
+    update_data = {"status": status.value, "updated_at": datetime.utcnow()}
+    result = await db.appointments.update_one(
+        {"id": appointment_id},
+        {"$set": update_data}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    return {"success": True, "message": "Appointment status updated"}
+
+@api_router.post("/performer/{performer_id}/availability", response_model=AppointmentAvailability)
+async def create_availability(performer_id: str, availability_data: dict):
+    """Create availability schedule for performer"""
+    availability_data["performer_id"] = performer_id
+    availability = AppointmentAvailability(**availability_data)
+    await db.appointment_availability.insert_one(availability.dict())
+    return availability
+
+@api_router.get("/performer/{performer_id}/availability", response_model=list[AppointmentAvailability])
+async def get_performer_availability(performer_id: str):
+    """Get performer's availability schedule"""
+    availability = await db.appointment_availability.find({"performer_id": performer_id}).to_list(1000)
+    return [AppointmentAvailability(**avail) for avail in availability]
+
+# Chat System API Routes
+@api_router.post("/chat/rooms", response_model=ChatRoom)
+async def create_chat_room(chat_data: dict):
+    """Create a new chat room"""
+    chat_room = ChatRoom(**chat_data)
+    await db.chat_rooms.insert_one(chat_room.dict())
+    return chat_room
+
+@api_router.get("/chat/rooms/{user_id}", response_model=list[ChatRoom])
+async def get_user_chat_rooms(user_id: str):
+    """Get all chat rooms for a user"""
+    chat_rooms = await db.chat_rooms.find({"participants": user_id}).to_list(1000)
+    return [ChatRoom(**room) for room in chat_rooms]
+
+@api_router.post("/chat/rooms/{room_id}/messages", response_model=ChatMessage)
+async def send_message(room_id: str, message_data: dict):
+    """Send a message to a chat room"""
+    message_data["chat_room_id"] = room_id
+    message = ChatMessage(**message_data)
+    await db.chat_messages.insert_one(message.dict())
+    
+    # Update chat room last message timestamp
+    await db.chat_rooms.update_one(
+        {"id": room_id},
+        {"$set": {"last_message_at": datetime.utcnow()}, "$inc": {"message_count": 1}}
+    )
+    
+    return message
+
+@api_router.get("/chat/rooms/{room_id}/messages", response_model=list[ChatMessage])
+async def get_chat_messages(room_id: str, limit: int = 50, offset: int = 0):
+    """Get messages from a chat room"""
+    messages = await db.chat_messages.find(
+        {"chat_room_id": room_id}
+    ).sort("created_at", -1).skip(offset).limit(limit).to_list(limit)
+    return [ChatMessage(**msg) for msg in reversed(messages)]
+
+@api_router.put("/chat/messages/{message_id}/read")
+async def mark_message_read(message_id: str, user_id: str):
+    """Mark a message as read"""
+    result = await db.chat_messages.update_one(
+        {"id": message_id},
+        {"$addToSet": {"read_by": user_id}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Message not found")
+    return {"success": True, "message": "Message marked as read"}
+
+# File Upload API Routes
+@api_router.post("/files/upload", response_model=UploadedFile)
+async def upload_file(file_data: dict):
+    """Upload a file"""
+    uploaded_file = UploadedFile(**file_data)
+    await db.uploaded_files.insert_one(uploaded_file.dict())
+    return uploaded_file
+
+@api_router.get("/files/{file_id}", response_model=UploadedFile)
+async def get_file(file_id: str):
+    """Get file information"""
+    file_doc = await db.uploaded_files.find_one({"id": file_id})
+    if not file_doc:
+        raise HTTPException(status_code=404, detail="File not found")
+    return UploadedFile(**file_doc)
+
+@api_router.get("/files/{file_id}/download")
+async def download_file(file_id: str, user_id: str):
+    """Download a file (with access control)"""
+    file_doc = await db.uploaded_files.find_one({"id": file_id})
+    if not file_doc:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    file_obj = UploadedFile(**file_doc)
+    
+    # Check access permissions
+    if file_obj.is_private and file_obj.uploader_id != user_id:
+        if file_obj.is_paid_content:
+            # Check if user has paid for this file
+            # TODO: Implement payment verification
+            pass
+        else:
+            raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Update download count
+    await db.uploaded_files.update_one(
+        {"id": file_id},
+        {"$inc": {"download_count": 1}}
+    )
+    
+    return {"download_url": file_obj.storage_path, "filename": file_obj.original_filename}
+
+# Store and Products API Routes
+@api_router.post("/store/products", response_model=Product)
+async def create_product(product_data: dict):
+    """Create a new product"""
+    product = Product(**product_data)
+    await db.products.insert_one(product.dict())
+    return product
+
+@api_router.get("/store/performer/{performer_id}/products", response_model=list[Product])
+async def get_performer_products(performer_id: str):
+    """Get all products for a performer"""
+    products = await db.products.find({"performer_id": performer_id}).to_list(1000)
+    return [Product(**prod) for prod in products]
+
+@api_router.post("/store/orders", response_model=Order)
+async def create_order(order_data: dict):
+    """Create a new order"""
+    order = Order(**order_data)
+    await db.orders.insert_one(order.dict())
+    return order
+
+@api_router.get("/store/orders/{order_id}", response_model=Order)
+async def get_order(order_id: str):
+    """Get order details"""
+    order_doc = await db.orders.find_one({"id": order_id})
+    if not order_doc:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return Order(**order_doc)
+
+@api_router.put("/store/orders/{order_id}/shipping")
+async def update_order_shipping(order_id: str, shipping_data: dict):
+    """Update order shipping information"""
+    update_data = {**shipping_data, "updated_at": datetime.utcnow()}
+    result = await db.orders.update_one(
+        {"id": order_id},
+        {"$set": update_data}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return {"success": True, "message": "Shipping information updated"}
+
+# Include the router in the main app
+app.include_router(api_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
