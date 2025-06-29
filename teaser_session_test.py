@@ -49,7 +49,12 @@ def test_teaser_session():
     response = requests.post(f"{API_URL}/performer/{TEST_PERFORMER_ID}/location-preferences", json=ny_preference)
     print(f"Created NY preference with TEASER access: {response.status_code}")
     
-    # 3. Create access request with NY location
+    # 3. First, get our actual IP address
+    response = requests.post(f"{API_URL}/detect-location")
+    actual_ip = response.json()['ip']
+    print(f"Actual IP address: {actual_ip}")
+    
+    # Create access request with NY location and actual IP
     ny_location = {
         "country": "United States",
         "country_code": "US",
@@ -62,6 +67,7 @@ def test_teaser_session():
     access_request = {
         "performer_id": TEST_PERFORMER_ID,
         "user_id": "teaser-test-user",
+        "user_ip": actual_ip,
         "location": ny_location
     }
     
