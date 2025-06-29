@@ -49,16 +49,6 @@ const ProfilePageWithAccessControl = () => {
   );
 };
 
-// Global Context for User State Management
-const UserContext = createContext();
-
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
-};
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
