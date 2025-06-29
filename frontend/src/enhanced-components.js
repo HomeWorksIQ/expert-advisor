@@ -312,8 +312,8 @@ export const DiscoverPage = () => {
   const refreshSuggestions = () => {
     setIsLoading(true);
     setTimeout(() => {
-      const shuffled = [...mockPerformers].sort(() => 0.5 - Math.random());
-      setPerformers(shuffled);
+      const shuffled = [...mockExperts].sort(() => 0.5 - Math.random());
+      setExperts(shuffled);
       applyFilters(shuffled, searchTerm, filters);
       setIsLoading(false);
     }, 800);
