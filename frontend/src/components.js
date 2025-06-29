@@ -971,42 +971,42 @@ export const SignUpPage = () => {
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
-                  formData.userType === 'member' 
-                    ? 'border-pink-500 bg-pink-500 bg-opacity-10' 
+                  formData.userType === 'client' 
+                    ? 'border-blue-500 bg-blue-500 bg-opacity-10' 
                     : 'border-gray-600 hover:border-gray-500'
                 }`}>
                   <input
                     type="radio"
                     name="userType"
-                    value="member"
-                    checked={formData.userType === 'member'}
+                    value="client"
+                    checked={formData.userType === 'client'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
                     className="sr-only"
                   />
                   <div className="text-center">
                     <div className="text-2xl mb-1">👤</div>
-                    <div className="text-sm font-medium">Member</div>
-                    <div className="text-xs text-gray-400 mt-1">View content</div>
+                    <div className="text-sm font-medium">Client</div>
+                    <div className="text-xs text-gray-400 mt-1">Seek expertise</div>
                   </div>
                 </label>
                 
                 <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
-                  formData.userType === 'performer' 
-                    ? 'border-pink-500 bg-pink-500 bg-opacity-10' 
+                  formData.userType === 'expert' 
+                    ? 'border-blue-500 bg-blue-500 bg-opacity-10' 
                     : 'border-gray-600 hover:border-gray-500'
                 }`}>
                   <input
                     type="radio"
                     name="userType"
-                    value="performer"
-                    checked={formData.userType === 'performer'}
+                    value="expert"
+                    checked={formData.userType === 'expert'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
                     className="sr-only"
                   />
                   <div className="text-center">
-                    <div className="text-2xl mb-1">⭐</div>
-                    <div className="text-sm font-medium">Creator</div>
-                    <div className="text-xs text-gray-400 mt-1">Create content</div>
+                    <div className="text-2xl mb-1">🎓</div>
+                    <div className="text-sm font-medium">Expert</div>
+                    <div className="text-xs text-gray-400 mt-1">Provide expertise</div>
                   </div>
                 </label>
               </div>
