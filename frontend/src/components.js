@@ -1411,34 +1411,27 @@ export const PerformerDashboard = () => {
 
         {/* Tab Content */}
         <div className="min-h-96">
+          {/* Trial Status */}
+          <TrialStatusComponent />
+          
           {activeTab === 'overview' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Stats Cards */}
-              <div className="bg-gray-800 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-white">Total Earnings</h3>
-                  <span className="text-2xl">💰</span>
-                </div>
-                <div className="text-3xl font-bold text-pink-400">$2,456.78</div>
-                <div className="text-gray-400 text-sm">+12% from last month</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-gray-800 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-4">Revenue Overview</h3>
+                <div className="text-3xl font-bold text-green-400 mb-2">$2,456</div>
+                <p className="text-gray-400">This month</p>
               </div>
-
-              <div className="bg-gray-800 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-white">Subscribers</h3>
-                  <span className="text-2xl">👥</span>
-                </div>
-                <div className="text-3xl font-bold text-blue-400">1,234</div>
-                <div className="text-gray-400 text-sm">+8% from last month</div>
+              
+              <div className="bg-gray-800 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-4">Subscribers</h3>
+                <div className="text-3xl font-bold text-blue-400 mb-2">1,234</div>
+                <p className="text-gray-400">Active subscribers</p>
               </div>
-
-              <div className="bg-gray-800 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-white">Profile Views</h3>
-                  <span className="text-2xl">👁️</span>
-                </div>
-                <div className="text-3xl font-bold text-purple-400">45,678</div>
-                <div className="text-gray-400 text-sm">+15% from last month</div>
+              
+              <div className="bg-gray-800 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-4">Content Views</h3>
+                <div className="text-3xl font-bold text-purple-400 mb-2">45.6K</div>
+                <p className="text-gray-400">Total views</p>
               </div>
             </div>
           )}
