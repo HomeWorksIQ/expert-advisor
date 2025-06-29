@@ -270,13 +270,13 @@ export const Header = ({ showSearch = true, className = "" }) => {
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-3">
               <img 
-                src="/eye-candy-logo.svg" 
-                alt="Eye Candy - Interlocking Hearts Logo" 
+                src="/experts-logo.svg" 
+                alt="The Experts - Professional Advisory Platform" 
                 className="h-8 w-auto"
               />
               <div className="flex flex-col">
-                <span className="text-red-500 font-bold text-lg leading-none italic" style={{fontFamily: 'cursive'}}>Eye Candy</span>
-                <span className="text-gray-400 text-xs italic" style={{fontFamily: 'cursive'}}>Unwrap Me</span>
+                <span className="text-blue-500 font-bold text-lg leading-none" style={{fontFamily: 'sans-serif'}}>The Experts</span>
+                <span className="text-gray-400 text-xs" style={{fontFamily: 'sans-serif'}}>Professional Advisory</span>
               </div>
             </a>
           </div>
