@@ -29,6 +29,8 @@ import {
   PaymentCancelledPage
 } from './components';
 import HelpSupportPage from './HelpSupportPage';
+import { GeolocationSettingsPage } from './GeolocationSettingsPage';
+import { ProfileAccessController } from './AccessControlComponents';
 
 // Global Context for User State Management
 const UserContext = createContext();
