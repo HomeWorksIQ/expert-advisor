@@ -342,7 +342,7 @@ const EnhancedSignUpPage = () => {
             <div className="text-center pt-4 border-t border-gray-700">
               <p className="text-gray-400 text-sm">
                 Already have an account?{' '}
-                <a href="/login" className="text-pink-400 hover:text-pink-300 font-medium">
+                <a href="/login" className="text-blue-400 hover:text-blue-300 font-medium">
                   Sign in here
                 </a>
               </p>
