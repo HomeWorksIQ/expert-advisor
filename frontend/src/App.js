@@ -27,7 +27,7 @@ import {
   PaymentSuccessPage,
   PaymentCancelledPage
 } from './components';
-import { DiscoverPage } from './enhanced-components';
+import DiscoverPage from './DiscoverPage';
 import AdminDashboard from './AdminDashboard';
 import ChatSystem from './ChatSystem';
 import AppointmentSystem from './AppointmentSystem';
