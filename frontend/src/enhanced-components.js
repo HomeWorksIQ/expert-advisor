@@ -93,6 +93,11 @@ export const DiscoverPage = () => {
       specializations: ["Strategic Planning", "Operations Management", "Startup Advisory"], ethnicity: "black"
     }
   ];
+
+  const mockPerformers = [
+    {
+      id: 8, firstName: "Alex", lastName: "Storm", displayName: "Alex Storm", username: "@alex_storm",
+      bio: "Fitness coach and lifestyle influencer 💪 Workout routines, nutrition tips, and motivation!",
       profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e", 
       coverImage: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136",
       gender: "male", age: 27, isOnline: true, followers: 91000, posts: 203, subscribers: 8700, rating: 4.7,
