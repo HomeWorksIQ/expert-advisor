@@ -1118,6 +1118,105 @@ async def get_public_trial_settings():
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to get public trial settings: {str(e)}")
 
+# Performer Search API Routes
+@api_router.post("/performers/search")
+async def search_performers(search_params: dict):
+    """Advanced performer search with filters"""
+    try:
+        from api_key_models import PerformerSearch
+        search = PerformerSearch(**search_params)
+        results = await performer_search_service.search_performers(search)
+        return {
+            "success": True,
+            **results
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Search failed: {str(e)}")
+
+@api_router.get("/performers/filters")
+async def get_performer_filter_options():
+    """Get available filter options for performer search"""
+    try:
+        options = await performer_search_service.get_filter_options()
+        return {
+            "success": True,
+            "filter_options": options
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get filter options: {str(e)}")
+
+@api_router.get("/performers/locations/{location_type}")
+async def get_location_suggestions(location_type: str, query: str):
+    """Get location suggestions for autocomplete"""
+    try:
+        suggestions = await performer_search_service.get_location_suggestions(query, location_type)
+        return {
+            "success": True,
+            "suggestions": suggestions
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get suggestions: {str(e)}")
+
+@api_router.post("/performers/profile")
+async def create_performer_profile(profile_data: dict):
+    """Create or update performer profile"""
+    try:
+        profile = await performer_search_service.create_performer_profile(profile_data)
+        return {
+            "success": True,
+            "profile": profile.dict()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to create profile: {str(e)}")
+
+@api_router.put("/performers/{user_id}/profile")
+async def update_performer_profile(user_id: str, profile_data: dict):
+    """Update performer profile"""
+    try:
+        success = await performer_search_service.update_performer_profile(user_id, profile_data)
+        if success:
+            return {"success": True, "message": "Profile updated successfully"}
+        else:
+            raise HTTPException(status_code=404, detail="Profile not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update profile: {str(e)}")
+
+@api_router.get("/performers/{user_id}/profile")
+async def get_performer_profile(user_id: str):
+    """Get performer profile"""
+    try:
+        profile = await performer_search_service.get_performer_profile(user_id)
+        if profile:
+            return {
+                "success": True,
+                "profile": profile.dict()
+            }
+        else:
+            raise HTTPException(status_code=404, detail="Profile not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get profile: {str(e)}")
+
+@api_router.post("/performers/{user_id}/view")
+async def increment_performer_views(user_id: str):
+    """Increment performer view count"""
+    try:
+        success = await performer_search_service.increment_view_count(user_id)
+        return {"success": success}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to increment views: {str(e)}")
+
+@api_router.put("/performers/{user_id}/status")
+async def update_performer_status(user_id: str, status: str):
+    """Update performer online status"""
+    try:
+        success = await performer_search_service.update_online_status(user_id, status)
+        if success:
+            return {"success": True, "message": "Status updated"}
+        else:
+            raise HTTPException(status_code=404, detail="Performer not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update status: {str(e)}")
+
 @api_router.get("/video/recordings/{recording_id}/download")
 async def download_recording(recording_id: str):
     """Download a recording file"""
