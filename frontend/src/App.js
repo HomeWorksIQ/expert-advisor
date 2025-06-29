@@ -28,7 +28,6 @@ import {
   PaymentSuccessPage,
   PaymentCancelledPage
 } from './components';
-import AdminDashboard from './AdminDashboard';
 import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
