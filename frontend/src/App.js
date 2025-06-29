@@ -317,6 +317,7 @@ function App() {
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
             <Route path="/payment-cancelled" element={<PaymentCancelledPage />} />
             <Route path="/help" element={<HelpSupportPage />} />
+            <Route path="/test-geolocation" element={<TestGeolocationPage />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
