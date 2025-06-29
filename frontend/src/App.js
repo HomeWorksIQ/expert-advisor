@@ -360,12 +360,26 @@ function App() {
               element={user?.userType === 'performer' ? <PerformerDashboard /> : <Navigate to="/login" />} 
             />
             <Route 
+              path="/performer/:performerId/geolocation-settings" 
+              element={user?.userType === 'performer' ? <GeolocationSettingsPage /> : <Navigate to="/login" />} 
+            />
+            <Route 
               path="/store/:id" 
               element={user?.userType === 'performer' ? <StorePage /> : <Navigate to="/login" />} 
             />
             <Route 
               path="/stream/:id" 
               element={user?.userType === 'performer' ? <StreamingPage /> : <Navigate to="/login" />} 
+            />
+
+            {/* Profile Access with Geo-Location Control */}
+            <Route 
+              path="/profile/:id" 
+              element={
+                <ProfileAccessController performerId={window.location.pathname.split('/')[2]}>
+                  <ProfilePage />
+                </ProfileAccessController>
+              } 
             />
 
             {/* Catch-all route */}
