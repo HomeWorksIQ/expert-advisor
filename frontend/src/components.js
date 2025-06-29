@@ -701,10 +701,10 @@ export const LoginPage = () => {
         <div className="w-full max-w-md">
           {/* Logo and Title */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-indigo-600 bg-clip-text text-transparent mb-2">
               Welcome Back
             </h1>
-            <p className="text-gray-400">Sign in to your Eye Candy account</p>
+            <p className="text-gray-400">Sign in to your The Experts account</p>
           </div>
 
           {/* Error Display */}
