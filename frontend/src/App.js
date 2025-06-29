@@ -352,6 +352,10 @@ function App() {
               element={user ? <AppointmentSystem /> : <Navigate to="/login" />} 
             />
             <Route 
+              path="/video-conference" 
+              element={user ? <VideoConferenceSystem /> : <Navigate to="/login" />} 
+            />
+            <Route 
               path="/settings" 
               element={user ? <SettingsPage /> : <Navigate to="/login" />} 
             />
