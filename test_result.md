@@ -770,7 +770,8 @@ test_plan:
     - "Real-time Chat System Interface"
     - "Appointment Booking System Interface"
     - "App Router Integration for New Features"
-  stuck_tasks: []
+  stuck_tasks:
+    - "UI/UX Testing - Discover Page"
   test_all: false
   test_priority: "high_first"
 
