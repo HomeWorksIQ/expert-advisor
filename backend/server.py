@@ -11,6 +11,8 @@ import uuid
 from datetime import datetime, timedelta
 from enum import Enum
 import random
+import sys
+sys.path.append('/app/backend')
 from api_key_models import (
     APIKey, APIKeyCreate, APIKeyUpdate, APIKeyType, APIKeyStatus,
     Appointment, AppointmentAvailability, AppointmentType, AppointmentStatus,
