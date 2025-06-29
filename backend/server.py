@@ -750,6 +750,132 @@ async def get_performer_recordings(performer_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to fetch recordings: {str(e)}")
 
+# Calendar Integration API Routes
+@api_router.post("/calendar/google/auth")
+async def initiate_google_calendar_auth(user_id: str):
+    """Initiate Google Calendar OAuth flow"""
+    try:
+        auth_data = await calendar_service.initiate_google_oauth(user_id)
+        return {
+            "success": True,
+            "authorization_url": auth_data["authorization_url"],
+            "state": auth_data["state"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"OAuth initiation failed: {str(e)}")
+
+@api_router.post("/calendar/google/callback")
+async def handle_google_calendar_callback(code: str, state: str):
+    """Handle Google Calendar OAuth callback"""
+    try:
+        result = await calendar_service.handle_google_callback(code, state)
+        return {
+            "success": True,
+            "message": result["message"],
+            "user_id": result["user_id"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"OAuth callback failed: {str(e)}")
+
+@api_router.post("/calendar/sync-appointment")
+async def sync_appointment_to_calendar(appointment_data: dict):
+    """Sync appointment to connected calendars"""
+    try:
+        sync_results = await calendar_service.sync_appointment_to_calendars(appointment_data)
+        return {
+            "success": True,
+            "sync_results": sync_results
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Calendar sync failed: {str(e)}")
+
+@api_router.get("/calendar/integrations/{user_id}")
+async def get_calendar_integrations(user_id: str):
+    """Get user's calendar integrations"""
+    try:
+        integrations = await calendar_service.get_user_calendar_integrations(user_id)
+        return {
+            "success": True,
+            "integrations": integrations
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to fetch integrations: {str(e)}")
+
+@api_router.delete("/calendar/integrations/{user_id}/{provider}")
+async def disconnect_calendar_integration(user_id: str, provider: str):
+    """Disconnect a calendar integration"""
+    try:
+        success = await calendar_service.disconnect_calendar_integration(user_id, provider)
+        if success:
+            return {"success": True, "message": "Calendar integration disconnected"}
+        else:
+            raise HTTPException(status_code=404, detail="Integration not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to disconnect integration: {str(e)}")
+
+# Shipping Label API Routes
+@api_router.post("/shipping/labels")
+async def create_shipping_label(label_request: dict):
+    """Create a shipping label"""
+    try:
+        provider = label_request.get("provider", "usps")
+        to_address = label_request["to_address"]
+        from_address = label_request["from_address"]
+        package_info = label_request["package_info"]
+        order_id = label_request.get("order_id")
+        
+        label_data = await shipping_service.create_shipping_label(
+            provider, to_address, from_address, package_info, order_id
+        )
+        
+        return {
+            "success": True,
+            "shipping_id": label_data["shipping_id"],
+            "tracking_number": label_data["tracking_number"],
+            "label_image": label_data["label_image"],
+            "shipping_cost": label_data["shipping_cost"]
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Label creation failed: {str(e)}")
+
+@api_router.get("/shipping/track/{tracking_number}")
+async def track_shipment(tracking_number: str, provider: str = "usps"):
+    """Track a shipment"""
+    try:
+        tracking_data = await shipping_service.track_shipment(tracking_number, provider)
+        return {
+            "success": True,
+            "tracking_data": tracking_data
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Tracking failed: {str(e)}")
+
+@api_router.get("/shipping/labels/{performer_id}")
+async def get_performer_shipping_labels(performer_id: str):
+    """Get all shipping labels for a performer"""
+    try:
+        labels = await shipping_service.get_shipping_labels_by_performer(performer_id)
+        return {
+            "success": True,
+            "shipping_labels": labels
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to fetch shipping labels: {str(e)}")
+
+@api_router.post("/shipping/labels/{shipping_id}/save")
+async def save_label_image(shipping_id: str, label_image_base64: str):
+    """Save shipping label image to file"""
+    try:
+        file_path = await shipping_service.save_label_image(shipping_id, label_image_base64)
+        return {
+            "success": True,
+            "file_path": file_path,
+            "message": "Label image saved successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to save label image: {str(e)}")
+
 @api_router.get("/video/recordings/{recording_id}/download")
 async def download_recording(recording_id: str):
     """Download a recording file"""
