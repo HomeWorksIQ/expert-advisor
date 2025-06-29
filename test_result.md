@@ -154,15 +154,18 @@ backend:
 
   - task: "File Upload/Download System API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented file upload/download system with access control, paid content support, and file type management. Supports images, videos, audio, documents with proper metadata and access permissions."
+        -working: true
+        -agent: "testing"
+        -comment: "File Upload/Download System API tested successfully. All endpoints work as expected. Can upload files, retrieve file information, and download files with proper access control. The system correctly handles different file types, paid content, and permissions."
 
   - task: "Store and Products Management API"
     implemented: true
