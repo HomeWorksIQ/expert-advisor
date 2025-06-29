@@ -288,15 +288,18 @@ frontend:
 
   - task: "Geo-location Settings Page"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/GeolocationSettingsPage.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented dedicated geo-location settings page with security checks and integration of all location management components."
+        -working: false
+        -agent: "testing"
+        -comment: "The page is accessible but the geo-location components are not rendering. The page structure is implemented but the actual components (Location Selector, Subscription Type Selector, Teaser Settings, User Blocking) are not visible on the page."
 
   - task: "App Router Integration"
     implemented: true
