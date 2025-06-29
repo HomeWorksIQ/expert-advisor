@@ -19,6 +19,17 @@ const AdminDashboard = () => {
     description: ''
   });
 
+  // Trial Settings State
+  const [trialSettings, setTrialSettings] = useState({
+    performer_trial_days: 7,
+    member_trial_days: 7,
+    trial_enabled: true,
+    auto_remind_days: [3, 1],
+    trial_benefits_performer: [],
+    trial_benefits_member: []
+  });
+  const [trialStats, setTrialStats] = useState(null);
+
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
   const apiKeyTypes = [
