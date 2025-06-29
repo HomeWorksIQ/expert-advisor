@@ -6,20 +6,45 @@ import TrialStatusComponent from './TrialStatusComponent';
 // Enhanced Discover Page with Advanced Features
 export const DiscoverPage = () => {
   const { user, API } = useUser();
-  const [performers, setPerformers] = useState([]);
-  const [filteredPerformers, setFilteredPerformers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState({
-    status: 'all', // all, online, offline
-    subscriptionType: 'all', // all, free, paid
-    sortBy: 'popularity', // popularity, newest, price_low, price_high
-    gender: 'all', // all, female, male, other
-    ageRange: 'all' // all, 18-25, 26-35, 36+
+  const [searchResults, setSearchResults] = useState({
+    performers: [],
+    pagination: { current_page: 1, total_pages: 1, total_count: 0 },
+    filters_applied: {}
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const performersPerPage = 12;
+  const [searchParams, setSearchParams] = useState({
+    query: '',
+    // Location filters
+    country: '',
+    state: '',
+    city: '',
+    radius_km: 50,
+    // Demographic filters
+    min_age: 18,
+    max_age: 65,
+    gender: [],
+    sexual_preference: [],
+    ethnicity: [],
+    // Status filters
+    online_only: false,
+    verified_only: false,
+    // Sort options
+    sort_by: 'popularity',
+    sort_order: 'desc',
+    page: 1,
+    limit: 20
+  });
+  const [filterOptions, setFilterOptions] = useState({
+    genders: [],
+    sexual_preferences: [],
+    ethnicities: [],
+    body_types: [],
+    hair_colors: [],
+    eye_colors: [],
+    sort_options: []
+  });
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Mock performers data
   const mockPerformers = [
