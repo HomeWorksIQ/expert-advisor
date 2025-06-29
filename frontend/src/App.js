@@ -396,10 +396,7 @@ function App() {
             />
 
             {/* Profile Access with Geo-Location Control */}
-            <Route 
-              path="/profile/:id" 
-              element={<ProfilePageWithAccessControl />} 
-            />
+            {/* Duplicate route removed - already defined above */}
 
             {/* Temporarily commenting out catch-all route for testing */}
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
