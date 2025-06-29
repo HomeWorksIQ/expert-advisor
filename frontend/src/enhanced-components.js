@@ -224,8 +224,8 @@ export const DiscoverPage = () => {
     setIsLoading(true);
     // Simulate API loading
     setTimeout(() => {
-      setPerformers(mockPerformers);
-      applyFilters(mockPerformers, searchTerm, filters);
+      setExperts(mockExperts);
+      applyFilters(mockExperts, searchTerm, filters);
       setIsLoading(false);
     }, 800);
   }, []);
