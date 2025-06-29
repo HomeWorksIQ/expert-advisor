@@ -1374,6 +1374,7 @@ export const PerformerDashboard = () => {
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'content', label: 'Content', icon: '🎥' },
     { id: 'geolocation', label: 'Location Settings', icon: '🌍' },
+    { id: 'analytics', label: 'Analytics', icon: '📈' },
     { id: 'earnings', label: 'Earnings', icon: '💰' },
     { id: 'settings', label: 'Settings', icon: '⚙️' }
   ];
