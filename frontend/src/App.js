@@ -31,6 +31,7 @@ import AdminDashboard from './AdminDashboard';
 import ChatSystem from './ChatSystem';
 import AppointmentSystem from './AppointmentSystem';
 import VideoConferenceSystem from './VideoConferenceSystem';
+import EnhancedSignUpPage from './EnhancedSignUpPage';
 import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
