@@ -15,7 +15,6 @@ import {
   ProfilePage,
   StorePage,
   StreamingPage,
-  DiscoverPage,
   MessagingPage,
   SettingsPage,
   AdminLogin,
@@ -27,6 +26,7 @@ import {
   PaymentSuccessPage,
   PaymentCancelledPage
 } from './components';
+import { DiscoverPage } from './enhanced-components';
 import AdminDashboard from './AdminDashboard';
 import ChatSystem from './ChatSystem';
 import AppointmentSystem from './AppointmentSystem';
