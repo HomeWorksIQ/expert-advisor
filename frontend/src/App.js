@@ -398,8 +398,8 @@ function App() {
             {/* Profile Access with Geo-Location Control */}
             {/* Duplicate route removed - already defined above */}
 
-            {/* Temporarily commenting out catch-all route for testing */}
-            {/* <Route path="*" element={<Navigate to="/" />} /> */}
+            {/* Catch-all route */}
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
       </div>
