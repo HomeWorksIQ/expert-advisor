@@ -640,10 +640,10 @@ export const HomePage = () => {
       <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Join Eye Candy?
+            Ready to Join The Experts?
           </h2>
           <p className="text-xl text-white mb-8 opacity-90">
-            Start your journey today and connect with thousands of amazing creators and fans
+            Start your journey today and connect with certified professionals and trusted advisors
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
