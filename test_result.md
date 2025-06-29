@@ -788,6 +788,7 @@ test_plan:
     - "Real-time Chat System Interface"
     - "Appointment Booking System Interface"
     - "App Router Integration for New Features"
+    - "Expert Platform Transformation"
   stuck_tasks:
   test_all: false
   test_priority: "high_first"
