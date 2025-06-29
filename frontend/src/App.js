@@ -375,11 +375,7 @@ function App() {
             {/* Profile Access with Geo-Location Control */}
             <Route 
               path="/profile/:id" 
-              element={
-                <ProfileAccessController performerId={window.location.pathname.split('/')[2]}>
-                  <ProfilePage />
-                </ProfileAccessController>
-              } 
+              element={<ProfilePageWithAccessControl />} 
             />
 
             {/* Catch-all route */}
