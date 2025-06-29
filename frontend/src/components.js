@@ -1363,17 +1363,183 @@ export const BankVerificationPage = () => (
 // Import enhanced components
 export { DiscoverPage, MemberDashboard } from './enhanced-components';
 
-export const PerformerDashboard = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Performer Dashboard</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-      <a href="/" className="text-pink-400 hover:text-pink-300 mt-4 inline-block">
-        Back to Home
-      </a>
+// Enhanced Performer Dashboard with Geo-Location Settings
+export const PerformerDashboard = () => {
+  const { user } = useUser();
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: '📊' },
+    { id: 'content', label: 'Content', icon: '🎥' },
+    { id: 'geolocation', label: 'Location Settings', icon: '🌍' },
+    { id: 'earnings', label: 'Earnings', icon: '💰' },
+    { id: 'settings', label: 'Settings', icon: '⚙️' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-black">
+      <Header />
+      
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Performer Dashboard</h1>
+          <p className="text-gray-400">Manage your content, earnings, and profile settings</p>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="flex space-x-1 mb-8 bg-gray-800 rounded-lg p-1">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                activeTab === tab.id
+                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        <div className="min-h-96">
+          {activeTab === 'overview' && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Stats Cards */}
+              <div className="bg-gray-800 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-white">Total Earnings</h3>
+                  <span className="text-2xl">💰</span>
+                </div>
+                <div className="text-3xl font-bold text-pink-400">$2,456.78</div>
+                <div className="text-gray-400 text-sm">+12% from last month</div>
+              </div>
+
+              <div className="bg-gray-800 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-white">Subscribers</h3>
+                  <span className="text-2xl">👥</span>
+                </div>
+                <div className="text-3xl font-bold text-blue-400">1,234</div>
+                <div className="text-gray-400 text-sm">+8% from last month</div>
+              </div>
+
+              <div className="bg-gray-800 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-white">Profile Views</h3>
+                  <span className="text-2xl">👁️</span>
+                </div>
+                <div className="text-3xl font-bold text-purple-400">45,678</div>
+                <div className="text-gray-400 text-sm">+15% from last month</div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'content' && (
+            <div className="bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Content Management</h3>
+              <p className="text-gray-400">Upload and manage your photos, videos, and live streams.</p>
+              <div className="mt-6">
+                <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all">
+                  Upload Content
+                </button>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'geolocation' && user && (
+            <div>
+              {/* Import the GeolocationSettings component */}
+              <div className="bg-gray-800 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-white mb-4">🌍 Location & Access Settings</h3>
+                <p className="text-gray-400 mb-6">
+                  Control who can access your profile based on their location and set subscription requirements.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="p-4 bg-gray-700 rounded-lg">
+                    <h4 className="text-white font-medium mb-2">🗺️ Geographic Controls</h4>
+                    <p className="text-gray-400 text-sm">Set which countries, states, or cities can access your profile</p>
+                  </div>
+                  <div className="p-4 bg-gray-700 rounded-lg">
+                    <h4 className="text-white font-medium mb-2">💳 Subscription Types</h4>
+                    <p className="text-gray-400 text-sm">Configure free, monthly, pay-per-visit, or teaser access</p>
+                  </div>
+                  <div className="p-4 bg-gray-700 rounded-lg">
+                    <h4 className="text-white font-medium mb-2">⏱️ Teaser Settings</h4>
+                    <p className="text-gray-400 text-sm">Set preview duration (15-300 seconds) before payment required</p>
+                  </div>
+                  <div className="p-4 bg-gray-700 rounded-lg">
+                    <h4 className="text-white font-medium mb-2">🚫 User Blocking</h4>
+                    <p className="text-gray-400 text-sm">Block users for harassment, inappropriate behavior, etc.</p>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <a 
+                    href={`/performer/${user.id}/geolocation-settings`}
+                    className="inline-block px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all"
+                  >
+                    Configure Location Settings
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'earnings' && (
+            <div className="bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Earnings Overview</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                  <span className="text-gray-400">This Month</span>
+                  <span className="text-white font-semibold">$567.89</span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                  <span className="text-gray-400">Last Month</span>
+                  <span className="text-white font-semibold">$1,234.56</span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                  <span className="text-gray-400">Pending Payout</span>
+                  <span className="text-green-400 font-semibold">$345.67</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Account Settings</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-300 mb-2">Display Name</label>
+                  <input 
+                    type="text" 
+                    defaultValue={user?.displayName || user?.firstName}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">Bio</label>
+                  <textarea 
+                    rows={4}
+                    defaultValue="Your bio here..."
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-pink-500"
+                  />
+                </div>
+                <button className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-all">
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const ProfilePage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
