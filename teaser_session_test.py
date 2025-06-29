@@ -62,7 +62,6 @@ def test_teaser_session():
     access_request = {
         "performer_id": TEST_PERFORMER_ID,
         "user_id": "teaser-test-user",
-        "user_ip": "192.168.1.105",
         "location": ny_location
     }
     
