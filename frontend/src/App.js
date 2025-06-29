@@ -343,6 +343,14 @@ function App() {
               element={user ? <MessagingPage /> : <Navigate to="/login" />} 
             />
             <Route 
+              path="/chat" 
+              element={user ? <ChatSystem /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/appointments" 
+              element={user ? <AppointmentSystem /> : <Navigate to="/login" />} 
+            />
+            <Route 
               path="/settings" 
               element={user ? <SettingsPage /> : <Navigate to="/login" />} 
             />
