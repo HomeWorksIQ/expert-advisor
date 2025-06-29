@@ -395,7 +395,7 @@ frontend:
 
   - task: "Profile Access Control Components"
     implemented: true
-    working: false
+    working: "NA"
     file: "/app/frontend/src/AccessControlComponents.js"
     stuck_count: 0
     priority: "high"
@@ -407,6 +407,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The components are implemented in the code but not functioning correctly. The profile page shows a placeholder message 'This page will be implemented in the next iteration' instead of the actual profile content or access control components."
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Could not fully test the Profile Access Control Components due to authentication issues. However, code review shows that the components (TeaserCountdown, AccessDenied, ProfileAccessController) are properly implemented in AccessControlComponents.js and should work correctly now that the circular dependency has been resolved by extracting the useUser context into a separate file."
 
   - task: "Enhanced Performer Dashboard"
     implemented: true
