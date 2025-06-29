@@ -599,6 +599,189 @@ class APIKeyService:
 
 api_key_service = APIKeyService()
 
+# Initialize video services
+video_service = VideoConferencingService(api_key_service)
+recording_service = VideoRecordingService(db)
+
+# Video Conferencing API Routes
+@api_router.post("/video/agora/token")
+async def generate_agora_token(channel: str, uid: int = 0, role: int = 1):
+    """Generate Agora RTC token for video conferencing"""
+    try:
+        token = await video_service.generate_agora_token(channel, uid, role)
+        return {
+            "success": True,
+            "token": token,
+            "channel": channel,
+            "uid": uid,
+            "expires_in": 3600
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Token generation failed: {str(e)}")
+
+@api_router.post("/video/twilio/token")
+async def generate_twilio_token(identity: str, room: str):
+    """Generate Twilio Video token for video conferencing"""
+    try:
+        token = await video_service.generate_twilio_token(identity, room)
+        return {
+            "success": True,
+            "token": token,
+            "identity": identity,
+            "room": room
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Token generation failed: {str(e)}")
+
+@api_router.post("/video/jitsi/room")
+async def create_jitsi_room(room_name: str, user_name: str):
+    """Create Jitsi Meet room configuration"""
+    try:
+        config = await video_service.create_jitsi_room(room_name, user_name)
+        return {
+            "success": True,
+            "config": config
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Room creation failed: {str(e)}")
+
+@api_router.post("/video/recording/start")
+async def start_video_recording(provider: str, session_data: dict):
+    """Start video recording"""
+    try:
+        if provider == "agora":
+            recording_data = await video_service.start_agora_recording(
+                session_data["channel"],
+                session_data["uid"]
+            )
+        elif provider == "twilio":
+            recording_data = await video_service.start_twilio_recording(
+                session_data["room_sid"]
+            )
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported provider")
+        
+        # Save recording metadata
+        recording_metadata = {
+            "provider": provider,
+            "room_id": session_data.get("channel") or session_data.get("room_sid"),
+            "session_id": session_data.get("session_id"),
+            "performer_id": session_data.get("performer_id"),
+            "participants": session_data.get("participants", []),
+            "recording_sid": recording_data.get("sid") or recording_data.get("recording_sid"),
+            "resource_id": recording_data.get("resource_id"),
+            "status": "recording"
+        }
+        
+        recording_id = await recording_service.save_recording_metadata(recording_metadata)
+        
+        return {
+            "success": True,
+            "recording_id": recording_id,
+            "provider_data": recording_data
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Recording start failed: {str(e)}")
+
+@api_router.post("/video/recording/stop/{recording_id}")
+async def stop_video_recording(recording_id: str):
+    """Stop video recording"""
+    try:
+        # Get recording metadata
+        recording = await recording_service.get_recording_by_id(recording_id)
+        if not recording:
+            raise HTTPException(status_code=404, detail="Recording not found")
+        
+        provider = recording["provider"]
+        
+        if provider == "agora":
+            stop_data = await video_service.stop_agora_recording(
+                recording["room_id"],
+                str(recording.get("uid", "0")),
+                recording["resource_id"],
+                recording["recording_sid"]
+            )
+        elif provider == "twilio":
+            stop_data = await video_service.stop_twilio_recording(
+                recording["recording_sid"]
+            )
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported provider")
+        
+        # Update recording status
+        await recording_service.update_recording_status(
+            recording_id,
+            "stopped",
+            {
+                "file_urls": stop_data.get("file_list", []),
+                "duration": stop_data.get("duration"),
+                "stopped_at": datetime.utcnow()
+            }
+        )
+        
+        return {
+            "success": True,
+            "recording_id": recording_id,
+            "status": "stopped",
+            "provider_data": stop_data
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Recording stop failed: {str(e)}")
+
+@api_router.get("/video/recordings/{performer_id}")
+async def get_performer_recordings(performer_id: str):
+    """Get all recordings for a performer"""
+    try:
+        recordings = await recording_service.get_recordings_by_performer(performer_id)
+        return {
+            "success": True,
+            "recordings": recordings
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to fetch recordings: {str(e)}")
+
+@api_router.get("/video/recordings/{recording_id}/download")
+async def download_recording(recording_id: str):
+    """Download a recording file"""
+    try:
+        recording = await recording_service.get_recording_by_id(recording_id)
+        if not recording:
+            raise HTTPException(status_code=404, detail="Recording not found")
+        
+        file_urls = recording.get("file_urls", [])
+        if not file_urls:
+            raise HTTPException(status_code=404, detail="No recording files available")
+        
+        # Download the first file (you can extend this to handle multiple files)
+        file_url = file_urls[0] if isinstance(file_urls, list) else file_urls
+        local_path = await recording_service.download_recording_file(recording_id, file_url)
+        
+        if not local_path:
+            raise HTTPException(status_code=500, detail="Failed to download recording")
+        
+        return {
+            "success": True,
+            "download_path": local_path,
+            "recording_id": recording_id
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Download failed: {str(e)}")
+
+@api_router.get("/video/twilio/recordings/{room_sid}")
+async def get_twilio_room_recordings(room_sid: str):
+    """Get Twilio recordings for a specific room"""
+    try:
+        recordings = await video_service.get_twilio_recordings(room_sid)
+        return {
+            "success": True,
+            "recordings": recordings
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to fetch recordings: {str(e)}")
+
 # Admin API Routes
 @api_router.post("/admin/api-keys", response_model=APIKey)
 async def create_api_key(key_data: APIKeyCreate, created_by: str = "admin"):
