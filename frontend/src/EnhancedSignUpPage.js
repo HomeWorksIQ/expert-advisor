@@ -61,7 +61,7 @@ const EnhancedSignUpPage = () => {
 
       if (response.data.access_token) {
         await login(response.data);
-        window.location.href = formData.userType === 'performer' ? '/performer/dashboard' : '/member/dashboard';
+        window.location.href = formData.userType === 'expert' ? '/expert/dashboard' : '/client/dashboard';
       }
     } catch (error) {
       alert(error.response?.data?.detail || 'Signup failed. Please try again.');
