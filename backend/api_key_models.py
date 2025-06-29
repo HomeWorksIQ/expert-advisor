@@ -5,6 +5,149 @@ from enum import Enum
 import uuid
 
 
+class SexualPreference(str, Enum):
+    STRAIGHT = "straight"
+    BISEXUAL = "bisexual"
+    GAY = "gay"
+    LESBIAN = "lesbian"
+    PANSEXUAL = "pansexual"
+    OTHER = "other"
+
+
+class Gender(str, Enum):
+    MALE = "male"
+    FEMALE = "female"
+    TRANS_MALE = "trans_male"
+    TRANS_FEMALE = "trans_female"
+    NON_BINARY = "non_binary"
+    OTHER = "other"
+
+
+class Ethnicity(str, Enum):
+    WHITE = "white"
+    BLACK = "black"
+    HISPANIC = "hispanic"
+    ASIAN = "asian"
+    MIDDLE_EASTERN = "middle_eastern"
+    NATIVE_AMERICAN = "native_american"
+    PACIFIC_ISLANDER = "pacific_islander"
+    MIXED = "mixed"
+    OTHER = "other"
+
+
+class PerformerProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(..., description="User ID")
+    
+    # Basic Info
+    stage_name: str = Field(..., description="Performer stage name")
+    bio: str = Field("", description="Performer bio")
+    age: int = Field(..., description="Performer age", ge=18, le=99)
+    
+    # Identity Information
+    gender: Gender = Field(..., description="Gender identity")
+    sexual_preference: SexualPreference = Field(..., description="Sexual preference")
+    ethnicity: Ethnicity = Field(..., description="Ethnicity")
+    
+    # Location Information
+    country: str = Field(..., description="Country")
+    state: Optional[str] = Field(None, description="State/Province")
+    city: str = Field(..., description="City")
+    zip_code: Optional[str] = Field(None, description="ZIP/Postal code")
+    show_exact_location: bool = Field(False, description="Show exact location to users")
+    location_radius_km: int = Field(50, description="Search radius in kilometers")
+    
+    # Physical Attributes (optional)
+    height_cm: Optional[int] = Field(None, description="Height in centimeters")
+    weight_kg: Optional[int] = Field(None, description="Weight in kilograms")
+    body_type: Optional[str] = Field(None, description="Body type")
+    hair_color: Optional[str] = Field(None, description="Hair color")
+    eye_color: Optional[str] = Field(None, description="Eye color")
+    
+    # Professional Info
+    experience_level: str = Field("beginner", description="Experience level")
+    specialties: List[str] = Field([], description="Performance specialties")
+    languages: List[str] = Field(["english"], description="Languages spoken")
+    
+    # Availability
+    online_status: str = Field("offline", description="Current online status")
+    last_active: datetime = Field(default_factory=datetime.utcnow)
+    timezone: str = Field("UTC", description="Performer timezone")
+    
+    # Content & Media
+    profile_image: Optional[str] = Field(None, description="Profile image URL")
+    cover_image: Optional[str] = Field(None, description="Cover image URL")
+    gallery_images: List[str] = Field([], description="Gallery image URLs")
+    
+    # Pricing & Services
+    rates: Dict[str, float] = Field({}, description="Service rates")
+    accepts_tips: bool = Field(True, description="Accepts tips")
+    minimum_tip: float = Field(1.0, description="Minimum tip amount")
+    
+    # Verification & Status
+    is_verified: bool = Field(False, description="Account verification status")
+    verification_level: str = Field("none", description="Verification level")
+    account_status: str = Field("active", description="Account status")
+    
+    # Statistics
+    total_views: int = Field(0, description="Total profile views")
+    total_likes: int = Field(0, description="Total likes received")
+    total_shows: int = Field(0, description="Total shows performed")
+    average_rating: float = Field(0.0, description="Average user rating")
+    rating_count: int = Field(0, description="Number of ratings")
+    
+    # Privacy Settings
+    show_in_search: bool = Field(True, description="Show in search results")
+    allow_location_search: bool = Field(True, description="Allow location-based search")
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class PerformerSearch(BaseModel):
+    # Text Search
+    query: Optional[str] = Field(None, description="Search query")
+    
+    # Location Filters
+    country: Optional[str] = Field(None, description="Filter by country")
+    state: Optional[str] = Field(None, description="Filter by state")
+    city: Optional[str] = Field(None, description="Filter by city")
+    zip_code: Optional[str] = Field(None, description="Filter by ZIP code")
+    radius_km: Optional[int] = Field(None, description="Search radius in kilometers")
+    
+    # Demographic Filters
+    min_age: Optional[int] = Field(None, description="Minimum age", ge=18)
+    max_age: Optional[int] = Field(None, description="Maximum age", le=99)
+    gender: Optional[List[Gender]] = Field(None, description="Gender filter")
+    sexual_preference: Optional[List[SexualPreference]] = Field(None, description="Sexual preference filter")
+    ethnicity: Optional[List[Ethnicity]] = Field(None, description="Ethnicity filter")
+    
+    # Physical Filters
+    min_height_cm: Optional[int] = Field(None, description="Minimum height in cm")
+    max_height_cm: Optional[int] = Field(None, description="Maximum height in cm")
+    body_type: Optional[List[str]] = Field(None, description="Body type filter")
+    hair_color: Optional[List[str]] = Field(None, description="Hair color filter")
+    eye_color: Optional[List[str]] = Field(None, description="Eye color filter")
+    
+    # Status Filters
+    online_only: bool = Field(False, description="Show only online performers")
+    verified_only: bool = Field(False, description="Show only verified performers")
+    
+    # Service Filters
+    max_rate: Optional[float] = Field(None, description="Maximum rate filter")
+    accepts_tips: Optional[bool] = Field(None, description="Accepts tips filter")
+    languages: Optional[List[str]] = Field(None, description="Language filter")
+    
+    # Sort Options
+    sort_by: str = Field("popularity", description="Sort field")
+    sort_order: str = Field("desc", description="Sort order (asc/desc)")
+    
+    # Pagination
+    page: int = Field(1, description="Page number", ge=1)
+    limit: int = Field(20, description="Results per page", ge=1, le=100)
+
+
 class TrialStatus(str, Enum):
     ACTIVE = "active"
     EXPIRED = "expired"
