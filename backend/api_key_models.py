@@ -51,6 +51,77 @@ class Ethnicity(str, Enum):
     MIXED = "mixed"
     OTHER = "other"
 
+# New Expert Profile Model for Professional Advisory Platform
+class ExpertProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(..., description="User ID")
+    
+    # Basic Professional Info
+    professional_name: str = Field(..., description="Professional display name")
+    title: str = Field(..., description="Professional title (e.g., 'Senior Tax Attorney')")
+    bio: str = Field("", description="Professional biography")
+    age: Optional[int] = Field(None, description="Expert age", ge=18, le=99)
+    
+    # Professional Identity
+    expertise_category: ExpertiseCategory = Field(..., description="Primary expertise category")
+    expertise_level: ExpertiseLevel = Field(..., description="Professional expertise level")
+    ethnicity: Ethnicity = Field(..., description="Ethnicity for diversity representation")
+    
+    # Location Information
+    country: str = Field(..., description="Country")
+    state: Optional[str] = Field(None, description="State/Province")
+    city: str = Field(..., description="City")
+    zip_code: Optional[str] = Field(None, description="ZIP/Postal code")
+    show_exact_location: bool = Field(False, description="Show exact location to clients")
+    location_radius_km: int = Field(50, description="Service radius in kilometers")
+    
+    # Professional Credentials
+    specializations: List[str] = Field([], description="Specialized areas within expertise")
+    credentials: List[str] = Field([], description="Professional credentials and certifications")
+    licenses: List[str] = Field([], description="Professional licenses")
+    education: List[Dict[str, str]] = Field([], description="Educational background")
+    years_of_experience: int = Field(0, description="Years of professional experience")
+    
+    # Professional Services
+    languages: List[str] = Field(["english"], description="Languages spoken")
+    consultation_types: List[str] = Field([], description="Types of consultations offered")
+    
+    # Availability
+    online_status: str = Field("offline", description="Current online status")
+    last_active: datetime = Field(default_factory=datetime.utcnow)
+    timezone: str = Field("UTC", description="Expert timezone")
+    
+    # Professional Media
+    profile_image: Optional[str] = Field(None, description="Professional headshot URL")
+    cover_image: Optional[str] = Field(None, description="Professional cover image URL")
+    portfolio_images: List[str] = Field([], description="Professional portfolio images")
+    
+    # Pricing & Services
+    consultation_rates: Dict[str, float] = Field({}, description="Consultation rates")
+    accepts_pro_bono: bool = Field(False, description="Accepts pro bono consultations")
+    minimum_consultation_fee: float = Field(50.0, description="Minimum consultation fee")
+    
+    # Verification & Status
+    is_verified: bool = Field(False, description="Professional verification status")
+    verification_level: str = Field("none", description="Verification level")
+    account_status: str = Field("active", description="Account status")
+    
+    # Professional Statistics
+    total_consultations: int = Field(0, description="Total consultations completed")
+    total_clients: int = Field(0, description="Total unique clients served")
+    total_reviews: int = Field(0, description="Total reviews received")
+    average_rating: float = Field(0.0, description="Average client rating")
+    rating_count: int = Field(0, description="Number of ratings")
+    success_rate: float = Field(0.0, description="Consultation success rate")
+    
+    # Privacy Settings
+    show_in_search: bool = Field(True, description="Show in search results")
+    allow_location_search: bool = Field(True, description="Allow location-based search")
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
 
 class PerformerProfile(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
