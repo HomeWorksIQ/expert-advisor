@@ -5,6 +5,8 @@ import json
 import time
 import os
 from enum import Enum
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any
 
 # Get the backend URL from the frontend .env file
 with open('/app/frontend/.env', 'r') as f:
@@ -19,6 +21,7 @@ API_URL = f"{BACKEND_URL}/api"
 # Test constants
 TEST_PERFORMER_ID = "test-performer-123"
 TEST_USER_ID = "test-user-456"
+TEST_MEMBER_ID = "test-member-789"
 
 # Enum classes to match backend
 class SubscriptionType(str, Enum):
@@ -33,6 +36,90 @@ class BlockReason(str, Enum):
     INAPPROPRIATE_BEHAVIOR = "inappropriate_behavior"
     SPAM = "spam"
     OTHER = "other"
+
+class APIKeyType(str, Enum):
+    # Video Conferencing
+    AGORA = "agora"
+    TWILIO_VIDEO = "twilio_video"
+    JITSI = "jitsi"
+    
+    # Calendar Integration
+    GOOGLE_CALENDAR = "google_calendar"
+    MICROSOFT_OUTLOOK = "microsoft_outlook"
+    
+    # Real-time Chat & Notifications
+    FIREBASE_FCM = "firebase_fcm"
+    TWILIO_SMS = "twilio_sms"
+    
+    # File Storage & Processing
+    AWS_S3 = "aws_s3"
+    GOOGLE_CLOUD_STORAGE = "google_cloud_storage"
+    CLOUDINARY = "cloudinary"
+    
+    # Shipping Integrations
+    USPS = "usps"
+    UPS = "ups"
+    FEDEX = "fedex"
+    
+    # Payment Processing
+    STRIPE_CONNECT = "stripe_connect"
+    
+    # AI/ML Services
+    OPENAI = "openai"
+    ANTHROPIC = "anthropic"
+
+class APIKeyStatus(str, Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    EXPIRED = "expired"
+
+class AppointmentType(str, Enum):
+    VIDEO_CALL = "video_call"
+    PHONE_CALL = "phone_call"
+    CHAT_SESSION = "chat_session"
+    CUSTOM_SERVICE = "custom_service"
+    IN_PERSON = "in_person"
+
+class AppointmentStatus(str, Enum):
+    SCHEDULED = "scheduled"
+    CONFIRMED = "confirmed"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+    NO_SHOW = "no_show"
+
+class ChatType(str, Enum):
+    DIRECT_MESSAGE = "direct_message"
+    GROUP_CHAT = "group_chat"
+    SUPPORT_CHAT = "support_chat"
+
+class MessageType(str, Enum):
+    TEXT = "text"
+    IMAGE = "image"
+    VIDEO = "video"
+    AUDIO = "audio"
+    FILE = "file"
+    SYSTEM = "system"
+
+class FileType(str, Enum):
+    IMAGE = "image"
+    VIDEO = "video"
+    AUDIO = "audio"
+    DOCUMENT = "document"
+    ARCHIVE = "archive"
+    OTHER = "other"
+
+class ProductType(str, Enum):
+    PHYSICAL = "physical"
+    DIGITAL = "digital"
+    SERVICE = "service"
+
+class ShippingProvider(str, Enum):
+    USPS = "usps"
+    UPS = "ups"
+    FEDEX = "fedex"
+    DHL = "dhl"
+    CUSTOM = "custom"
 
 class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
     """Test suite for geo-location and access control APIs"""
