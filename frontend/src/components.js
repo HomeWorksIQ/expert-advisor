@@ -1270,8 +1270,8 @@ export const PerformerDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Performer Dashboard</h1>
-          <p className="text-gray-400">Manage your content, earnings, and profile settings</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Expert Dashboard</h1>
+          <p className="text-gray-400">Manage your consultations, earnings, and profile settings</p>
         </div>
 
         {/* Navigation Tabs */}
