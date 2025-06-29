@@ -114,7 +114,7 @@ const EnhancedSignUpPage = () => {
           
           {/* Free Trial Highlight */}
           <div className="mb-8">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <span>🎉</span>
               <span>LIMITED TIME OFFER</span>
             </div>
