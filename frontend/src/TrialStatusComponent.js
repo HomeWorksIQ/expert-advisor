@@ -16,6 +16,13 @@ const TrialStatusComponent = () => {
     }
   }, [user]);
 
+  // Auto-show expiration modal for expired or expiring trials
+  useEffect(() => {
+    if (trialData && (trialData.status === 'expired' || (trialData.days_remaining <= 1 && trialData.status === 'active'))) {
+      setShowExpirationModal(true);
+    }
+  }, [trialData]);
+
   const fetchTrialStatus = async () => {
     try {
       setLoading(true);
