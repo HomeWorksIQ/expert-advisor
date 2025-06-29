@@ -179,7 +179,7 @@ const EnhancedSignUpPage = () => {
               <div className="text-sm opacity-90">
                 No credit card required
                 <span className="block text-xs mt-1">
-                  Regular price: ${formData.userType === 'performer' ? '29.99' : '19.99'}/month
+                  Regular price: ${formData.userType === 'expert' ? '29.99' : '19.99'}/month
                 </span>
               </div>
             </div>
