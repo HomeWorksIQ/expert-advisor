@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useUser } from './App';
+import { useUser } from './UserContext';
 import { Header } from './components';
 import TrialStatusComponent from './TrialStatusComponent';
 
