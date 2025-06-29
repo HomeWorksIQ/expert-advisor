@@ -599,13 +599,7 @@ frontend:
         -agent: "testing"
         -comment: "Based on visual inspection, the hero section displays correctly with the Eye Candy heading, subheading, and two call-to-action buttons (Start Your Journey and Explore Creators). The background image with gradient overlay is also visible."
 
-  - task: "UI/UX Testing - Discover Page"
-    implemented: true
-    working: false
-    file: "/app/frontend/src/App.js"
-    stuck_count: 2
-    priority: "medium"
-    needs_retesting: true
+
     status_history:
         -working: "NA"
         -agent: "main"
