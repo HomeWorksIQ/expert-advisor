@@ -10,7 +10,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from cryptography.fernet import Fernet
 import httpx
-from .api_key_models import APIKeyType
+from api_key_models import APIKeyType
 
 
 class CalendarIntegrationService:
