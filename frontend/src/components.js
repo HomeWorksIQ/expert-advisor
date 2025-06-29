@@ -1363,7 +1363,7 @@ export const BankVerificationPage = () => (
 );
 
 // Import enhanced components
-export { DiscoverPage, MemberDashboard } from './enhanced-components';
+export { MemberDashboard } from './enhanced-components';
 
 // Enhanced Performer Dashboard with Geo-Location Settings
 export const PerformerDashboard = () => {
