@@ -8,13 +8,24 @@ class TrialService:
     def __init__(self, db):
         self.db = db
     
-    async def create_trial(self, user_id: str, trial_type: str, trial_duration_days: int = 7) -> Trial:
+    async def create_trial(self, user_id: str, trial_type: str, trial_duration_days: int = None) -> Trial:
         """Create a new trial for a user"""
         
         # Check if user already has a trial
         existing_trial = await self.db.trials.find_one({"user_id": user_id})
         if existing_trial:
             raise HTTPException(status_code=400, detail="User already has a trial")
+        
+        # Get trial settings from database if duration not specified
+        if trial_duration_days is None:
+            settings = await self.db.trial_settings.find_one({"setting_type": "global"})
+            if settings:
+                if trial_type == "performer":
+                    trial_duration_days = settings.get("performer_trial_days", 7)
+                else:
+                    trial_duration_days = settings.get("member_trial_days", 7)
+            else:
+                trial_duration_days = 7  # Default fallback
         
         # Define trial benefits based on user type
         benefits = self._get_trial_benefits(trial_type)
