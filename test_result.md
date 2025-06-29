@@ -323,7 +323,7 @@ frontend:
 
   - task: "Location Selector Component"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/GeolocationComponents.js"
     stuck_count: 0
     priority: "high"
@@ -335,6 +335,9 @@ frontend:
         -working: false
         -agent: "testing"
         -comment: "The component is implemented in the code but not rendering on the page. API endpoint for location preferences is working (returns 200), but the UI component is not visible when accessing the geo-location settings page directly."
+        -working: true
+        -agent: "testing"
+        -comment: "After fixing the circular dependency by extracting the useUser context into a separate file (UserContext.js), the Location Selector component is now rendering properly on the test-geolocation page. The component displays correctly with country selection dropdown and Add Location button."
 
   - task: "Subscription Type Selector"
     implemented: true
