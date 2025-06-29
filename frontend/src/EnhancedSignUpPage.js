@@ -201,7 +201,10 @@ const EnhancedSignUpPage = () => {
                 >
                   <div className="text-2xl mb-2">👤</div>
                   <div className="font-medium">Member</div>
-                  <div className="text-xs opacity-75">{trialSettings.member_trial_days} days free</div>
+                  <div className="text-xs opacity-75">
+                    {trialSettings.member_trial_days} days FREE
+                    <span className="text-gray-400"> (reg. $19.99/mo)</span>
+                  </div>
                 </button>
                 
                 <button
@@ -215,7 +218,10 @@ const EnhancedSignUpPage = () => {
                 >
                   <div className="text-2xl mb-2">⭐</div>
                   <div className="font-medium">Performer</div>
-                  <div className="text-xs opacity-75">{trialSettings.performer_trial_days} days free</div>
+                  <div className="text-xs opacity-75">
+                    {trialSettings.performer_trial_days} days FREE
+                    <span className="text-gray-400"> (reg. $29.99/mo)</span>
+                  </div>
                 </button>
               </div>
             </div>
