@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from './App';
+import TrialExpirationModal from './TrialExpirationModal';
 
 const TrialStatusComponent = () => {
   const { user, API } = useUser();
