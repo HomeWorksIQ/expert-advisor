@@ -231,8 +231,8 @@ export const DiscoverPage = () => {
   }, []);
 
   useEffect(() => {
-    applyFilters(performers, searchTerm, filters);
-  }, [searchTerm, filters, performers]);
+    applyFilters(experts, searchTerm, filters);
+  }, [searchTerm, filters, experts]);
 
   const applyFilters = (allPerformers, search, currentFilters) => {
     let filtered = [...allPerformers];
