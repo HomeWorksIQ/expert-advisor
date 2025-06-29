@@ -1007,12 +1007,10 @@ export const LoginPage = () => {
 
 // Enhanced Sign Up Page with Terms & Conditions
 export const SignUpPage = () => {
-  const { signup } = useUser();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
     password: '',
     confirmPassword: '',
     userType: 'member',
