@@ -31,6 +31,7 @@ import {
 import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
+import { TestGeolocationPage } from './TestGeolocationPage';
 
 // Profile Page with Access Control
 const ProfilePageWithAccessControl = () => {
