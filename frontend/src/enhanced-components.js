@@ -739,6 +739,9 @@ export const MemberDashboard = () => {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Trial Status */}
+        <TrialStatusComponent />
+        
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
