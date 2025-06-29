@@ -303,15 +303,18 @@ frontend:
 
   - task: "App Router Integration"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
         -comment: "Updated App.js with new routes for geo-location settings and profile access control integration."
+        -working: true
+        -agent: "testing"
+        -comment: "The routes are properly implemented in App.js. The routes for geo-location settings (/performer/:performerId/geolocation-settings) and profile access control (/profile/:id) are correctly defined and accessible."
 
 backend:
   - task: "Location Detection API"
