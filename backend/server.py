@@ -14,7 +14,6 @@ import random
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import timedelta
-from models import UserCreate, User
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
