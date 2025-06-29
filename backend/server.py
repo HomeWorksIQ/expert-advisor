@@ -21,6 +21,8 @@ from api_key_models import (
     Product, Order, ProductType, ShippingProvider
 )
 from video_service import VideoConferencingService, VideoRecordingService
+from calendar_service import CalendarIntegrationService
+from shipping_service import ShippingLabelService
 
 
 ROOT_DIR = Path(__file__).parent
