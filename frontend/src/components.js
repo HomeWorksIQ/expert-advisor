@@ -998,6 +998,36 @@ export const HomePage = () => {
             Step 1: Choose your location → Step 2: Browse categories → Step 3: Connect with experts. Always free for members.
           </p>
           
+          {/* Search Bar */}
+          <div className="mb-8 max-w-xl mx-auto">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search for expertise... (e.g., family doctor, insurance agent, business consultant)"
+                className="w-full px-6 py-4 text-lg rounded-lg border-2 border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.target.value.trim()) {
+                    window.location.href = `/discover?search=${encodeURIComponent(e.target.value.trim())}`;
+                  }
+                }}
+              />
+              <button
+                onClick={(e) => {
+                  const input = e.target.previousElementSibling;
+                  if (input.value.trim()) {
+                    window.location.href = `/discover?search=${encodeURIComponent(input.value.trim())}`;
+                  }
+                }}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              >
+                🔍 Search
+              </button>
+            </div>
+            <p className="text-center text-gray-300 text-sm mt-2">
+              Or browse by category below
+            </p>
+          </div>
+          
           {/* Location and Category Selection */}
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8 max-w-3xl mx-auto">
             <h3 className="text-white text-lg font-semibold mb-4">Find experts near you:</h3>
