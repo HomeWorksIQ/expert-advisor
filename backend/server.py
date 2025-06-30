@@ -1497,6 +1497,299 @@ async def update_performer_status(user_id: str, status: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to update status: {str(e)}")
 
+# =============================================================================
+# AFFILIATE PROGRAM API ROUTES
+# =============================================================================
+
+@api_router.post("/affiliate/create")
+async def create_affiliate_account(member_id: str):
+    """Create affiliate account for a member"""
+    try:
+        affiliate_account = await affiliate_service.create_affiliate_account(member_id)
+        return {
+            "success": True,
+            "affiliate_account": affiliate_account.dict(),
+            "message": "Affiliate account created successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to create affiliate account: {str(e)}")
+
+@api_router.get("/affiliate/{member_id}")
+async def get_affiliate_account(member_id: str):
+    """Get affiliate account for a member"""
+    try:
+        affiliate_account = await affiliate_service.get_affiliate_account(member_id)
+        if affiliate_account:
+            return {
+                "success": True,
+                "affiliate_account": affiliate_account.dict()
+            }
+        else:
+            return {
+                "success": False,
+                "message": "No affiliate account found"
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get affiliate account: {str(e)}")
+
+@api_router.post("/affiliate/track-click")
+async def track_referral_click(request: Request, affiliate_code: str, referrer_url: str = None):
+    """Track referral link click"""
+    try:
+        client_ip = request.client.host
+        user_agent = request.headers.get("user-agent", "")
+        
+        tracking = await affiliate_service.track_referral_click(
+            affiliate_code=affiliate_code,
+            ip_address=client_ip,
+            user_agent=user_agent,
+            referrer_url=referrer_url or ""
+        )
+        
+        return {
+            "success": True,
+            "tracking_id": tracking.id,
+            "message": "Referral click tracked"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to track referral: {str(e)}")
+
+@api_router.post("/affiliate/process-signup")
+async def process_referral_signup(affiliate_code: str, new_user_id: str):
+    """Process referral signup and award credits"""
+    try:
+        success = await affiliate_service.process_referral_signup(affiliate_code, new_user_id)
+        if success:
+            return {
+                "success": True,
+                "message": "Referral processed and credits awarded"
+            }
+        else:
+            return {
+                "success": False,
+                "message": "Referral could not be processed"
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to process referral signup: {str(e)}")
+
+@api_router.get("/affiliate/{member_id}/stats")
+async def get_referral_stats(member_id: str):
+    """Get referral statistics for a member"""
+    try:
+        stats = await affiliate_service.get_referral_stats(member_id)
+        return {
+            "success": True,
+            "stats": stats
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get referral stats: {str(e)}")
+
+# =============================================================================
+# CREDITS SYSTEM API ROUTES
+# =============================================================================
+
+@api_router.post("/credits/create-account")
+async def create_credit_account(user_id: str):
+    """Create credit account for a user"""
+    try:
+        credit_account = await credit_service.create_credit_account(user_id)
+        return {
+            "success": True,
+            "credit_account": credit_account.dict(),
+            "message": "Credit account created successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to create credit account: {str(e)}")
+
+@api_router.get("/credits/{user_id}/balance")
+async def get_credit_balance(user_id: str):
+    """Get credit balance for a user"""
+    try:
+        balance = await credit_service.get_credit_balance(user_id)
+        return {
+            "success": True,
+            "balance": balance,
+            "currency": "USD"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get credit balance: {str(e)}")
+
+@api_router.get("/credits/{user_id}/history")
+async def get_credit_history(user_id: str, limit: int = 50):
+    """Get credit transaction history for a user"""
+    try:
+        transactions = await credit_service.get_credit_history(user_id, limit)
+        return {
+            "success": True,
+            "transactions": [t.dict() for t in transactions],
+            "count": len(transactions)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get credit history: {str(e)}")
+
+@api_router.post("/credits/use")
+async def use_credits_for_purchase(user_id: str, amount: float, order_id: str, description: str):
+    """Use credits for a purchase"""
+    try:
+        success = await credit_service.use_credits_for_purchase(user_id, amount, order_id, description)
+        if success:
+            return {
+                "success": True,
+                "message": f"Successfully used {amount} credits"
+            }
+        else:
+            return {
+                "success": False,
+                "message": "Insufficient credit balance"
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to use credits: {str(e)}")
+
+# =============================================================================
+# PAYOUT SYSTEM API ROUTES
+# =============================================================================
+
+@api_router.post("/payouts/accounts")
+async def create_payout_account(expert_id: str, account_data: dict):
+    """Create payout account for an expert"""
+    try:
+        payout_account = await payout_service.create_payout_account(expert_id, account_data)
+        return {
+            "success": True,
+            "payout_account": payout_account.dict(),
+            "message": "Payout account created successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to create payout account: {str(e)}")
+
+@api_router.get("/payouts/{expert_id}/accounts")
+async def get_payout_accounts(expert_id: str):
+    """Get payout accounts for an expert"""
+    try:
+        accounts = await payout_service.get_payout_accounts(expert_id)
+        return {
+            "success": True,
+            "accounts": [account.dict() for account in accounts]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get payout accounts: {str(e)}")
+
+@api_router.post("/payouts/request")
+async def request_payout(expert_id: str, amount: float, payout_account_id: str, description: str = None):
+    """Create a payout request"""
+    try:
+        payout_request = await payout_service.request_payout(expert_id, amount, payout_account_id, description)
+        return {
+            "success": True,
+            "payout_request": payout_request.dict(),
+            "message": "Payout request submitted successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to request payout: {str(e)}")
+
+@api_router.get("/payouts/{expert_id}/requests")
+async def get_payout_requests(expert_id: str, status: str = None):
+    """Get payout requests for an expert"""
+    try:
+        payout_status = PayoutStatus(status) if status else None
+        requests = await payout_service.get_payout_requests(expert_id, payout_status)
+        return {
+            "success": True,
+            "requests": [req.dict() for req in requests]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get payout requests: {str(e)}")
+
+@api_router.post("/admin/payouts/{request_id}/process")
+async def process_payout_request(request_id: str, admin_notes: str = None):
+    """Process a payout request (admin only)"""
+    try:
+        success = await payout_service.process_payout_request(request_id, admin_notes)
+        if success:
+            return {
+                "success": True,
+                "message": "Payout request processed successfully"
+            }
+        else:
+            return {
+                "success": False,
+                "message": "Payout request not found"
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to process payout: {str(e)}")
+
+@api_router.post("/admin/payouts/{request_id}/complete")
+async def complete_payout(request_id: str, transaction_id: str, processing_fee: float = 0.0):
+    """Complete a payout (admin only)"""
+    try:
+        history = await payout_service.complete_payout(request_id, transaction_id, processing_fee)
+        return {
+            "success": True,
+            "payout_history": history.dict(),
+            "message": "Payout completed successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to complete payout: {str(e)}")
+
+# =============================================================================
+# SHOPPING CART WITH CREDITS API ROUTES
+# =============================================================================
+
+@api_router.get("/cart/{user_id}")
+async def get_shopping_cart(user_id: str):
+    """Get shopping cart for a user"""
+    try:
+        cart = await cart_service.get_or_create_cart(user_id)
+        return {
+            "success": True,
+            "cart": cart.dict()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get shopping cart: {str(e)}")
+
+@api_router.post("/cart/{user_id}/items")
+async def add_item_to_cart(user_id: str, product_id: str, product_data: dict):
+    """Add item to shopping cart"""
+    try:
+        cart_item = await cart_service.add_item_to_cart(user_id, product_id, product_data)
+        return {
+            "success": True,
+            "cart_item": cart_item.dict(),
+            "message": "Item added to cart"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to add item to cart: {str(e)}")
+
+@api_router.post("/cart/{user_id}/apply-credits")
+async def apply_credits_to_cart(user_id: str, credits_to_use: float):
+    """Apply credits to shopping cart"""
+    try:
+        result = await cart_service.apply_credits_to_cart(user_id, credits_to_use)
+        return {
+            "success": True,
+            "result": result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to apply credits: {str(e)}")
+
+@api_router.get("/cart/{user_id}/max-credits")
+async def get_max_credits_usable(user_id: str):
+    """Get maximum credits that can be used for current cart"""
+    try:
+        cart = await cart_service.get_or_create_cart(user_id)
+        max_credits = await credit_service.calculate_max_credits_usable(cart.subtotal)
+        user_balance = await credit_service.get_credit_balance(user_id)
+        
+        return {
+            "success": True,
+            "max_credits_usable": min(max_credits, user_balance),
+            "cart_subtotal": cart.subtotal,
+            "user_credit_balance": user_balance,
+            "max_percentage": 50
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get max credits: {str(e)}")
+
 @api_router.get("/video/recordings/{recording_id}/download")
 async def download_recording(recording_id: str):
     """Download a recording file"""
