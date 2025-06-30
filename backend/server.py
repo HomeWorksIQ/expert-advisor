@@ -51,6 +51,8 @@ from affiliate_credits_models import (
 )
 from member_auth_service import MemberAuthService
 from member_profile_service import MemberProfileService
+from admin_auth_service import AdminAuthService
+from admin_management_service import AdminManagementService
 
 
 ROOT_DIR = Path(__file__).parent
