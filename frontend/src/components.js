@@ -150,7 +150,7 @@ const mockPerformers = [
     email: "maria.garcia@theexperts.com",
     phone: "+1-602-555-0105",
     address: "202 Protection Ave, Phoenix, AZ 85001",
-    bio: "Senior insurance advisor specializing in family protection plans and business insurance. 18+ years helping clients navigate complex insurance needs and claims.",
+    bio: "Senior insurance advisor specializing in family protection plans and business insurance. 18+ years helping members navigate complex insurance needs and claims.",
     profileImage: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw1fHxpbnN1cmFuY2UlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Phoenix", state: "AZ", country: "USA", zipCode: "85001" },
