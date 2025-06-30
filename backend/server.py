@@ -1226,6 +1226,10 @@ credit_service = CreditService(db)
 payout_service = PayoutService(db)
 cart_service = ShoppingCartService(db)
 
+# Initialize member services
+member_auth_service = MemberAuthService(db)
+member_profile_service = MemberProfileService(db)
+
 # Video Conferencing API Routes
 @api_router.post("/video/agora/token")
 async def generate_agora_token(channel: str, uid: int = 0, role: int = 1):
