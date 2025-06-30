@@ -39,6 +39,9 @@ const CategoriesPage = () => {
       } else {
         setLocationInfo('Local experts in specified area');
       }
+    } else if (city && state && zip) {
+      // Show both city and zip when both are available (from geo IP)
+      setLocationInfo(`Local experts in ${city}, ${state} (${zip})`);
     } else if (city && state) {
       setLocationInfo(`Local experts in ${city}, ${state}`);
     } else if (location === 'local') {
