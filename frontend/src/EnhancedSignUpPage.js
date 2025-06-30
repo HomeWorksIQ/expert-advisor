@@ -174,13 +174,10 @@ const EnhancedSignUpPage = () => {
           <div className="lg:hidden mb-8 text-center">
             <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-3 rounded-lg mb-4">
               <div className="text-lg font-bold">
-                {getTrialDays()}-Day FREE Trial
+                {formData.userType === 'expert' ? 'Expert Account' : 'Member Account'}
               </div>
               <div className="text-sm opacity-90">
-                No credit card required
-                <span className="block text-xs mt-1">
-                  Regular price: ${formData.userType === 'expert' ? '29.99' : '19.99'}/month
-                </span>
+                {formData.userType === 'expert' ? 'Free signup, then $50/month when published' : 'Always completely free'}
               </div>
             </div>
           </div>
