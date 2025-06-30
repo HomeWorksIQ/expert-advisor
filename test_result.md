@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "20 Diverse Expert Profiles & Category System"
+  - task: "Geo IP Location Detection & Simplified User Flow"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js, /app/frontend/src/CategoriesPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Implemented geo IP location detection with simplified user flow. Updated hero section to have two options: 'Use My Location' (with browser geolocation + IP fallback) and 'Browse National Experts'. Removed complex location selection grid. Location detection uses existing backend API endpoint (/api/detect-location) with browser geolocation as primary and IP detection as fallback. Updated categories page to display detected location and pass location parameters through the URL. New flow: Homepage → Choose Location (geo or national) → Categories Page → Expert Selection."
     implemented: true
     working: true
     file: "/app/frontend/src/components.js"
