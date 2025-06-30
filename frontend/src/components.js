@@ -825,9 +825,21 @@ export const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API call to fetch featured performers
+    // Simulate API call to fetch featured performers - show diverse selection
     setTimeout(() => {
-      setFeaturedPerformers(mockPerformers.slice(0, 3));
+      // Select diverse experts from different categories
+      const diverseSelection = [
+        mockPerformers.find(p => p.id === 1), // Dr. Sarah Chen - Medical
+        mockPerformers.find(p => p.id === 4), // James Wilson - Insurance  
+        mockPerformers.find(p => p.id === 6), // David Thompson - Business
+        mockPerformers.find(p => p.id === 8), // Professor Adams - Education
+        mockPerformers.find(p => p.id === 11), // Amanda Rodriguez - Marketing
+        mockPerformers.find(p => p.id === 13), // Mike Thompson - Home Services
+        mockPerformers.find(p => p.id === 15), // Attorney Stone - Legal
+        mockPerformers.find(p => p.id === 19) // Dr. Emily Foster - Pet Care
+      ].filter(Boolean);
+      
+      setFeaturedPerformers(diverseSelection);
       setIsLoading(false);
     }, 1000);
   }, []);
