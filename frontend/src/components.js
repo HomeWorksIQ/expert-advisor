@@ -706,7 +706,7 @@ export const Header = ({ showSearch = true, className = "" }) => {
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-6">
-            <a href="/discover" className="text-gray-600 hover:text-blue-600 transition-colors">
+            <a href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
               Find Experts
             </a>
             <a href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
