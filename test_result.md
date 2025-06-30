@@ -1088,16 +1088,26 @@ frontend:
         -comment: "The homepage search bar is implemented and prominently displayed after the subtitle. It has a placeholder text about searching for expertise, a search button with a magnifying glass icon, and text below saying 'Or browse by category below'. The search bar is visually well-designed and positioned correctly on the page. However, I couldn't test the functionality (whether it navigates to /discover?search=[term]) due to authentication/routing issues that prevent accessing pages other than the homepage."
 
 metadata:
-  - task: "Expert Profile Favorite Button"
-    implemented: true
-    working: "NA"
-    file: "/app/frontend/src/ProfilePage.js"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-        -working: "NA"
-        -agent: "testing"
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Affiliate Program"
+    - "Credits System"
+    - "Payout System"
+    - "Shopping Cart with Credits"
+  stuck_tasks:
+    - "Affiliate Program - Get Referral Stats"
+    - "Shopping Cart - Cart Subtotal Update"
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    -agent: "testing"
+    -message: "I've tested the new affiliate program, credits system, and payout functionality. Most endpoints are working correctly, but there are a few issues: 1) The /affiliate/{member_id}/stats endpoint returns a 500 error, 2) The shopping cart subtotal is not being updated correctly when adding items, and 3) The affiliate code is not consistent between creation and retrieval. The payout system is working perfectly."
         -comment: "Unable to test the Expert Profile Favorite Button functionality due to authentication/routing issues. When attempting to access expert profile pages (/profile/1, /profile/2, etc.), I was redirected to the homepage. The code review shows that the feature is implemented in ProfilePage.js with a favorite button that toggles between 'Add to Favorites' with a white heart (🤍) and 'Favorited' with a red heart (❤️), but I couldn't verify its functionality."
 
   - task: "Member Dashboard Favorites Tab"
