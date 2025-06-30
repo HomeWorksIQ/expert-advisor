@@ -21,6 +21,55 @@ const ProfilePage = () => {
     }, 1000);
   }, [id]);
 
+  // File upload handler
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setUploadMessage('');
+    }
+  };
+
+  // File upload function
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      setUploadMessage('Please select a file first.');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setUploadMessage('File size must be less than 10MB.');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadMessage('');
+
+    try {
+      // Simulate file upload - in real app, this would call an API
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setUploadMessage(`✅ File "${selectedFile.name}" uploaded successfully! The expert will receive it shortly.`);
+      setSelectedFile(null);
+      
+      // Reset file input
+      const fileInput = document.getElementById('file-upload');
+      if (fileInput) fileInput.value = '';
+      
+    } catch (error) {
+      setUploadMessage('❌ Upload failed. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // File download handler
+  const handleFileDownload = (document) => {
+    // In a real app, this would trigger an actual download
+    alert(`Downloading: ${document.name}\nThis would normally start the download from: ${document.downloadUrl}`);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
