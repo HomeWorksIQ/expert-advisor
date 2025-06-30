@@ -552,28 +552,58 @@ export const HomePage = () => {
         />
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-indigo-600 bg-clip-text text-transparent drop-shadow-2xl">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent drop-shadow-2xl">
             The Experts
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-lg">
-            Professional Advisory. Expert Guidance. Available for you.
+          <p className="text-xl md:text-2xl mb-6 text-gray-100 drop-shadow-lg">
+            Find Local Experts. Get Professional Help.
           </p>
           <p className="text-lg mb-8 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
-            Connect with certified professionals across law, medicine, finance, and business. 
-            Get expert advice from qualified advisors you can trust.
+            Connect with professionals in your area who pay to be featured. 
+            Free for clients - experts invest in their visibility.
           </p>
+          
+          {/* Location Selection */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8 max-w-2xl mx-auto">
+            <h3 className="text-white text-lg font-semibold mb-4">Start by choosing your location:</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+              <a href="/discover?location=national" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center transition-all">
+                National
+              </a>
+              <a href="/discover?location=local" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-center transition-all">
+                Local Area
+              </a>
+              <a href="/discover?location=state" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-center transition-all">
+                State-wide
+              </a>
+              <a href="/discover?location=city" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-center transition-all">
+                City Only
+              </a>
+            </div>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Or search by name, specialty, or keyword..." 
+                className="flex-1 px-4 py-2 rounded-lg text-gray-900 placeholder-gray-500"
+              />
+              <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-all">
+                Search
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
               href="/signup" 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              Start Consulting
+              Join Free (Clients)
             </a>
             <a 
-              href="/discover" 
-              className="border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105"
+              href="/signup?type=expert" 
+              className="border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105"
             >
-              Find Experts
+              List Your Services (Experts)
             </a>
           </div>
         </div>
