@@ -596,6 +596,80 @@ async def get_client_consultations(client_id: str):
     """Get client consultations (alias for member appointments)"""
     return await get_member_appointments(client_id)
 
+@api_router.get("/experts/search-by-location")
+async def search_experts_by_location(
+    zip_code: Optional[str] = None,
+    city: Optional[str] = None,
+    state: Optional[str] = None,
+    radius: Optional[int] = 25,
+    category: Optional[str] = None
+):
+    """Search experts by geographic location with radius"""
+    try:
+        # Mock implementation for demonstration
+        # In production, this would use geolocation services and database queries
+        
+        base_experts = [
+            {
+                "id": 1,
+                "name": "Dr. Sarah Chen",
+                "specialty": "Family Medicine",
+                "location": {"city": "Boston", "state": "MA", "zip": "02115"},
+                "distance": 5.2,
+                "hourly_rate": 150
+            },
+            {
+                "id": 2,
+                "name": "James Wilson",
+                "specialty": "Life Insurance",
+                "location": {"city": "Cambridge", "state": "MA", "zip": "02138"},
+                "distance": 8.7,
+                "hourly_rate": 100
+            },
+            {
+                "id": 3,
+                "name": "David Thompson",
+                "specialty": "Business Consulting",
+                "location": {"city": "Newton", "state": "MA", "zip": "02458"},
+                "distance": 12.3,
+                "hourly_rate": 200
+            }
+        ]
+        
+        # Filter by radius
+        filtered_experts = [expert for expert in base_experts if expert["distance"] <= radius]
+        
+        # Filter by category if specified
+        if category:
+            category_map = {
+                "medical": ["Family Medicine", "Cardiology", "Mental Health"],
+                "insurance": ["Life Insurance", "Health Insurance"],
+                "business": ["Business Consulting", "Financial Consulting"]
+            }
+            relevant_specialties = category_map.get(category, [])
+            filtered_experts = [expert for expert in filtered_experts if expert["specialty"] in relevant_specialties]
+        
+        search_location = ""
+        if zip_code:
+            search_location = f"zip code {zip_code}"
+        elif city and state:
+            search_location = f"{city}, {state}"
+        elif city:
+            search_location = city
+            
+        return {
+            "success": True,
+            "experts": filtered_experts,
+            "search_params": {
+                "location": search_location,
+                "radius": radius,
+                "category": category,
+                "total_results": len(filtered_experts)
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Location search failed: {str(e)}")
+
 @api_router.get("/experts/search")
 async def search_experts(
     category: Optional[str] = None,
