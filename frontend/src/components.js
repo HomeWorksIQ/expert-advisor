@@ -1213,19 +1213,27 @@ export const HomePage = () => {
                     </div>
                     
                     {/* Action Buttons */}
-                    <div className="flex gap-2">
+                    <div className="space-y-2">
                       <a 
-                        href={`/chat/${performer.id}`}
-                        className="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-xs text-center hover:bg-blue-600 transition-all"
+                        href={`/profile/${performer.id}`}
+                        className="w-full px-3 py-2 bg-gray-100 text-gray-700 rounded text-xs text-center hover:bg-gray-200 transition-all block"
                       >
-                        Chat Now
+                        View Profile
                       </a>
-                      <a 
-                        href={`/book/${performer.id}`}
-                        className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded text-xs text-center hover:from-blue-600 hover:to-green-600 transition-all"
-                      >
-                        Book Appt
-                      </a>
+                      <div className="flex gap-2">
+                        <a 
+                          href={`/chat/${performer.id}`}
+                          className="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-xs text-center hover:bg-blue-600 transition-all"
+                        >
+                          Chat Now
+                        </a>
+                        <a 
+                          href={`/book/${performer.id}`}
+                          className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded text-xs text-center hover:from-blue-600 hover:to-green-600 transition-all"
+                        >
+                          Book Appt
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
