@@ -967,7 +967,7 @@ export const HomePage = () => {
         />
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent drop-shadow-2xl">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent drop-shadow-2xl">
             The Experts
           </h1>
           <p className="text-xl md:text-2xl mb-6 text-gray-100 drop-shadow-lg">
