@@ -226,12 +226,20 @@ const BookingPage = () => {
               <p className="text-sm mb-4 opacity-90">
                 Start a chat session right now if the expert is available.
               </p>
-              <a
-                href={`/chat/${expertId}`}
-                className="inline-block px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all"
-              >
-                Start Chat Now
-              </a>
+              <div className="flex gap-3">
+                <a
+                  href={`/chat/${expertId}`}
+                  className="flex-1 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all text-center"
+                >
+                  Start Chat Now
+                </a>
+                <a
+                  href={`/profile/${expertId}`}
+                  className="flex-1 px-4 py-2 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all text-center"
+                >
+                  View Profile
+                </a>
+              </div>
             </div>
           </div>
         </div>
