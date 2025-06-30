@@ -2157,6 +2157,18 @@ async def get_all_users(user_type: Optional[str] = None, page: int = 1, limit: i
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to get users: {str(e)}")
 
+@api_router.get("/admin/users/search")
+async def search_users(query: str, user_type: Optional[str] = None):
+    """Search users by name, email, or other criteria"""
+    try:
+        result = await admin_management_service.search_users(query, user_type)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Search failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Search failed: {str(e)}")
+
 @api_router.get("/admin/users/{user_id}")
 async def get_user_details(user_id: str):
     """Get detailed user information"""
