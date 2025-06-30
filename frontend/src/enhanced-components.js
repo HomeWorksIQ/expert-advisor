@@ -330,6 +330,58 @@ export const MemberDashboard = () => {
               )}
             </div>
           )}
+
+          {activeTab === 'affiliate' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Affiliate Program 💰</h2>
+              <p className="text-gray-400 mb-6">
+                Earn credits by referring new members to The Experts platform.
+              </p>
+              
+              <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-lg p-6 mb-6">
+                <h3 className="text-xl font-bold mb-2">Earn $10 for Every Referral!</h3>
+                <p className="text-green-100 mb-4">
+                  Share your unique referral link and earn credits when new members sign up.
+                </p>
+                <a 
+                  href="/affiliate" 
+                  className="inline-block px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                >
+                  Go to Affiliate Dashboard
+                </a>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-gray-700 rounded-lg p-4 text-center">
+                  <div className="text-3xl mb-2">🔗</div>
+                  <h4 className="font-semibold mb-2">Share Your Link</h4>
+                  <p className="text-sm text-gray-400">Get your unique referral link and share it with friends</p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 text-center">
+                  <div className="text-3xl mb-2">👥</div>
+                  <h4 className="font-semibold mb-2">They Sign Up</h4>
+                  <p className="text-sm text-gray-400">When someone uses your link to create an account</p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 text-center">
+                  <div className="text-3xl mb-2">💰</div>
+                  <h4 className="font-semibold mb-2">Earn Credits</h4>
+                  <p className="text-sm text-gray-400">You receive $10 in credits to use for expert services</p>
+                </div>
+              </div>
+              
+              <div className="mt-6 p-4 bg-blue-900 bg-opacity-50 rounded-lg border border-blue-500">
+                <h4 className="font-semibold text-blue-300 mb-2">💡 Pro Tips:</h4>
+                <ul className="text-sm text-blue-200 space-y-1">
+                  <li>• Credits can cover up to 50% of any purchase</li>
+                  <li>• Credits never expire</li>
+                  <li>• Share on social media for maximum reach</li>
+                  <li>• Track your referrals in the affiliate dashboard</li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
