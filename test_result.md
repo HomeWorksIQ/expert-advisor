@@ -860,7 +860,7 @@ frontend:
         -agent: "testing"
         -comment: "Unable to fully test the Go Live button due to Playwright script issues. From code review, the button is implemented with proper state toggling between Go Live and End Stream."
 
-  - task: "Responsive Design - Different Screen Sizes"
+  - task: "Dashboard Functionality - Referral Links"
     implemented: true
     working: "NA"
     file: "/app/frontend/src/components.js"
@@ -870,10 +870,10 @@ frontend:
     status_history:
         -working: "NA"
         -agent: "main"
-        -comment: "Implemented responsive design with Tailwind CSS. Need to test on different screen sizes."
+        -comment: "Implemented referral links in both member and performer dashboards. Need to test if they are displayed correctly."
         -working: "NA"
         -agent: "testing"
-        -comment: "Unable to fully test the responsive design due to Playwright script issues. From code review, the responsive design is implemented with Tailwind CSS classes for different screen sizes."
+        -comment: "Unable to fully test the referral links due to Playwright script issues. From code review, the referral links are implemented with proper display and copy functionality."
 
   - task: "Visual Design - Dark Theme with Gradients"
     implemented: true
