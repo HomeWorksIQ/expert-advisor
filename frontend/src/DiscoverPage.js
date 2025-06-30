@@ -183,7 +183,7 @@ const DiscoverPage = () => {
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text text-transparent">
-            Discover Amazing Creators
+            Discover Amazing Experts
           </h1>
           <p className="text-gray-400 text-lg">
             Find your favorite content creators and explore exclusive content
