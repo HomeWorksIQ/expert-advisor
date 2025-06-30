@@ -556,6 +556,9 @@ frontend:
         -working: "NA"
         -agent: "main"
         -comment: "Implemented comprehensive appointment booking system with calendar view, availability management for performers, appointment creation, status management, and multiple appointment types (video call, phone call, chat session, custom service, in-person)."
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Could not test the appointment booking system interface directly as it requires authentication and the login functionality redirects to the homepage. However, the component is implemented in the code."
 
   - task: "App Router Integration for New Features"
     implemented: true
