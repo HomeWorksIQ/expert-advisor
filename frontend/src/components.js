@@ -1927,6 +1927,23 @@ export { MemberDashboard } from './enhanced-components';
 export const PerformerDashboard = () => {
   const { user } = useUser();
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedExpertise, setSelectedExpertise] = useState('');
+  const [monthlyFee, setMonthlyFee] = useState(0);
+  const [hasSetExpertise, setHasSetExpertise] = useState(false);
+
+  // Expertise categories with monthly fees
+  const expertiseCategories = [
+    { id: 'medical', name: 'Medical & Healthcare', fee: 125, demand: 'high' },
+    { id: 'legal', name: 'Legal Services', fee: 150, demand: 'high' },
+    { id: 'financial', name: 'Financial Planning', fee: 100, demand: 'high' },
+    { id: 'business', name: 'Business Consulting', fee: 100, demand: 'high' },
+    { id: 'insurance', name: 'Insurance Services', fee: 75, demand: 'medium' },
+    { id: 'education', name: 'Education & Tutoring', fee: 60, demand: 'medium' },
+    { id: 'technology', name: 'Technology & IT', fee: 110, demand: 'high' },
+    { id: 'marketing', name: 'Marketing & Advertising', fee: 85, demand: 'medium' },
+    { id: 'real_estate', name: 'Real Estate', fee: 90, demand: 'medium' },
+    { id: 'accounting', name: 'Accounting & Tax', fee: 95, demand: 'medium' }
+  ];
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
