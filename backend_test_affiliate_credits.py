@@ -637,8 +637,8 @@ class TestPayoutSystem(unittest.TestCase):
         response = requests.get(f"{API_URL}/payouts/{TEST_EXPERT_ID}/requests")
         self.assertEqual(response.status_code, 200)
         
-        requests = response.json()["requests"]
-        completed_request = next((r for r in requests if r["id"] == request_id), None)
+        payout_requests = response.json()["requests"]
+        completed_request = next((r for r in payout_requests if r["id"] == request_id), None)
         
         self.assertIsNotNone(completed_request)
         self.assertEqual(completed_request["status"], PayoutStatus.COMPLETED)
