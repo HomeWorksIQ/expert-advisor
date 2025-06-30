@@ -45,6 +45,9 @@ import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
 import { TestGeolocationPage } from './TestGeolocationPage';
+import AffiliateDashboard from './AffiliateDashboard';
+import CreditsPaymentComponent from './CreditsPaymentComponent';
+import ExpertPayoutDashboard from './ExpertPayoutDashboard';
 
 // Profile Page with Access Control
 const ProfilePageWithAccessControl = () => {
