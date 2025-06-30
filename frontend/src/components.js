@@ -712,9 +712,6 @@ export const Header = ({ showSearch = true, className = "" }) => {
             <a href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
               Categories
             </a>
-            <a href="/how-it-works" className="text-gray-600 hover:text-blue-600 transition-colors">
-              How It Works
-            </a>
           </nav>
 
           {/* User Actions */}
