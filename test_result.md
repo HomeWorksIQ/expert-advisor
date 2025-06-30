@@ -1124,11 +1124,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Expert Profile Favorite Button"
-    - "Member Dashboard Favorites Tab"
-    - "Chat Page Timer and Cost Tracking"
-    - "Documents Tab Layout Update"
-    - "Homepage Search Bar"
+    - "Expert Dashboard Expertise Selection"
+    - "Subscription Page"
   stuck_tasks:
     - "Authentication/Routing Issues"
   test_all: false
