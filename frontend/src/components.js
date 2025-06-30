@@ -831,8 +831,18 @@ export const Header = ({ showSearch = true, className = "" }) => {
 // Enhanced Home Page
 export const HomePage = () => {
   const { user } = useUser();
+  // Get featured performers using shared data
   const [featuredPerformers, setFeaturedPerformers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Load featured experts from shared data
+    setTimeout(() => {
+      const allExperts = getAllExperts();
+      setFeaturedPerformers(allExperts);
+      setIsLoading(false);
+    }, 1000);
+  }, []);
   const [userLocation, setUserLocation] = useState(null);
 
   // Search by location function
