@@ -8,6 +8,14 @@ import { getAllExperts, getExpertById } from './data/experts';
 export const MemberDashboard = () => {
   const { user } = useUser();
   const [activeTab, setActiveTab] = useState('overview');
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    // Load favorites from localStorage
+    const savedFavorites = JSON.parse(localStorage.getItem('memberFavorites') || '[]');
+    const favoriteExperts = savedFavorites.map(id => getExpertById(id)).filter(Boolean);
+    setFavorites(favoriteExperts);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
