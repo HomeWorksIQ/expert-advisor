@@ -121,6 +121,361 @@ class ShippingProvider(str, Enum):
     DHL = "dhl"
     CUSTOM = "custom"
 
+class TestAdminFunctionality(unittest.TestCase):
+    """Test suite for Admin API functionality"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+        
+        # Admin credentials
+        self.admin_credentials = {
+            "email": "admin@theexperts.com",
+            "password": "AdminPassword123!"
+        }
+        
+        # Login to get admin token
+        self.admin_token = self.get_admin_token()
+        
+        # Get a test user ID for user management tests
+        self.test_user_id = self.get_test_user_id()
+
+    def get_admin_token(self):
+        """Login as admin and get token"""
+        response = requests.post(f"{API_URL}/admin/login", json=self.admin_credentials)
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('success'):
+                return data.get('access_token')
+        
+        print("Warning: Failed to get admin token. Some tests may fail.")
+        return None
+
+    def get_test_user_id(self):
+        """Get a test user ID for testing"""
+        if not self.admin_token:
+            return None
+            
+        # Get all users
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        response = requests.get(f"{API_URL}/admin/users", headers=headers)
+        
+        if response.status_code == 200:
+            users = response.json().get('users', [])
+            # Find a member user
+            for user in users:
+                if user.get('userType') == 'member':
+                    return user.get('id')
+        
+        return None
+
+    def test_01_admin_authentication(self):
+        """Test admin authentication endpoints"""
+        print("\n=== Testing Admin Authentication ===")
+        
+        # Test admin login with valid credentials
+        print("Testing /api/admin/login with valid credentials")
+        response = requests.post(f"{API_URL}/admin/login", json=self.admin_credentials)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data.get('success'))
+        self.assertIn('access_token', data)
+        self.assertIn('admin', data)
+        
+        admin = data.get('admin')
+        admin_id = admin.get('id')
+        
+        print(f"Admin login successful: {admin.get('displayName')} ({admin.get('adminRole')})")
+        
+        # Test admin login with invalid credentials
+        print("Testing /api/admin/login with invalid credentials")
+        invalid_credentials = {
+            "email": "admin@theexperts.com",
+            "password": "WrongPassword123!"
+        }
+        
+        response = requests.post(f"{API_URL}/admin/login", json=invalid_credentials)
+        self.assertEqual(response.status_code, 401)
+        
+        print(f"Invalid login correctly rejected: {response.status_code}")
+        
+        # Test admin profile
+        if not self.admin_token or not admin_id:
+            self.skipTest("Admin token or ID not available")
+            
+        print(f"Testing /api/admin/profile/{admin_id}")
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        response = requests.get(f"{API_URL}/admin/{admin_id}/profile", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data.get('success'))
+        self.assertIn('profile', data)
+        
+        profile = data.get('profile', {})
+        self.assertEqual(profile.get('id'), admin_id)
+        
+        print(f"Admin profile retrieved successfully")
+        
+        # Test admin profile with invalid ID
+        print(f"Testing /api/admin/profile/invalid-id")
+        response = requests.get(f"{API_URL}/admin/invalid-id/profile", headers=headers)
+        self.assertNotEqual(response.status_code, 200)
+        
+        print(f"Invalid admin ID correctly rejected: {response.status_code}")
+
+    def test_02_user_management(self):
+        """Test user management endpoints"""
+        print("\n=== Testing User Management ===")
+        
+        if not self.admin_token:
+            self.skipTest("Admin token not available")
+            
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test getting all users
+        print("Testing /api/admin/users")
+        response = requests.get(f"{API_URL}/admin/users", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data.get('success'))
+        self.assertIn('users', data)
+        self.assertIn('pagination', data)
+        
+        users = data.get('users', [])
+        pagination = data.get('pagination', {})
+        
+        print(f"Retrieved {len(users)} users (page {pagination.get('page')} of {pagination.get('pages')})")
+        
+        # Test pagination
+        print("Testing /api/admin/users with pagination")
+        response = requests.get(f"{API_URL}/admin/users?page=1&limit=5", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        users = data.get('users', [])
+        self.assertLessEqual(len(users), 5)
+        
+        print(f"Pagination working: retrieved {len(users)} users with limit=5")
+        
+        # Test user search
+        print("Testing /api/admin/users/search")
+        search_term = "test"
+        response = requests.get(f"{API_URL}/admin/users/search?query={search_term}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data.get('success'))
+        self.assertIn('results', data)
+        
+        results = data.get('results', [])
+        print(f"Search for '{search_term}' returned {len(results)} results")
+        
+        # Test user search with user type filter
+        print("Testing /api/admin/users/search with user type filter")
+        response = requests.get(f"{API_URL}/admin/users/search?query={search_term}&user_type=member", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        results = data.get('results', [])
+        
+        if results:
+            for user in results:
+                self.assertEqual(user.get('userType'), 'member')
+        
+        print(f"Search with user_type=member returned {len(results)} results")
+        
+        # Test getting specific user details
+        if not users:
+            self.skipTest("No users available for testing")
+            
+        user_id = users[0].get('id')
+        print(f"Testing /api/admin/users/{user_id}")
+        response = requests.get(f"{API_URL}/admin/users/{user_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data.get('success'))
+        self.assertIn('user', data)
+        
+        user = data.get('user', {})
+        self.assertEqual(user.get('id'), user_id)
+        
+        print(f"User details retrieved successfully for: {user.get('displayName')} ({user.get('email')})")
+        
+        # Test getting user details with invalid ID
+        print(f"Testing /api/admin/users/invalid-id")
+        response = requests.get(f"{API_URL}/admin/users/invalid-id", headers=headers)
+        self.assertNotEqual(response.status_code, 200)
+        
+        print(f"Invalid user ID correctly rejected: {response.status_code}")
+        
+        # Test updating user status
+        if not self.test_user_id:
+            print("Skipping user status update test - no test user available")
+        else:
+            print(f"Testing /api/admin/users/{self.test_user_id}/status")
+            status_data = {
+                "status": "suspended",
+                "reason": "Testing status update functionality"
+            }
+            
+            response = requests.put(f"{API_URL}/admin/users/{self.test_user_id}/status", 
+                                   json=status_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.assertTrue(data.get('success'))
+                print(f"User status updated successfully to suspended")
+                
+                # Verify the status change
+                response = requests.get(f"{API_URL}/admin/users/{self.test_user_id}", headers=headers)
+                if response.status_code == 200:
+                    user = response.json().get('user', {})
+                    self.assertEqual(user.get('accountStatus'), 'suspended')
+                    print(f"Verified user status is now: {user.get('accountStatus')}")
+                
+                # Restore user status to active
+                status_data = {
+                    "status": "active",
+                    "reason": "Restoring after test"
+                }
+                
+                response = requests.put(f"{API_URL}/admin/users/{self.test_user_id}/status", 
+                                       json=status_data, headers=headers)
+                
+                if response.status_code == 200:
+                    print(f"Restored user status to active")
+            else:
+                print(f"Status update failed: {response.status_code} - {response.text}")
+
+    def test_03_expert_management(self):
+        """Test expert management endpoints"""
+        print("\n=== Testing Expert Management ===")
+        
+        if not self.admin_token:
+            self.skipTest("Admin token not available")
+            
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test getting pending experts
+        print("Testing /api/admin/experts/pending")
+        response = requests.get(f"{API_URL}/admin/experts/pending", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data.get('success'))
+        self.assertIn('pending_experts', data)
+        
+        pending_experts = data.get('pending_experts', [])
+        print(f"Retrieved {len(pending_experts)} pending experts")
+        
+        # If we have pending experts, test approval and rejection
+        if pending_experts:
+            expert_id = pending_experts[0].get('id')
+            
+            # Test expert approval
+            print(f"Testing /api/admin/experts/{expert_id}/approve")
+            approval_data = {
+                "admin_notes": "Approved for testing purposes"
+            }
+            
+            response = requests.post(f"{API_URL}/admin/experts/{expert_id}/approve", 
+                                    json=approval_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.assertTrue(data.get('success'))
+                print(f"Expert approved successfully")
+            else:
+                print(f"Expert approval failed: {response.status_code} - {response.text}")
+                
+            # Test expert rejection (using a different expert if available)
+            if len(pending_experts) > 1:
+                expert_id = pending_experts[1].get('id')
+            
+            print(f"Testing /api/admin/experts/{expert_id}/reject")
+            rejection_data = {
+                "rejection_reason": "Testing rejection functionality"
+            }
+            
+            response = requests.post(f"{API_URL}/admin/experts/{expert_id}/reject", 
+                                    json=rejection_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.assertTrue(data.get('success'))
+                print(f"Expert rejected successfully")
+            else:
+                print(f"Expert rejection failed: {response.status_code} - {response.text}")
+        else:
+            print("No pending experts available for approval/rejection testing")
+
+    def test_04_financial_and_analytics(self):
+        """Test financial and analytics endpoints"""
+        print("\n=== Testing Financial & Analytics ===")
+        
+        if not self.admin_token:
+            self.skipTest("Admin token not available")
+            
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test financial overview
+        print("Testing /api/admin/finances/overview")
+        response = requests.get(f"{API_URL}/admin/finances/overview", headers=headers)
+        
+        # This might be /api/admin/finances/overview or /api/admin/financial/overview
+        if response.status_code != 200:
+            print(f"Trying alternate endpoint path")
+            response = requests.get(f"{API_URL}/admin/financial/overview", headers=headers)
+            
+        if response.status_code == 200:
+            data = response.json()
+            self.assertTrue(data.get('success'))
+            
+            overview = data.get('financial_overview', {})
+            print(f"Financial overview retrieved successfully")
+            print(f"Total users: {overview.get('users', {}).get('total_members', 0)} members, {overview.get('users', {}).get('total_experts', 0)} experts")
+        else:
+            print(f"Financial overview failed: {response.status_code} - {response.text}")
+            
+        # Test platform analytics
+        print("Testing /api/admin/analytics/overview")
+        response = requests.get(f"{API_URL}/admin/analytics/overview", headers=headers)
+        
+        # This might be /api/admin/analytics/overview or /api/admin/analytics
+        if response.status_code != 200:
+            print(f"Trying alternate endpoint path")
+            response = requests.get(f"{API_URL}/admin/analytics", headers=headers)
+            
+        if response.status_code == 200:
+            data = response.json()
+            self.assertTrue(data.get('success'))
+            
+            analytics = data.get('analytics', {})
+            print(f"Platform analytics retrieved successfully")
+            print(f"Total users: {analytics.get('overview', {}).get('total_users', 0)}")
+        else:
+            print(f"Platform analytics failed: {response.status_code} - {response.text}")
+            
+        # Test engagement metrics
+        print("Testing /api/admin/analytics/engagement")
+        response = requests.get(f"{API_URL}/admin/analytics/engagement", headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
+            self.assertTrue(data.get('success'))
+            
+            engagement = data.get('engagement', {})
+            print(f"Engagement metrics retrieved successfully")
+            print(f"Daily active users: {engagement.get('daily_active_users', 0)}")
+            print(f"Weekly active users: {engagement.get('weekly_active_users', 0)}")
+            print(f"Monthly active users: {engagement.get('monthly_active_users', 0)}")
+        else:
+            print(f"Engagement metrics failed: {response.status_code} - {response.text}")
+
 class TestGeoLocationAndAccessControlAPIs(unittest.TestCase):
     """Test suite for geo-location and access control APIs"""
 
