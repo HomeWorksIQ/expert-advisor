@@ -9,7 +9,7 @@ const EnhancedSignUpPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    userType: 'client'
+    userType: 'member'
   });
   const [trialSettings, setTrialSettings] = useState({
     trial_enabled: true,
