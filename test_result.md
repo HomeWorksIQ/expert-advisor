@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "Enhanced Geo IP with City + Zip Display in Categories"
+  - task: "Complete Expert Profile Pages with Chat/Video/Booking"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/ProfilePage.js, /app/frontend/src/App.js, /app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Created comprehensive ProfilePage component to replace placeholder. Expert cards now have 'View Profile' link that opens detailed profile page with About/Services/Reviews/Contact tabs. Profile page includes expert bio, credentials, education, office hours, pricing, contact info, and action buttons for Chat, Video Call, Voice Call, and Book Appointment. Added direct links from expert cards: 'View Profile' → '/profile/{id}', 'Chat Now' → '/chat/{id}', 'Book Appt' → '/book/{id}'. Profile page shows availability status, ratings, reviews, services offered, consultation methods, and complete contact information. All functionality integrated with existing chat and booking systems."
     implemented: true
     working: true
     file: "/app/frontend/src/components.js, /app/frontend/src/CategoriesPage.js, /app/backend/server.py"
