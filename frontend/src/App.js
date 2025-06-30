@@ -319,7 +319,7 @@ function App() {
             <Route path="/chat/:expertId" element={<ChatPage />} />
             <Route path="/search" element={<EnhancedPerformerSearch />} />
             <Route path="/performer-search" element={<EnhancedPerformerSearch />} />
-            <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route path="/profile/:id" element={<ProfilePageComponent />} />
             <Route path="/post/:id" element={<PostDetailPage />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
             <Route path="/payment-cancelled" element={<PaymentCancelledPage />} />
