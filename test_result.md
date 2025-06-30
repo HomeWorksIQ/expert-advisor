@@ -965,6 +965,53 @@ frontend:
         -comment: "The homepage search bar is implemented and prominently displayed after the subtitle. It has a placeholder text about searching for expertise, a search button with a magnifying glass icon, and text below saying 'Or browse by category below'. The search bar is visually well-designed and positioned correctly on the page. However, I couldn't test the functionality (whether it navigates to /discover?search=[term]) due to authentication/routing issues that prevent accessing pages other than the homepage."
 
 metadata:
+  - task: "Expert Profile Favorite Button"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/ProfilePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Unable to test the Expert Profile Favorite Button functionality due to authentication/routing issues. When attempting to access expert profile pages (/profile/1, /profile/2, etc.), I was redirected to the homepage. The code review shows that the feature is implemented in ProfilePage.js with a favorite button that toggles between 'Add to Favorites' with a white heart (🤍) and 'Favorited' with a red heart (❤️), but I couldn't verify its functionality."
+
+  - task: "Member Dashboard Favorites Tab"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/enhanced-components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Unable to test the Member Dashboard Favorites Tab functionality due to authentication/routing issues. When attempting to access the member dashboard (/member/dashboard), I was redirected to the homepage. The code review shows that the feature is implemented in enhanced-components.js with a 'My Favorites ❤️' tab that displays favorited experts or a 'No favorites yet' message, but I couldn't verify its functionality."
+
+  - task: "Chat Page Timer and Cost Tracking"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/ChatPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Unable to test the Chat Page Timer and Cost Tracking functionality due to authentication/routing issues. When attempting to access chat pages (/chat/1, /chat/2, etc.), I was redirected to the homepage. The code review shows that the feature is implemented in ChatPage.js with a timer that appears after sending the first message and displays elapsed time and cost calculation based on the expert's hourly rate, but I couldn't verify its functionality."
+
+  - task: "Documents Tab Layout Update"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/ProfilePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Unable to test the Documents Tab Layout Update due to authentication/routing issues. When attempting to access expert profile pages (/profile/1, /profile/3, etc.), I was redirected to the homepage. The code review shows that the feature is implemented in ProfilePage.js with a two-column layout (left side for expert's documents, right side for document upload), but I couldn't verify its functionality."
   created_by: "testing_agent"
   version: "1.0"
   test_sequence: 3
