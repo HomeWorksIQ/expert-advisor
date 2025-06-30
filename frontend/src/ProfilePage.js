@@ -8,6 +8,9 @@ const ProfilePage = () => {
   const [expert, setExpert] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('about');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadMessage, setUploadMessage] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     // Fetch expert data from shared data source
