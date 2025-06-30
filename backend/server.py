@@ -911,6 +911,12 @@ trial_service = TrialService(db)
 # Initialize performer search service
 performer_search_service = PerformerSearchService(db)
 
+# Initialize affiliate, credits, and payout services
+affiliate_service = AffiliateService(db)
+credit_service = CreditService(db)
+payout_service = PayoutService(db)
+cart_service = ShoppingCartService(db)
+
 # Video Conferencing API Routes
 @api_router.post("/video/agora/token")
 async def generate_agora_token(channel: str, uid: int = 0, role: int = 1):
