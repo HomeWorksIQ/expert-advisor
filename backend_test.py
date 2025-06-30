@@ -2022,16 +2022,23 @@ def run_individual_test(test_name):
     """Run a single test by name"""
     suite = unittest.TestSuite()
     
-    # Determine which test class the test belongs to
-    if test_name.startswith("test_") and "_" in test_name:
-        prefix = test_name.split("_")[1]
-        if prefix == "01" or prefix == "02" or prefix == "03" or prefix == "04" or prefix == "05":
-            suite.addTest(TestGeoLocationAndAccessControlAPIs(test_name))
-        elif prefix == "expert":
-            suite.addTest(TestExpertAPIs(test_name))
-        else:
-            # Default to geo location tests
-            suite.addTest(TestGeoLocationAndAccessControlAPIs(test_name))
+    # Check if the test name includes the class name
+    if "." in test_name:
+        class_name, method_name = test_name.split(".")
+        if class_name == "TestExpertAPIs":
+            suite.addTest(TestExpertAPIs(method_name))
+        elif class_name == "TestGeoLocationAndAccessControlAPIs":
+            suite.addTest(TestGeoLocationAndAccessControlAPIs(method_name))
+        elif class_name == "TestAPIKeyManagementSystem":
+            suite.addTest(TestAPIKeyManagementSystem(method_name))
+        elif class_name == "TestAppointmentBookingSystem":
+            suite.addTest(TestAppointmentBookingSystem(method_name))
+        elif class_name == "TestChatSystem":
+            suite.addTest(TestChatSystem(method_name))
+        elif class_name == "TestFileUploadSystem":
+            suite.addTest(TestFileUploadSystem(method_name))
+        elif class_name == "TestStoreAndProductsManagement":
+            suite.addTest(TestStoreAndProductsManagement(method_name))
     else:
         # Default to geo location tests
         suite.addTest(TestGeoLocationAndAccessControlAPIs(test_name))
