@@ -547,7 +547,7 @@ export const HomePage = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1652715256284-6cba3e829a70?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxsaW5nZXJpZSUyMG1vZGVsfGVufDB8fHxibGFja3wxNzUwOTQ3MjExfDA&ixlib=rb-4.1.0&q=85')`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg')`
           }}
         />
         
