@@ -599,35 +599,35 @@ export const HomePage = () => {
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎥</span>
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🎓</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Premium Content</h3>
+              <h3 className="text-xl font-semibold mb-4">Certified Experts</h3>
               <p className="text-gray-400">
-                Access exclusive content from your favorite creators with unlimited streaming, 
-                high-quality videos, and personalized recommendations.
+                Connect with verified professionals across medical, legal, business, and financial sectors. 
+                All experts are credential-verified and industry-certified.
               </p>
             </div>
             
             <div className="text-center p-6 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">💰</span>
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">💼</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Earn & Refer</h3>
+              <h3 className="text-xl font-semibold mb-4">Professional Service</h3>
               <p className="text-gray-400">
-                Join our 3-tier affiliate program and earn from referrals. 
-                Creators keep 60% of revenue with multiple monetization options.
+                Get expert consultation through video calls, phone sessions, or in-person meetings. 
+                Flexible scheduling and transparent pricing.
               </p>
             </div>
             
             <div className="text-center p-6 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🔒</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Secure & Private</h3>
+              <h3 className="text-xl font-semibold mb-4">Secure & Confidential</h3>
               <p className="text-gray-400">
-                Your privacy is our priority with end-to-end encryption, 
-                secure payments, and advanced content protection.
+                Your consultations are completely confidential with end-to-end encryption, 
+                secure payments, and professional ethics standards.
               </p>
             </div>
           </div>
