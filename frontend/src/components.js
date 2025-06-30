@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useUser } from './UserContext';
 import TrialStatusComponent from './TrialStatusComponent';
 import TrialWelcomeModal from './TrialWelcomeModal';
+import { getAllExperts } from './data/experts';
 
 // Utility functions for optimization
 const debounce = (func, delay) => {
