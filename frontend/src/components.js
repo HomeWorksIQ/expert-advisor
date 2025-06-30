@@ -1052,7 +1052,7 @@ export const HomePage = () => {
               href="/signup" 
               className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              Join Free (Clients)
+              Join Free (Members)
             </a>
             <a 
               href="/signup?type=expert" 
