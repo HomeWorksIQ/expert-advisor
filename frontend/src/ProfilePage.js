@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components';
 import { useParams } from 'react-router-dom';
+import { getExpertById } from './data/experts';
 
 const ProfilePage = () => {
   const { id } = useParams();
