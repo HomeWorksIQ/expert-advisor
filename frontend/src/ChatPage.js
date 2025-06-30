@@ -117,6 +117,9 @@ const ChatPage = () => {
   const sendMessage = (e) => {
     e.preventDefault();
     if (message.trim()) {
+      // Start session timer on first message
+      startSession();
+      
       const newMessage = {
         id: chatMessages.length + 1,
         sender: 'user',
