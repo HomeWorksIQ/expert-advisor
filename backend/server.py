@@ -757,6 +757,156 @@ async def handle_social_auth_callback(provider: str, code: str, state: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Social auth callback failed: {str(e)}")
 
+@api_router.get("/experts/discover")
+async def discover_experts(
+    category: Optional[str] = None,
+    location: Optional[str] = None,
+    zipCode: Optional[str] = None,
+    radius: Optional[str] = None,
+    status: Optional[str] = None,
+    experienceLevel: Optional[str] = None,
+    sortBy: Optional[str] = None,
+    limit: int = 50
+):
+    """Enhanced expert discovery with comprehensive filtering"""
+    try:
+        # This would normally query the database, but for demo we'll return mock data
+        # In a real implementation, this would filter the experts collection in MongoDB
+        
+        mock_experts = [
+            {
+                "id": 1,
+                "name": "Dr. Sarah Chen",
+                "category": "medical",
+                "specialty": "Family Medicine",
+                "location": {"city": "Boston", "state": "MA", "zipCode": "02115"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 15,
+                "isOnline": True,
+                "rating": 4.9,
+                "consultationRate": 150,
+                "profileImage": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2",
+                "credentials": ["MD", "Board Certified"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 2,
+                "name": "Dr. Michael Rodriguez",
+                "category": "medical",
+                "specialty": "Cardiology",
+                "location": {"city": "Houston", "state": "TX", "zipCode": "77002"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 20,
+                "isOnline": False,
+                "rating": 4.8,
+                "consultationRate": 250,
+                "profileImage": "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
+                "credentials": ["MD", "FACC"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 3,
+                "name": "James Wilson",
+                "category": "insurance",
+                "specialty": "Life Insurance",
+                "location": {"city": "Denver", "state": "CO", "zipCode": "80202"},
+                "experienceLevel": "experienced",
+                "yearsOfExperience": 15,
+                "isOnline": True,
+                "rating": 4.7,
+                "consultationRate": 100,
+                "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+                "credentials": ["Licensed Agent"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 4,
+                "name": "David Thompson",
+                "category": "business",
+                "specialty": "Strategy Consulting",
+                "location": {"city": "Seattle", "state": "WA", "zipCode": "98101"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 22,
+                "isOnline": True,
+                "rating": 4.9,
+                "consultationRate": 200,
+                "profileImage": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+                "credentials": ["MBA", "CPA"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 5,
+                "name": "Professor Robert Adams",
+                "category": "education",
+                "specialty": "Mathematics",
+                "location": {"city": "Boston", "state": "MA", "zipCode": "02116"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 25,
+                "isOnline": True,
+                "rating": 4.9,
+                "consultationRate": 75,
+                "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+                "credentials": ["PhD Mathematics"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            }
+        ]
+        
+        # Apply filters
+        filtered_experts = mock_experts
+        
+        # Filter by category
+        if category and category != 'all':
+            filtered_experts = [e for e in filtered_experts if e['category'] == category]
+        
+        # Filter by status
+        if status and status != 'all':
+            if status == 'online':
+                filtered_experts = [e for e in filtered_experts if e['isOnline']]
+            elif status == 'offline':
+                filtered_experts = [e for e in filtered_experts if not e['isOnline']]
+        
+        # Filter by experience level
+        if experienceLevel and experienceLevel != 'all':
+            experience_map = {
+                'entry': (0, 2),
+                'intermediate': (3, 7),
+                'experienced': (8, 15),
+                'expert': (16, 100)
+            }
+            if experienceLevel in experience_map:
+                min_exp, max_exp = experience_map[experienceLevel]
+                filtered_experts = [e for e in filtered_experts if min_exp <= e['yearsOfExperience'] <= max_exp]
+        
+        # Sort results
+        if sortBy:
+            if sortBy == 'rating':
+                filtered_experts.sort(key=lambda x: x['rating'], reverse=True)
+            elif sortBy == 'price_low':
+                filtered_experts.sort(key=lambda x: x['consultationRate'])
+            elif sortBy == 'price_high':
+                filtered_experts.sort(key=lambda x: x['consultationRate'], reverse=True)
+            elif sortBy == 'experience':
+                filtered_experts.sort(key=lambda x: x['yearsOfExperience'], reverse=True)
+        
+        # Apply limit
+        filtered_experts = filtered_experts[:limit]
+        
+        return {
+            "success": True,
+            "experts": filtered_experts,
+            "total": len(filtered_experts),
+            "filters_applied": {
+                "category": category,
+                "location": location,
+                "status": status,
+                "experienceLevel": experienceLevel,
+                "sortBy": sortBy
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Expert discovery failed: {str(e)}")
+
 @api_router.get("/experts/search")
 async def search_experts(
     category: Optional[str] = None,
