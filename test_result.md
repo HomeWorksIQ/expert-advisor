@@ -289,6 +289,21 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
+  - task: "Simplified Homepage Hero Section"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Simplified the homepage hero section by removing the search bar and complex location selection UI. Kept the 'Welcome to The Experts' title and added a simple 'Search Now' button that links to /categories."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the hero section has been successfully simplified. The 'Welcome to The Experts' title is prominently displayed with the professional subtitle 'Professional Advisory. Expert Guidance. Available for you.' The complex location selection UI and search bar have been completely removed from the hero section. A simple 'Search Now' button is now positioned below the title and correctly links to the /categories page when clicked. The overall layout looks clean and professional."
+
   - task: "Header 'How it Works' Link Removal"
     implemented: true
     working: true
