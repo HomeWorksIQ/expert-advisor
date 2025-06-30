@@ -791,7 +791,7 @@ export const PaymentPage = () => {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Complete Your Purchase</h1>
-          <p className="text-gray-400">Secure payment processing for Eye Candy</p>
+          <p className="text-gray-400">Secure payment processing for The Experts</p>
         </div>
 
         {/* Progress Steps */}
