@@ -1571,7 +1571,7 @@ export const SignUpPage = () => {
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <label className={`flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all ${
-                  formData.userType === 'client' 
+                  formData.userType === 'member' 
                     ? 'border-blue-500 bg-blue-500 bg-opacity-10' 
                     : 'border-gray-600 hover:border-gray-500'
                 }`}>
