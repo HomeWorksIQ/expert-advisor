@@ -289,6 +289,20 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
+  - task: "Header 'How it Works' Link Removal"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Removed the 'How it Works' link from the header navigation. The header now only has 'Find Experts' and 'Categories' links."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the 'How it Works' link has been completely removed from the header navigation. The header now only has 'Find Experts' and 'Categories' links as required. Both remaining links work correctly and navigate to the /categories page when clicked."
   - task: "Homepage 'How it Works' Section Removal and Steps Redesign"
     implemented: true
     working: true
