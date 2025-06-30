@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUser } from './UserContext';
 import { Header } from './components';
 import TrialStatusComponent from './TrialStatusComponent';
+import { getAllExperts, getExpertById } from './data/experts';
 
 // Client Dashboard Component
 export const MemberDashboard = () => {
