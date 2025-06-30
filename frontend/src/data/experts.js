@@ -118,7 +118,27 @@ export const mockExperts = [
     ],
     credentials: ["Ph.D. Psychology", "Licensed Professional Counselor", "Certified Wellness Coach"],
     education: "University of Texas at Austin",
-    officeHours: "Monday-Friday: 10AM-7PM, Saturday: 9AM-2PM"
+    officeHours: "Monday-Friday: 10AM-7PM, Saturday: 9AM-2PM",
+    documents: [
+      {
+        id: 4,
+        name: "Anxiety Management Workbook",
+        type: "PDF",
+        size: "3.1 MB",
+        uploadDate: "2024-01-20",
+        downloadUrl: "/documents/anxiety-management-workbook.pdf",
+        description: "Self-help workbook for managing anxiety and stress"
+      },
+      {
+        id: 5,
+        name: "Mindfulness Meditation Guide",
+        type: "PDF",
+        size: "2.7 MB",
+        uploadDate: "2024-01-18",
+        downloadUrl: "/documents/mindfulness-meditation-guide.pdf",
+        description: "Step-by-step guide to mindfulness meditation practices"
+      }
+    ]
   },
   {
     id: 4,
