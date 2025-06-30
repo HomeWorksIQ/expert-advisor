@@ -267,7 +267,7 @@ const DiscoverPage = () => {
         ) : filteredPerformers.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold mb-2">No creators found</h3>
+            <h3 className="text-xl font-semibold mb-2">No experts found</h3>
             <p className="text-gray-400 mb-4">Try adjusting your search criteria or filters</p>
             <button
               onClick={() => {
