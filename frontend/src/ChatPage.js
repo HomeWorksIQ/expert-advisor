@@ -38,6 +38,51 @@ const ChatPage = () => {
     }, 500);
   }, [expertId]);
 
+  // Timer effect for session tracking
+  useEffect(() => {
+    let interval = null;
+    
+    if (isSessionActive && sessionStartTime) {
+      interval = setInterval(() => {
+        const now = new Date().getTime();
+        const elapsed = Math.floor((now - sessionStartTime) / 1000); // in seconds
+        setElapsedTime(elapsed);
+        
+        // Calculate cost (hourly rate / 3600 seconds * elapsed seconds)
+        if (expert) {
+          const costPerSecond = expert.hourlyRate / 3600;
+          const currentCost = costPerSecond * elapsed;
+          setTotalCost(currentCost);
+        }
+      }, 1000);
+    } else if (!isSessionActive) {
+      clearInterval(interval);
+    }
+    
+    return () => clearInterval(interval);
+  }, [isSessionActive, sessionStartTime, expert]);
+
+  // Start session when first message is sent
+  const startSession = () => {
+    if (!isSessionActive) {
+      setSessionStartTime(new Date().getTime());
+      setIsSessionActive(true);
+    }
+  };
+
+  // Format time display
+  const formatTime = (seconds) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    if (hrs > 0) {
+      return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    } else {
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
