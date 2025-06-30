@@ -103,7 +103,7 @@ const ChatPage = () => {
         const expertResponse = {
           id: chatMessages.length + 2,
           sender: 'expert',
-          name: expert.name,
+          name: expert.displayName,
           text: 'Thank you for your message. I understand your concern. Let me provide some guidance on that...',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
