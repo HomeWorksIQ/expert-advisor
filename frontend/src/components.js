@@ -1930,6 +1930,7 @@ export const PerformerDashboard = () => {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
+    { id: 'expertise', label: 'Expertise & Billing', icon: '🎯' },
     { id: 'content', label: 'Content', icon: '🎥' },
     { id: 'geolocation', label: 'Location Settings', icon: '🌍' },
     { id: 'analytics', label: 'Analytics', icon: '📈' },
