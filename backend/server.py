@@ -573,6 +573,119 @@ async def get_teaser_session_status(performer_id: str, request: Request, user_id
         "message": f"Teaser active - {remaining_seconds} seconds remaining"
     }
 
+# Expert API Aliases (for platform transformation from performer to expert platform)
+# These endpoints provide expert-friendly aliases to the existing performer endpoints
+
+@api_router.get("/experts/{expert_id}/profile")
+async def get_expert_profile(expert_id: str):
+    """Get expert profile (alias for performer profile)"""
+    return await get_performer_profile(expert_id)
+
+@api_router.post("/experts/profile")
+async def create_expert_profile(profile_data: dict):
+    """Create expert profile (alias for performer profile)"""
+    return await create_performer_profile(profile_data)
+
+@api_router.get("/experts/{expert_id}/consultations")
+async def get_expert_consultations(expert_id: str):
+    """Get expert consultations (alias for performer appointments)"""
+    return await get_performer_appointments(expert_id)
+
+@api_router.get("/clients/{client_id}/consultations")
+async def get_client_consultations(client_id: str):
+    """Get client consultations (alias for member appointments)"""
+    return await get_member_appointments(client_id)
+
+@api_router.get("/experts/search")
+async def search_experts(
+    category: Optional[str] = None,
+    level: Optional[str] = None,
+    location: Optional[str] = None,
+    online_only: bool = False
+):
+    """Search experts (enhanced version of performer search)"""
+    # Map expert parameters to performer search parameters
+    gender_filter = None
+    if category:
+        # Map expertise categories to search terms that work with existing data
+        expertise_map = {
+            "legal": ["law", "legal", "attorney"],
+            "medical": ["doctor", "medical", "health"],
+            "financial": ["financial", "finance", "money"],
+            "accounting": ["accounting", "tax", "cpa"],
+            "business": ["business", "consulting", "strategy"]
+        }
+        if category in expertise_map:
+            # For now, return a mock response since we need to update the search service
+            return {
+                "experts": [],
+                "total": 0,
+                "message": f"Expert search for {category} category - API endpoint ready for integration"
+            }
+    
+    # Return existing performer search for now
+    search_service = PerformerSearchService(db)
+    return await search_service.search_performers({
+        "online_only": online_only,
+        "location": location
+    })
+
+@api_router.get("/experts/categories")
+async def get_expert_categories():
+    """Get available expert categories"""
+    return {
+        "categories": [
+            {"id": "legal", "name": "Legal", "description": "Attorneys, lawyers, legal advisors"},
+            {"id": "medical", "name": "Medical", "description": "Doctors, physicians, healthcare professionals"},
+            {"id": "financial", "name": "Financial", "description": "Financial planners, investment advisors"},
+            {"id": "accounting", "name": "Accounting", "description": "CPAs, tax specialists, bookkeepers"},
+            {"id": "business", "name": "Business", "description": "Business consultants, strategy advisors"},
+            {"id": "technology", "name": "Technology", "description": "IT consultants, software architects"},
+            {"id": "education", "name": "Education", "description": "Educational specialists, tutors"},
+            {"id": "marketing", "name": "Marketing", "description": "Marketing specialists, brand consultants"},
+            {"id": "real_estate", "name": "Real Estate", "description": "Real estate brokers, property advisors"},
+            {"id": "insurance", "name": "Insurance", "description": "Insurance agents, risk advisors"}
+        ]
+    }
+
+@api_router.get("/experts/featured")
+async def get_featured_experts():
+    """Get featured experts"""
+    # For now, return sample expert data
+    featured_experts = [
+        {
+            "id": "expert_001",
+            "name": "Dr. Sarah Chen",
+            "title": "Senior Corporate Attorney",
+            "category": "legal",
+            "rating": 4.9,
+            "consultations": 1247,
+            "rate": 350.0,
+            "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2"
+        },
+        {
+            "id": "expert_002",
+            "name": "Dr. Priya Patel",
+            "title": "Internal Medicine Physician",
+            "category": "medical",
+            "rating": 4.9,
+            "consultations": 1456,
+            "rate": 200.0,
+            "image": "https://images.unsplash.com/photo-1582750433449-648ed127bb54"
+        },
+        {
+            "id": "expert_003",
+            "name": "Jennifer Thompson",
+            "title": "Certified Financial Planner",
+            "category": "financial",
+            "rating": 4.8,
+            "consultations": 734,
+            "rate": 250.0,
+            "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956"
+        }
+    ]
+    return {"featured_experts": featured_experts}
+
 # Include the router in the main app
 app.include_router(api_router)
 
