@@ -1579,7 +1579,7 @@ export const SignUpPage = () => {
                     type="radio"
                     name="userType"
                     value="client"
-                    checked={formData.userType === 'client'}
+                    checked={formData.userType === 'member'}
                     onChange={(e) => setFormData({...formData, userType: e.target.value})}
                     className="sr-only"
                   />
