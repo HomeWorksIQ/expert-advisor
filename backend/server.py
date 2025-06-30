@@ -651,7 +651,14 @@ async def search_experts_by_location(
         
         search_location = ""
         if zip_code:
-            search_location = f"zip code {zip_code}"
+            # Add city lookup for zip code (mock implementation)
+            zip_to_city = {
+                "02115": "Boston, MA",
+                "02138": "Cambridge, MA", 
+                "02458": "Newton, MA"
+            }
+            city_name = zip_to_city.get(zip_code, "Unknown City")
+            search_location = f"{zip_code} ({city_name})"
         elif city and state:
             search_location = f"{city}, {state}"
         elif city:
