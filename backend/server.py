@@ -2210,18 +2210,6 @@ async def verify_user_account(user_id: str, verification_data: dict):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Verification failed: {str(e)}")
 
-@api_router.get("/admin/users/search")
-async def search_users(query: str, user_type: Optional[str] = None):
-    """Search users by name, email, or other criteria"""
-    try:
-        result = await admin_management_service.search_users(query, user_type)
-        if result.get('success'):
-            return result
-        else:
-            raise HTTPException(status_code=400, detail=result.get('message', 'Search failed'))
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Search failed: {str(e)}")
-
 @api_router.get("/admin/experts/pending")
 async def get_pending_experts():
     """Get experts pending approval"""
