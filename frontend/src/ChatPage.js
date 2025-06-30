@@ -171,6 +171,16 @@ const ChatPage = () => {
             </div>
             <div className="flex flex-col space-y-2">
               <p className="text-sm text-gray-600 text-right">${expert.hourlyRate}/hour</p>
+              
+              {/* Session Timer */}
+              {isSessionActive && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-right">
+                  <div className="text-sm font-semibold text-blue-900">Session Time</div>
+                  <div className="text-lg font-mono text-blue-600">{formatTime(elapsedTime)}</div>
+                  <div className="text-xs text-blue-700">Amount Due: ${totalCost.toFixed(2)}</div>
+                </div>
+              )}
+              
               <div className="flex space-x-2">
                 <a
                   href={`/profile/${expertId}`}
