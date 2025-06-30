@@ -232,6 +232,94 @@ export const MemberDashboard = () => {
               </div>
             </div>
           )}
+
+          {activeTab === 'favorites' && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">My Favorite Experts ❤️</h2>
+              <p className="text-gray-400 mb-6">
+                Experts you've saved for quick access and future consultations.
+              </p>
+              
+              {favorites.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {favorites.map(expert => (
+                    <div key={expert.id} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                      <div className="flex items-center space-x-4 mb-4">
+                        <img
+                          src={expert.profileImage}
+                          alt={expert.displayName}
+                          className="w-16 h-16 rounded-full object-cover"
+                        />
+                        <div>
+                          <h3 className="font-semibold text-lg">{expert.displayName}</h3>
+                          <p className="text-blue-400 text-sm">{expert.specialty}</p>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <span className="text-yellow-400">⭐</span>
+                            <span className="text-sm">{expert.rating}</span>
+                            <div className={`w-2 h-2 rounded-full ${expert.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                            <span className="text-xs text-gray-400">
+                              {expert.isOnline ? 'Online' : 'Offline'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                        {expert.bio}
+                      </p>
+                      
+                      <div className="flex space-x-2">
+                        <a
+                          href={`/profile/${expert.id}`}
+                          className="flex-1 px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-center text-sm transition-colors"
+                        >
+                          View Profile
+                        </a>
+                        <a
+                          href={`/chat/${expert.id}`}
+                          className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-center text-sm transition-colors"
+                        >
+                          Chat
+                        </a>
+                        <a
+                          href={`/book/${expert.id}`}
+                          className="flex-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-center text-sm transition-colors"
+                        >
+                          Book
+                        </a>
+                      </div>
+                      
+                      <button
+                        onClick={() => {
+                          const savedFavorites = JSON.parse(localStorage.getItem('memberFavorites') || '[]');
+                          const updatedFavorites = savedFavorites.filter(id => id !== expert.id);
+                          localStorage.setItem('memberFavorites', JSON.stringify(updatedFavorites));
+                          setFavorites(favorites.filter(fav => fav.id !== expert.id));
+                        }}
+                        className="w-full mt-3 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm transition-colors"
+                      >
+                        💔 Remove from Favorites
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-5xl mb-4">🤍</div>
+                  <h3 className="text-xl font-semibold mb-2">No favorites yet</h3>
+                  <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                    Browse expert profiles and click the heart button to save your favorite experts for quick access.
+                  </p>
+                  <a 
+                    href="/categories" 
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Browse Experts
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
