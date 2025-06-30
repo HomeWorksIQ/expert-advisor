@@ -27,124 +27,63 @@ const throttle = (func, limit) => {
   };
 };
 
-// Enhanced Mock Data for Professional Experts
+// Enhanced Mock Data for Local Experts Paying for Exposure
 const mockPerformers = [
   {
     id: 1,
-    firstName: "Dr. Sarah",
-    lastName: "Chen",
-    displayName: "Dr. Sarah Chen",
-    username: "@dr_sarah_chen",
-    email: "sarah.chen@theexperts.com",
+    firstName: "Mike",
+    lastName: "Thompson",
+    displayName: "Mike Thompson",
+    username: "@mike_handyman",
+    email: "mike.thompson@theexperts.com",
     phone: "+1234567890",
-    bio: "Board-certified family physician with 15+ years of experience. Specializing in preventive care, health consultations, and telemedicine. Available for virtual consultations and second opinions.",
-    profileImage: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3J8ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    bio: "Local handyman and contractor with 10+ years experience. Available for home repairs, renovations, and maintenance. Pay for exposure to reach more local customers.",
+    profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: {
-      address: "123 Medical Center Dr, Boston, MA 02115",
-      city: "Boston",
-      state: "MA",
+      address: "Local Service Area, Denver, CO 80202",
+      city: "Denver",
+      state: "CO",
       country: "USA",
-      zipCode: "02115"
+      zipCode: "80202"
     },
-    gender: "female",
-    age: 42,
+    gender: "male",
+    age: 35,
     isOnline: true,
     lastSeen: new Date().toISOString(),
-    followers: 15000,
-    following: 200,
-    posts: 147,
-    subscribers: 2500,
-    rating: 4.9,
-    subscriptionType: "consultation",
-    monthlyFee: 150.00,
-    consultationRate: 200.00,
-    specialty: "Medical",
-    credentials: ["MD", "Board Certified Family Medicine", "Telemedicine Certified"],
-    yearsOfExperience: 15,
-    education: "Harvard Medical School",
+    followers: 450,
+    following: 80,
+    posts: 67,
+    subscribers: 125,
+    rating: 4.8,
+    subscriptionType: "visibility",
+    monthlyFee: 50.00,
+    hourlyRate: 75.00,
+    specialty: "Home Services",
+    serviceArea: "Local - 15 mile radius",
+    yearsOfExperience: 12,
+    services: ["Home Repairs", "Renovation", "Maintenance", "Plumbing", "Electrical"],
+    payingForExposure: true,
+    exposureLevel: "Local",
     bundles: [
-      { sessions: 3, price: 540.00, discount: 10 },
-      { sessions: 6, price: 1020.00, discount: 15 },
-      { sessions: 12, price: 1920.00, discount: 20 }
+      { hours: 5, price: 350.00, discount: 7 },
+      { hours: 10, price: 675.00, discount: 10 },
+      { hours: 20, price: 1300.00, discount: 13 }
     ],
     socialAccounts: {
-      linkedin: "sarah-chen-md",
-      twitter: "@dr_sarah_chen"
+      facebook: "mike-handyman-denver"
     },
     bankVerified: true,
     idVerified: true,
     accountStatus: "active",
     createdAt: "2023-01-15T10:30:00Z",
     earnings: {
-      total: 125780.50,
-      thisMonth: 15240.30,
-      pendingPayout: 3250.75
+      total: 25780.50,
+      thisMonth: 3240.30,
+      pendingPayout: 650.75
     },
     preferences: {
-      darkMode: true,
-      language: "en",
-      notifications: {
-        push: true,
-        email: true,
-        sms: false
-      }
-    }
-  },
-  {
-    id: 2,
-    firstName: "Marcus",
-    lastName: "Johnson",
-    displayName: "Marcus Johnson",
-    username: "@marcus_business",
-    email: "marcus.johnson@theexperts.com",
-    phone: "+1234567891",
-    bio: "Senior Business Consultant with MBA from Wharton. Helping startups and established businesses optimize operations, strategic planning, and market expansion. 20+ years of Fortune 500 experience.",
-    profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
-    coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
-    location: {
-      address: "456 Business Park, New York, NY 10001",
-      city: "New York",
-      state: "NY",
-      country: "USA",
-      zipCode: "10001"
-    },
-    gender: "male",
-    age: 45,
-    isOnline: false,
-    lastSeen: "2024-01-20T14:45:00Z",
-    followers: 22000,
-    following: 150,
-    posts: 189,
-    subscribers: 1800,
-    rating: 4.8,
-    subscriptionType: "consultation",
-    monthlyFee: 300.00,
-    consultationRate: 250.00,
-    specialty: "Business Strategy",
-    credentials: ["MBA Wharton", "PMP Certified", "Six Sigma Black Belt"],
-    yearsOfExperience: 22,
-    education: "Wharton School of Business",
-    bundles: [
-      { sessions: 3, price: 675.00, discount: 10 },
-      { sessions: 6, price: 1275.00, discount: 15 },
-      { sessions: 12, price: 2400.00, discount: 20 }
-    ],
-    socialAccounts: {
-      linkedin: "marcus-johnson-consultant",
-      twitter: "@marcus_business"
-    },
-    bankVerified: true,
-    idVerified: true,
-    accountStatus: "active",
-    createdAt: "2023-03-22T09:15:00Z",
-    earnings: {
-      total: 89450.25,
-      thisMonth: 12890.60,
-      pendingPayout: 2980.40
-    },
-    preferences: {
-      darkMode: true,
+      darkMode: false,
       language: "en",
       notifications: {
         push: true,
@@ -154,64 +93,130 @@ const mockPerformers = [
     }
   },
   {
-    id: 3,
-    firstName: "Jennifer",
+    id: 2,
+    firstName: "Dr. Lisa",
     lastName: "Rodriguez",
-    displayName: "Jennifer Rodriguez",
-    username: "@jennifer_legal",
-    email: "jennifer.rodriguez@theexperts.com",
+    displayName: "Dr. Lisa Rodriguez",
+    username: "@dr_lisa_wellness",
+    email: "lisa.rodriguez@theexperts.com",
+    phone: "+1234567891",
+    bio: "Licensed therapist and wellness coach. Offering virtual sessions for stress management, relationship counseling, and personal development. Investing in visibility to help more people.",
+    profileImage: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3J8ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
+    location: {
+      address: "Virtual Sessions, Austin, TX 78701",
+      city: "Austin",
+      state: "TX",
+      country: "USA",
+      zipCode: "78701"
+    },
+    gender: "female",
+    age: 41,
+    isOnline: false,
+    lastSeen: "2024-01-20T14:45:00Z",
+    followers: 890,
+    following: 120,
+    posts: 145,
+    subscribers: 280,
+    rating: 4.9,
+    subscriptionType: "visibility",
+    monthlyFee: 50.00,
+    sessionRate: 120.00,
+    specialty: "Mental Health & Wellness",
+    serviceArea: "State-wide & Virtual",
+    yearsOfExperience: 8,
+    services: ["Therapy", "Counseling", "Coaching", "Stress Management", "Relationship Help"],
+    payingForExposure: true,
+    exposureLevel: "State",
+    bundles: [
+      { sessions: 4, price: 430.00, discount: 10 },
+      { sessions: 8, price: 816.00, discount: 15 },
+      { sessions: 12, price: 1152.00, discount: 20 }
+    ],
+    socialAccounts: {
+      linkedin: "dr-lisa-rodriguez-therapist",
+      instagram: "@wellness_with_lisa"
+    },
+    bankVerified: true,
+    idVerified: true,
+    accountStatus: "active",
+    createdAt: "2023-03-22T09:15:00Z",
+    earnings: {
+      total: 42450.25,
+      thisMonth: 5890.60,
+      pendingPayout: 1180.40
+    },
+    preferences: {
+      darkMode: false,
+      language: "en",
+      notifications: {
+        push: true,
+        email: true,
+        sms: false
+      }
+    }
+  },
+  {
+    id: 3,
+    firstName: "James",
+    lastName: "Park",
+    displayName: "James Park",
+    username: "@james_fitness",
+    email: "james.park@theexperts.com",
     phone: "+1234567892",
-    bio: "Corporate Attorney specializing in business law, contract negotiations, and legal compliance. JD from Stanford Law. Providing legal guidance for businesses of all sizes with 12+ years of experience.",
+    bio: "Certified personal trainer and nutrition coach. Specializing in weight loss, strength training, and healthy lifestyle coaching. Paying for visibility to grow my client base.",
     profileImage: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: {
-      address: "789 Legal Plaza, San Francisco, CA 94102",
-      city: "San Francisco",
-      state: "CA",
+      address: "Fitness Studios, Miami, FL 33101",
+      city: "Miami",
+      state: "FL",
       country: "USA",
-      zipCode: "94102"
+      zipCode: "33101"
     },
-    gender: "female",
-    age: 38,
+    gender: "male",
+    age: 29,
     isOnline: true,
     lastSeen: new Date().toISOString(),
-    followers: 18500,
-    following: 180,
-    posts: 156,
-    subscribers: 1200,
-    rating: 4.9,
-    subscriptionType: "consultation",
-    monthlyFee: 400.00,
-    consultationRate: 350.00,
-    specialty: "Legal",
-    credentials: ["JD Stanford Law", "CA State Bar", "Corporate Law Specialist"],
-    yearsOfExperience: 12,
-    education: "Stanford Law School",
+    followers: 1250,
+    following: 200,
+    posts: 89,
+    subscribers: 340,
+    rating: 4.7,
+    subscriptionType: "visibility",
+    monthlyFee: 50.00,
+    sessionRate: 85.00,
+    specialty: "Fitness & Nutrition",
+    serviceArea: "Local & Virtual",
+    yearsOfExperience: 6,
+    services: ["Personal Training", "Nutrition Coaching", "Workout Plans", "Lifestyle Coaching"],
+    payingForExposure: true,
+    exposureLevel: "Local",
     bundles: [
-      { sessions: 3, price: 945.00, discount: 10 },
-      { sessions: 6, price: 1785.00, discount: 15 },
-      { sessions: 12, price: 3360.00, discount: 20 }
+      { sessions: 6, price: 459.00, discount: 10 },
+      { sessions: 12, price: 867.00, discount: 15 },
+      { sessions: 24, price: 1632.00, discount: 20 }
     ],
     socialAccounts: {
-      linkedin: "jennifer-rodriguez-attorney",
-      twitter: "@jennifer_legal"
+      instagram: "@james_fitness_miami",
+      tiktok: "@jamespark_fit"
     },
     bankVerified: true,
     idVerified: true,
     accountStatus: "active",
     createdAt: "2023-02-10T11:20:00Z",
     earnings: {
-      total: 156890.75,
-      thisMonth: 18240.50,
-      pendingPayout: 4120.25
+      total: 28890.75,
+      thisMonth: 4240.50,
+      pendingPayout: 820.25
     },
     preferences: {
-      darkMode: true,
+      darkMode: false,
       language: "en",
       notifications: {
         push: true,
         email: true,
-        sms: false
+        sms: true
       }
     }
   }
