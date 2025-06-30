@@ -544,7 +544,7 @@ export const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       <Header showSearch={false} />
       
       {/* Hero Section */}
