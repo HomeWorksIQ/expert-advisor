@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Experts - Backend API Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .endpoint { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #007bff; }
+        .method { display: inline-block; padding: 4px 8px; border-radius: 3px; color: white; font-weight: bold; }
+        .post { background-color: #28a745; }
+        .get { background-color: #007bff; }
+        .put { background-color: #ffc107; color: black; }
+        .delete { background-color: #dc3545; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        button { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .response { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px; white-space: pre-wrap; font-family: monospace; }
+        .success { border-left: 4px solid #28a745; }
+        .error { border-left: 4px solid #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>🔍 The Experts Backend API Tester</h1>
+    <p>Use this interface to test your new member backend functionality.</p>
+
+    <!-- Member Registration -->
+    <div class="container">
+        <h2>👤 Member Registration</h2>
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/api/members/register</strong>
+            <p>Register a new member with email/password authentication.</p>
+            <textarea id="registerData">{
+  "email": "test.user@example.com",
+  "password": "TestPassword123!",
+  "firstName": "Test",
+  "lastName": "User",
+  "agreesToTerms": true
+}</textarea>
+            <button onclick="testMemberRegister()">Test Registration</button>
+            <div id="registerResponse" class="response" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Member Login -->
+    <div class="container">
+        <h2>🔐 Member Authentication</h2>
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/api/members/login</strong>
+            <p>Login with member credentials to get JWT token.</p>
+            <textarea id="loginData">{
+  "email": "test.user@example.com",
+  "password": "TestPassword123!"
+}</textarea>
+            <button onclick="testMemberLogin()">Test Login</button>
+            <div id="loginResponse" class="response" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Affiliate System -->
+    <div class="container">
+        <h2>💰 Affiliate Integration</h2>
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/api/affiliate/create</strong>
+            <p>Create affiliate account (auto-created during registration).</p>
+            <input type="text" id="affiliateMemberId" placeholder="Enter Member ID" style="width: 300px; padding: 8px;">
+            <button onclick="testAffiliateCreate()">Create Affiliate Account</button>
+            <div id="affiliateResponse" class="response" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Expert Discovery -->
+    <div class="container">
+        <h2>🔍 Expert Discovery</h2>
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/api/experts/discover</strong>
+            <p>Search for experts with advanced filtering.</p>
+            <select id="expertCategory" style="padding: 8px; margin-right: 10px;">
+                <option value="medical">Medical & Health</option>
+                <option value="business">Business Consulting</option>
+                <option value="legal">Legal Services</option>
+                <option value="financial">Financial Planning</option>
+                <option value="education">Education & Tutoring</option>
+            </select>
+            <button onclick="testExpertDiscovery()">Search Experts</button>
+            <div id="expertResponse" class="response" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Password Management -->
+    <div class="container">
+        <h2>🔑 Password Management</h2>
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/api/members/forgot-password</strong>
+            <p>Test forgot password functionality.</p>
+            <input type="email" id="forgotEmail" placeholder="Enter email address" style="width: 300px; padding: 8px;">
+            <button onclick="testForgotPassword()">Test Forgot Password</button>
+            <div id="forgotResponse" class="response" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001/api';
+
+        async function makeRequest(method, endpoint, data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(API_BASE + endpoint, options);
+                const result = await response.json();
+                
+                return {
+                    status: response.status,
+                    data: result
+                };
+            } catch (error) {
+                return {
+                    status: 0,
+                    data: { error: error.message }
+                };
+            }
+        }
+
+        function displayResponse(elementId, response) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = 'response ' + (response.status >= 200 && response.status < 300 ? 'success' : 'error');
+            element.textContent = JSON.stringify(response.data, null, 2);
+        }
+
+        async function testMemberRegister() {
+            const data = JSON.parse(document.getElementById('registerData').value);
+            const response = await makeRequest('POST', '/members/register', data);
+            displayResponse('registerResponse', response);
+        }
+
+        async function testMemberLogin() {
+            const data = JSON.parse(document.getElementById('loginData').value);
+            const response = await makeRequest('POST', '/members/login', data);
+            displayResponse('loginResponse', response);
+        }
+
+        async function testAffiliateCreate() {
+            const memberId = document.getElementById('affiliateMemberId').value;
+            const response = await makeRequest('POST', `/affiliate/create?member_id=${memberId}`);
+            displayResponse('affiliateResponse', response);
+        }
+
+        async function testExpertDiscovery() {
+            const category = document.getElementById('expertCategory').value;
+            const response = await makeRequest('GET', `/experts/discover?category=${category}&status=online`);
+            displayResponse('expertResponse', response);
+        }
+
+        async function testForgotPassword() {
+            const email = document.getElementById('forgotEmail').value;
+            const response = await makeRequest('POST', '/members/forgot-password', { email: email });
+            displayResponse('forgotResponse', response);
+        }
+    </script>
+</body>
+</html>
