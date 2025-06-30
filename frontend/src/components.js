@@ -424,7 +424,7 @@ export const Header = ({ showSearch = true, className = "" }) => {
                 <div className="relative">
                   <button
                     onClick={() => setShowNotifications(!showNotifications)}
-                    className="relative p-2 text-gray-400 hover:text-white transition-colors"
+                    className="relative p-2 text-gray-600 hover:text-blue-600 transition-colors"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3.5-3.5a1 1 0 01-.5-.85V9a6 6 0 10-12 0v3.65a1 1 0 01-.5.85L0 17h5m5 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -437,16 +437,16 @@ export const Header = ({ showSearch = true, className = "" }) => {
                   </button>
                   
                   {showNotifications && (
-                    <div className="absolute right-0 mt-2 w-80 bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
+                    <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
                       <div className="p-4">
-                        <h3 className="text-white font-semibold mb-3">Notifications</h3>
+                        <h3 className="text-gray-900 font-semibold mb-3">Notifications</h3>
                         {notifications.length === 0 ? (
-                          <p className="text-gray-400 text-center py-4">No new notifications</p>
+                          <p className="text-gray-500 text-center py-4">No new notifications</p>
                         ) : (
                           notifications.map(notification => (
-                            <div key={notification.id} className="mb-3 p-3 bg-gray-700 rounded-lg">
-                              <p className="text-white text-sm">{notification.message}</p>
-                              <p className="text-gray-400 text-xs mt-1">{notification.time}</p>
+                            <div key={notification.id} className="mb-3 p-3 bg-gray-50 rounded-lg">
+                              <p className="text-gray-900 text-sm">{notification.message}</p>
+                              <p className="text-gray-500 text-xs mt-1">{notification.time}</p>
                             </div>
                           ))
                         )}
@@ -456,7 +456,7 @@ export const Header = ({ showSearch = true, className = "" }) => {
                 </div>
 
                 {/* Messages */}
-                <a href="/messages" className="p-2 text-gray-400 hover:text-white transition-colors">
+                <a href="/messages" className="p-2 text-gray-600 hover:text-blue-600 transition-colors">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
@@ -466,7 +466,7 @@ export const Header = ({ showSearch = true, className = "" }) => {
                 <div className="relative">
                   <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="flex items-center space-x-2 text-white hover:text-pink-400 transition-colors"
+                    className="flex items-center space-x-2 text-gray-900 hover:text-blue-600 transition-colors"
                   >
                     <img 
                       src={user.profileImage || "https://images.unsplash.com/photo-1701286618296-b40443dc63a9"} 
@@ -480,23 +480,23 @@ export const Header = ({ showSearch = true, className = "" }) => {
                   </button>
                   
                   {isOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
-                      <a href={`/${userType}-dashboard`} className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700">
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                      <a href={`/${userType}-dashboard`} className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                         Dashboard
                       </a>
-                      <a href="/profile-setup" className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700">
+                      <a href="/profile-setup" className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                         Profile
                       </a>
-                      <a href="/wallet" className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700">
+                      <a href="/wallet" className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                         Wallet
                       </a>
-                      <a href="/settings" className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700">
+                      <a href="/settings" className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                         Settings
                       </a>
-                      <div className="border-t border-gray-700"></div>
+                      <div className="border-t border-gray-200"></div>
                       <button 
                         onClick={logout}
-                        className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700"
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                       >
                         Logout
                       </button>
@@ -508,15 +508,15 @@ export const Header = ({ showSearch = true, className = "" }) => {
               <div className="flex space-x-3">
                 <a 
                   href="/login"
-                  className="px-4 py-2 text-white hover:text-pink-400 transition-colors"
+                  className="px-4 py-2 text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Login
                 </a>
                 <a 
                   href="/signup"
-                  className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg hover:from-blue-600 hover:to-green-600 transition-all"
                 >
-                  Sign Up
+                  Join Free
                 </a>
               </div>
             )}
