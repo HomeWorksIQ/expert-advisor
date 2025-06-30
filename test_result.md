@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "Replace Eye Candy with Experts & Add Location Search"
+  - task: "Complete Business Model & UI Updates"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js, /app/backend/server.py, multiple"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Completed comprehensive platform updates: 1) Made clients/members completely free (removed all pricing), 2) Removed 7-day trial system - experts sign up free then pay when publishing profiles, 3) Updated all expert profiles with full contact info (phone, email, address) for geo IP search, 4) Assigned gender-appropriate professional images to all 20 expert profiles, 5) Changed all 'client' references to 'member' throughout platform, 6) Changed all 'creator' references to 'expert', 7) Updated search API to show city next to zip code format: '02115 (Boston, MA)'. Monthly fees now vary by category: Medical $75-125, Insurance $40-45, Business $70-100, Education $30, etc. All experts have published: true, freeSignup: true flags."
     implemented: true
     working: true
     file: "/app/frontend/src/components.js, /app/frontend/src/CategoriesPage.js, /app/backend/server.py"
