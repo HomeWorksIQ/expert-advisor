@@ -738,28 +738,31 @@ export const HomePage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-500 to-indigo-600">
+      <section className="py-16 bg-gradient-to-r from-blue-500 to-green-500">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Join The Experts?
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Get Started?
           </h2>
-          <p className="text-xl text-white mb-8 opacity-90">
-            Start your journey today and connect with certified professionals and trusted advisors
+          <p className="text-lg text-white mb-8 opacity-90">
+            Join free as a client, or pay $50/month to get featured as an expert (7-day free trial)
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
               href="/signup"
-              className="px-8 py-4 bg-white text-purple-600 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105"
+              className="px-8 py-3 bg-white text-blue-600 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105"
             >
-              Get Started Now
+              Join Free (Clients)
             </a>
             <a 
-              href="/discover"
-              className="px-8 py-4 border-2 border-white text-white rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
+              href="/signup?type=expert"
+              className="px-8 py-3 border-2 border-white text-white rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
             >
-              Browse Experts
+              Start 7-Day Trial (Experts)
             </a>
           </div>
+          <p className="text-white text-sm mt-4 opacity-75">
+            Experts: $50/month after free trial • Clients: Always free
+          </p>
         </div>
       </section>
     </div>
