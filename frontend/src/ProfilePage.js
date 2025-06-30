@@ -11,6 +11,8 @@ const ProfilePage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadMessage, setUploadMessage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [uploadedDocuments, setUploadedDocuments] = useState([]);
 
   useEffect(() => {
     // Fetch expert data from shared data source
