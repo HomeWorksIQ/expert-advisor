@@ -698,6 +698,59 @@ async def search_experts_by_location(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Location search failed: {str(e)}")
 
+# Social Authentication Routes
+@api_router.get("/auth/{provider}")
+async def initiate_social_auth(provider: str):
+    """Initiate social authentication flow"""
+    try:
+        # OAuth URLs for different providers
+        auth_urls = {
+            "google": f"https://accounts.google.com/oauth/authorize?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&scope=openid email profile&response_type=code&state=google",
+            "linkedin": f"https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=YOUR_LINKEDIN_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&state=linkedin&scope=r_liteprofile r_emailaddress",
+            "facebook": f"https://www.facebook.com/v18.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=YOUR_REDIRECT_URI&scope=email&state=facebook",
+            "github": f"https://github.com/login/oauth/authorize?client_id=YOUR_GITHUB_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&scope=user:email&state=github"
+        }
+        
+        if provider not in auth_urls:
+            raise HTTPException(status_code=400, detail="Unsupported authentication provider")
+        
+        return {
+            "success": True,
+            "auth_url": auth_urls[provider],
+            "provider": provider
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Social auth initiation failed: {str(e)}")
+
+@api_router.post("/auth/{provider}/callback")
+async def handle_social_auth_callback(provider: str, code: str, state: str):
+    """Handle social authentication callback"""
+    try:
+        # In production, this would:
+        # 1. Exchange code for access token
+        # 2. Fetch user profile from provider
+        # 3. Create or update user account
+        # 4. Generate JWT token for the session
+        
+        # Mock response for demo
+        mock_user_data = {
+            "google": {"email": "user@gmail.com", "name": "Google User", "picture": "https://example.com/avatar.jpg"},
+            "linkedin": {"email": "user@linkedin.com", "name": "LinkedIn User", "picture": "https://example.com/avatar.jpg"},
+            "facebook": {"email": "user@facebook.com", "name": "Facebook User", "picture": "https://example.com/avatar.jpg"},
+            "github": {"email": "user@github.com", "name": "GitHub User", "picture": "https://example.com/avatar.jpg"}
+        }
+        
+        user_data = mock_user_data.get(provider, {})
+        
+        return {
+            "success": True,
+            "user": user_data,
+            "access_token": "mock_jwt_token_here",
+            "provider": provider
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Social auth callback failed: {str(e)}")
+
 @api_router.get("/experts/search")
 async def search_experts(
     category: Optional[str] = None,
