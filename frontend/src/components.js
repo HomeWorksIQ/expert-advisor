@@ -363,7 +363,7 @@ const mockPerformers = [
     username: "@james_fitness",
     email: "james.park@theexperts.com",
     phone: "+1234567803",
-    bio: "Certified personal trainer and nutrition coach with 8+ years helping clients achieve fitness goals. Specializing in weight loss, strength training, and healthy lifestyle coaching.",
+    bio: "Certified personal trainer and nutrition coach with 8+ years helping members achieve fitness goals. Specializing in weight loss, strength training, and healthy lifestyle coaching.",
     profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Los Angeles", state: "CA", country: "USA", zipCode: "90210" },
