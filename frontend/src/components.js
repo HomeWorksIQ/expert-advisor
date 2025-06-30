@@ -1356,7 +1356,7 @@ export const LoginPage = () => {
                   />
                   <div className="text-center">
                     <div className="text-2xl mb-1">⭐</div>
-                    <div className="text-sm font-medium">Creator</div>
+                    <div className="text-sm font-medium">Expert</div>
                   </div>
                 </label>
               </div>
