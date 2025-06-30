@@ -2049,6 +2049,268 @@ async def remove_member_favorite(member_id: str, expert_id: str):
         raise HTTPException(status_code=400, detail=f"Failed to remove favorite: {str(e)}")
 
 # =============================================================================
+# ADMIN AUTHENTICATION API ROUTES
+# =============================================================================
+
+@api_router.post("/admin/create-admin")
+async def create_admin_user(admin_data: dict):
+    """Create a new admin user (super admin only)"""
+    try:
+        result = await admin_auth_service.create_admin_user(admin_data)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Admin creation failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Admin creation failed: {str(e)}")
+
+@api_router.post("/admin/create-default-admin")
+async def create_default_admin():
+    """Create default admin user if none exists"""
+    try:
+        result = await admin_auth_service.create_default_admin()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Default admin creation failed: {str(e)}")
+
+@api_router.post("/admin/login")
+async def login_admin(login_data: dict):
+    """Login admin with email/password"""
+    try:
+        email = login_data.get('email', '')
+        password = login_data.get('password', '')
+        
+        result = await admin_auth_service.login_admin(email, password)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=401, detail=result.get('message', 'Admin login failed'))
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Admin login failed: {str(e)}")
+
+@api_router.post("/admin/logout")
+async def logout_admin(logout_data: dict):
+    """Logout admin and invalidate session"""
+    try:
+        session_token = logout_data.get('session_token', '')
+        
+        result = await admin_auth_service.logout_admin(session_token)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Admin logout failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Admin logout failed: {str(e)}")
+
+@api_router.get("/admin/{admin_id}/profile")
+async def get_admin_profile(admin_id: str):
+    """Get admin profile"""
+    try:
+        result = await admin_auth_service.get_admin_profile(admin_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'Admin profile not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get admin profile: {str(e)}")
+
+@api_router.get("/admin/list-admins")
+async def list_admin_users():
+    """List all admin users"""
+    try:
+        result = await admin_auth_service.list_admin_users()
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to list admins'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to list admins: {str(e)}")
+
+@api_router.post("/admin/{admin_id}/change-password")
+async def change_admin_password(admin_id: str, password_data: dict):
+    """Change admin password"""
+    try:
+        old_password = password_data.get('old_password', '')
+        new_password = password_data.get('new_password', '')
+        
+        result = await admin_auth_service.change_admin_password(admin_id, old_password, new_password)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Password change failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Password change failed: {str(e)}")
+
+# =============================================================================
+# ADMIN USER MANAGEMENT API ROUTES
+# =============================================================================
+
+@api_router.get("/admin/users")
+async def get_all_users(user_type: Optional[str] = None, page: int = 1, limit: int = 50):
+    """Get all users with pagination and filtering"""
+    try:
+        result = await admin_management_service.get_all_users(user_type, page, limit)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to get users'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get users: {str(e)}")
+
+@api_router.get("/admin/users/{user_id}")
+async def get_user_details(user_id: str):
+    """Get detailed user information"""
+    try:
+        result = await admin_management_service.get_user_details(user_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'User not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get user details: {str(e)}")
+
+@api_router.put("/admin/users/{user_id}/status")
+async def update_user_status(user_id: str, status_data: dict):
+    """Update user account status"""
+    try:
+        status = status_data.get('status', '')
+        reason = status_data.get('reason', '')
+        
+        result = await admin_management_service.update_user_status(user_id, status, reason)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Status update failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Status update failed: {str(e)}")
+
+@api_router.post("/admin/users/{user_id}/verify")
+async def verify_user_account(user_id: str, verification_data: dict):
+    """Verify user account (email, ID, bank)"""
+    try:
+        verification_type = verification_data.get('verification_type', 'email')
+        
+        result = await admin_management_service.verify_user_account(user_id, verification_type)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Verification failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Verification failed: {str(e)}")
+
+@api_router.get("/admin/users/search")
+async def search_users(query: str, user_type: Optional[str] = None):
+    """Search users by name, email, or other criteria"""
+    try:
+        result = await admin_management_service.search_users(query, user_type)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Search failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Search failed: {str(e)}")
+
+# =============================================================================
+# ADMIN EXPERT MANAGEMENT API ROUTES
+# =============================================================================
+
+@api_router.get("/admin/experts/pending")
+async def get_pending_experts():
+    """Get experts pending approval"""
+    try:
+        result = await admin_management_service.get_pending_experts()
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to get pending experts'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get pending experts: {str(e)}")
+
+@api_router.post("/admin/experts/{expert_id}/approve")
+async def approve_expert(expert_id: str, approval_data: dict = None):
+    """Approve expert application"""
+    try:
+        admin_notes = approval_data.get('admin_notes', '') if approval_data else ''
+        
+        result = await admin_management_service.approve_expert(expert_id, admin_notes)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Expert approval failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Expert approval failed: {str(e)}")
+
+@api_router.post("/admin/experts/{expert_id}/reject")
+async def reject_expert(expert_id: str, rejection_data: dict):
+    """Reject expert application"""
+    try:
+        rejection_reason = rejection_data.get('rejection_reason', 'No reason provided')
+        
+        result = await admin_management_service.reject_expert(expert_id, rejection_reason)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Expert rejection failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Expert rejection failed: {str(e)}")
+
+# =============================================================================
+# ADMIN FINANCIAL MANAGEMENT API ROUTES
+# =============================================================================
+
+@api_router.get("/admin/finances/overview")
+async def get_financial_overview():
+    """Get financial dashboard overview"""
+    try:
+        result = await admin_management_service.get_financial_overview()
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to get financial overview'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get financial overview: {str(e)}")
+
+@api_router.get("/admin/finances/transactions")
+async def get_transaction_history(transaction_type: str = "all", limit: int = 100):
+    """Get transaction history"""
+    try:
+        result = await admin_management_service.get_transaction_history(transaction_type, limit)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to get transaction history'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get transaction history: {str(e)}")
+
+# =============================================================================
+# ADMIN ANALYTICS API ROUTES
+# =============================================================================
+
+@api_router.get("/admin/analytics/overview")
+async def get_platform_analytics(period: str = "30d"):
+    """Get platform analytics and metrics"""
+    try:
+        result = await admin_management_service.get_platform_analytics(period)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to get analytics'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get analytics: {str(e)}")
+
+@api_router.get("/admin/analytics/engagement")
+async def get_user_engagement_metrics():
+    """Get user engagement metrics"""
+    try:
+        result = await admin_management_service.get_user_engagement_metrics()
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to get engagement metrics'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get engagement metrics: {str(e)}")
+
+# =============================================================================
 # AFFILIATE PROGRAM API ROUTES
 # =============================================================================
 
