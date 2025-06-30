@@ -674,6 +674,21 @@ backend:
         -comment: "Tested the profile access control API. The API correctly enforces access rules based on location preferences, subscription types, and user blocking. It returns appropriate access levels (full, teaser, blocked) with detailed reasons. The teaser session functionality works correctly, creating time-limited preview sessions and expiring them after the configured duration."
 
 frontend:
+  - task: "Documents Tab on Expert Profile"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/ProfilePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Implemented Documents tab on expert profile page with document download and upload functionality."
+        -working: true
+        -agent: "testing"
+        -comment: "Successfully tested the Documents tab functionality on expert profiles. The tab is properly implemented and accessible on all expert profiles. For Dr. Lisa Park (ID: 3), the Documents tab correctly displays her two documents: 'Anxiety Management Workbook' and 'Mindfulness Meditation Guide' with download buttons. For James Wilson (ID: 4), the tab correctly shows 'No documents available from this expert yet.' message. The upload section is present on all profiles with proper file input, validation, and upload button. The tab navigation works correctly, allowing users to switch between tabs. The header action buttons (Start Chat, Book Appointment) remain visible and functional when on the Documents tab."
+
   - task: "Navigation Testing - Header Links"
     implemented: true
     working: true
