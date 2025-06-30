@@ -102,9 +102,15 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Add Geo location for the models to select where they want to share their profile, also exclude where they want to share their profile. Create locations by country, state, city or even zip code. Include performer controls with enable switches for different subscription models (Free, monthly, per visit, teaser), teaser functionality with configurable time limits (15-300 seconds), and user blocking system for harassment/inappropriate behavior.
+user_problem_statement: "on the front page, I need to change the model out for 3 professionals, mix it up with male and females, also find a image with a doctor and some other professional people
 
-CONTINUATION TASK: Build another way from the performer to make appointments, text chat with members that have questions about anything pertaining to the specific field, go live with a video presentation like zoom with some of the same features, member upload and performer download features, either free or for a fee. Also connect the store feature where the performer can send items purchase through the store. Also need a label to print based on either usps or ups."
+CONTINUATION UPDATES:
+- The experts can perform all the same attributes at the performers and charge for their time or documents.
+- The client is always free to join, the expert will pay $50 a month after a 7 day free trial
+- Lets make the color scheme blue with green highlights.
+- The sample experts will be a random of people that want to pay for exposure based on location.
+- The first thing a member will do is pick a location or national demographic before selecting a category. They can also do a seach by text.
+- Also change the format to a more simple layout."
 
 backend:
   - task: "API Key Management System"
