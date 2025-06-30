@@ -26,9 +26,19 @@ const CategoriesPage = () => {
     const location = searchParams.get('location');
     const city = searchParams.get('city');
     const state = searchParams.get('state');
+    const zip = searchParams.get('zip');
+    const radius = searchParams.get('radius');
 
     if (location === 'national') {
       setLocationInfo('National experts');
+    } else if (location === 'radius') {
+      if (zip && radius) {
+        setLocationInfo(`Local experts within ${radius} miles of ${zip}`);
+      } else if (city && radius) {
+        setLocationInfo(`Local experts within ${radius} miles of ${city}`);
+      } else {
+        setLocationInfo('Local experts in specified area');
+      }
     } else if (city && state) {
       setLocationInfo(`Local experts in ${city}, ${state}`);
     } else if (location === 'local') {
