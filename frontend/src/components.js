@@ -269,13 +269,13 @@ const mockStories = [
   {
     id: 1,
     performerId: 1,
-    type: "photo",
-    mediaUrl: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
+    type: "consultation",
+    mediaUrl: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3J8ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
     duration: 15,
-    text: "Good morning beautiful souls! ☀️",
+    text: "Available for health consultations today! 🩺",
     createdAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
     expiresAt: new Date(Date.now() + 23 * 3600000).toISOString(), // 23 hours from now
-    views: 450,
+    views: 150,
     viewers: []
   }
 ];
