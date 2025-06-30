@@ -200,7 +200,7 @@ const EnhancedSignUpPage = () => {
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-white mb-2">Join The Experts</h2>
             <p className="text-gray-400">
-              Create your account and start your free trial instantly
+              Create your account and start connecting with {formData.userType === 'expert' ? 'clients' : 'experts'} today
             </p>
           </div>
 
