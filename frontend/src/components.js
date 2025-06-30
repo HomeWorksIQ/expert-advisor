@@ -1230,24 +1230,24 @@ export const HomePage = () => {
             Ready to Get Started?
           </h2>
           <p className="text-lg text-white mb-8 opacity-90">
-            Join free as a client, or pay $50/month to get featured as an expert (7-day free trial)
+            Join free as a member, or list your services as an expert (pay only when you publish)
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
               href="/signup"
               className="px-8 py-3 bg-white text-blue-600 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105"
             >
-              Join Free (Clients)
+              Join Free (Members)
             </a>
             <a 
               href="/signup?type=expert"
               className="px-8 py-3 border-2 border-white text-white rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
             >
-              Start 7-Day Trial (Experts)
+              Become an Expert
             </a>
           </div>
           <p className="text-white text-sm mt-4 opacity-75">
-            Experts: $50/month after free trial • Clients: Always free
+            Members: Always free • Experts: Pay when you publish your profile
           </p>
         </div>
       </section>
