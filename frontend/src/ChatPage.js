@@ -197,6 +197,35 @@ const ChatPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Quick Actions */}
+        <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+            Need More Time with {expert.firstName}?
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <a 
+              href={`/profile/${expertId}`}
+              className="flex items-center justify-center gap-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <span>👤</span>
+              <div className="text-center">
+                <div className="font-medium text-gray-900">View Full Profile</div>
+                <div className="text-sm text-gray-600">See credentials, reviews & more</div>
+              </div>
+            </a>
+            <a 
+              href={`/book/${expertId}`}
+              className="flex items-center justify-center gap-2 p-4 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              <span>📅</span>
+              <div className="text-center">
+                <div className="font-medium text-blue-600">Schedule Appointment</div>
+                <div className="text-sm text-blue-500">Video call, phone, or in-person</div>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
