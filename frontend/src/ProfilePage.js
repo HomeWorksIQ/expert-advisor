@@ -152,6 +152,7 @@ const ProfilePage = () => {
               {[
                 { id: 'about', label: 'About' },
                 { id: 'services', label: 'Services' },
+                { id: 'documents', label: 'Documents' },
                 { id: 'reviews', label: 'Reviews' },
                 { id: 'contact', label: 'Contact' }
               ].map(tab => (
