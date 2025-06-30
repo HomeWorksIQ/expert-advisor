@@ -27,6 +27,23 @@ const throttle = (func, limit) => {
   };
 };
 
+// Categories for expert classification
+const categories = [
+  { id: "medical", name: "Medical & Health", icon: "🏥", count: 3 },
+  { id: "insurance", name: "Insurance", icon: "🛡️", count: 2 },
+  { id: "business", name: "Business Consulting", icon: "💼", count: 2 },
+  { id: "education", name: "Education & Tutoring", icon: "📚", count: 3 },
+  { id: "marketing", name: "Marketing & Advertising", icon: "📱", count: 2 },
+  { id: "home_services", name: "Home Services", icon: "🔧", count: 1 },
+  { id: "fitness", name: "Fitness & Wellness", icon: "💪", count: 1 },
+  { id: "legal", name: "Legal Services", icon: "⚖️", count: 1 },
+  { id: "technology", name: "Technology & IT", icon: "💻", count: 1 },
+  { id: "real_estate", name: "Real Estate", icon: "🏠", count: 1 },
+  { id: "automotive", name: "Automotive", icon: "🚗", count: 1 },
+  { id: "pet_care", name: "Pet Care", icon: "🐕", count: 1 },
+  { id: "financial", name: "Financial Planning", icon: "💰", count: 1 }
+];
+
 // Enhanced Mock Data for 20 Local Experts Paying for Exposure
 const mockPerformers = [
   // Medical Professionals
