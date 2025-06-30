@@ -815,7 +815,7 @@ frontend:
         -agent: "testing"
         -comment: "The creator cards have been updated to expert cards with professional styling. Each card displays the expert's profile image, name, specialty, verification badge, and availability status. The cards also show key credentials, consultation rates, and ratings. The design uses a professional blue/green color scheme consistent with 'The Experts' branding."
 
-  - task: "Dashboard Functionality - Performer Dashboard Tabs"
+  - task: "Dashboard Functionality - Member Dashboard Tabs"
     implemented: true
     working: "NA"
     file: "/app/frontend/src/components.js"
@@ -825,10 +825,10 @@ frontend:
     status_history:
         -working: "NA"
         -agent: "main"
-        -comment: "Implemented performer dashboard with tabs for overview, content, store, earnings, and referrals. Need to test if tabs work correctly."
+        -comment: "Implemented member dashboard with tabs for feed, subscriptions, messages, and referrals. Need to test if tabs work correctly."
         -working: "NA"
         -agent: "testing"
-        -comment: "Unable to fully test the performer dashboard tabs due to Playwright script issues. From code review, the tabs are implemented with proper state management and content switching."
+        -comment: "Unable to fully test the member dashboard tabs due to Playwright script issues. From code review, the tabs are implemented with proper state management and content switching."
 
   - task: "Dashboard Functionality - Go Live Button"
     implemented: true
