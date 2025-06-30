@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components';
+import { useSearchParams } from 'react-router-dom';
 
 const categories = [
   { id: "medical", name: "Medical & Health", icon: "🏥", count: 3, description: "Doctors, therapists, and health professionals" },
@@ -18,7 +19,24 @@ const categories = [
 ];
 
 const CategoriesPage = () => {
-  const [selectedLocation, setSelectedLocation] = useState('');
+  const [searchParams] = useSearchParams();
+  const [locationInfo, setLocationInfo] = useState('');
+
+  useEffect(() => {
+    const location = searchParams.get('location');
+    const city = searchParams.get('city');
+    const state = searchParams.get('state');
+
+    if (location === 'national') {
+      setLocationInfo('National experts');
+    } else if (city && state) {
+      setLocationInfo(`Local experts in ${city}, ${state}`);
+    } else if (location === 'local') {
+      setLocationInfo('Local experts in your area');
+    } else {
+      setLocationInfo('All experts');
+    }
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -27,60 +45,26 @@ const CategoriesPage = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Browse by <span className="text-green-600">Category</span>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Choose Your <span className="text-green-600">Expert Category</span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Find the right professional for your needs. All experts pay for visibility to better serve you.
+          <p className="text-lg text-green-600 font-medium mb-4">{locationInfo}</p>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Select the type of professional you need. All experts pay for visibility to better serve you.
           </p>
         </div>
 
-        {/* Location Selector */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            First, choose your location preference:
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <button 
-              onClick={() => setSelectedLocation('national')}
-              className={`px-4 py-2 rounded-lg text-center transition-all ${
-                selectedLocation === 'national' 
-                  ? 'bg-green-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+        {/* Location Info Banner */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-blue-600">📍</span>
+            <span className="text-blue-800 font-medium">{locationInfo}</span>
+            <a 
+              href="/"
+              className="text-blue-600 hover:text-blue-800 text-sm underline ml-4"
             >
-              National
-            </button>
-            <button 
-              onClick={() => setSelectedLocation('state')}
-              className={`px-4 py-2 rounded-lg text-center transition-all ${
-                selectedLocation === 'state' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              State-wide
-            </button>
-            <button 
-              onClick={() => setSelectedLocation('local')}
-              className={`px-4 py-2 rounded-lg text-center transition-all ${
-                selectedLocation === 'local' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Local Area
-            </button>
-            <button 
-              onClick={() => setSelectedLocation('city')}
-              className={`px-4 py-2 rounded-lg text-center transition-all ${
-                selectedLocation === 'city' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              City Only
-            </button>
+              Change location
+            </a>
           </div>
         </div>
 
@@ -89,39 +73,67 @@ const CategoriesPage = () => {
           {categories.map(category => (
             <a
               key={category.id}
-              href={`/discover?category=${category.id}${selectedLocation ? `&location=${selectedLocation}` : ''}`}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all group"
+              href={`/discover?category=${category.id}${searchParams.toString() ? `&${searchParams.toString()}` : ''}`}
+              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all group hover:border-green-300"
             >
               <div className="text-center">
-                <div className="text-4xl mb-3">{category.icon}</div>
+                <div className="text-4xl mb-4">{category.icon}</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
                   {category.name}
                 </h3>
-                <p className="text-gray-600 text-sm mb-3">{category.description}</p>
+                <p className="text-gray-600 text-sm mb-4">{category.description}</p>
                 <div className="flex items-center justify-center space-x-2">
-                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                     {category.count} expert{category.count !== 1 ? 's' : ''}
                   </span>
+                </div>
+                <div className="mt-3 text-green-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                  View experts →
                 </div>
               </div>
             </a>
           ))}
         </div>
 
-        {/* CTA Section */}
+        {/* Quick Search */}
+        <div className="mt-12 bg-white rounded-lg shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+            Or search directly for what you need
+          </h3>
+          <div className="flex gap-3 max-w-md mx-auto">
+            <input 
+              type="text" 
+              placeholder="Search by specialty, name, or service..." 
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
+            />
+            <button className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white px-6 py-2 rounded-lg transition-all">
+              Search
+            </button>
+          </div>
+        </div>
+
+        {/* Help Section */}
         <div className="text-center mt-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-white mb-4">
-            Can't find what you're looking for?
+            Need help choosing?
           </h2>
           <p className="text-white mb-6 opacity-90">
-            Use our search to find experts by name, specialty, or specific skills.
+            Not sure which category fits your needs? Browse all experts or contact our support team.
           </p>
-          <a
-            href="/discover"
-            className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all"
-          >
-            Search All Experts
-          </a>
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <a
+              href={`/discover?${searchParams.toString()}`}
+              className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all"
+            >
+              Browse All Experts
+            </a>
+            <a
+              href="/help"
+              className="inline-block px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
+            >
+              Contact Support
+            </a>
+          </div>
         </div>
       </div>
     </div>
