@@ -1,30 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components';
 import { useParams } from 'react-router-dom';
 
 const ChatPage = () => {
   const { expertId } = useParams();
   const [message, setMessage] = useState('');
-  const [chatMessages, setChatMessages] = useState([
+  const [expert, setExpert] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [chatMessages, setChatMessages] = useState([]);
+
+  // Mock expert data - get from shared mockPerformers
+  const mockPerformers = [
     {
-      id: 1,
-      sender: 'expert',
-      name: 'Dr. Sarah Chen',
-      text: 'Hello! I\'m available to help you. What can I assist you with today?',
-      time: '2:30 PM',
+      id: 1, firstName: "Dr. Sarah", lastName: "Chen", displayName: "Dr. Sarah Chen",
+      specialty: "Family Medicine", hourlyRate: 150,
+      profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3IlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
+      isOnline: true
+    },
+    {
+      id: 2, firstName: "Dr. Michael", lastName: "Rodriguez", displayName: "Dr. Michael Rodriguez",
+      specialty: "Cardiology", hourlyRate: 250,
+      profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxkb2N0b3IlMjBtYW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+      isOnline: false
+    },
+    {
+      id: 3, firstName: "Dr. Lisa", lastName: "Park", displayName: "Dr. Lisa Park",
+      specialty: "Mental Health", hourlyRate: 120,
+      profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx0aGVyYXBpc3QlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
       isOnline: true
     }
-  ]);
+  ];
 
-  // Mock expert data
-  const expert = {
-    id: expertId,
-    name: "Dr. Sarah Chen",
-    specialty: "Family Medicine",
-    profileImage: "https://images.unsplash.com/photo-1638202993928-7267aad84c31",
-    isOnline: true,
-    hourlyRate: 150
-  };
+  useEffect(() => {
+    // Find expert by ID and set initial chat message
+    setTimeout(() => {
+      const foundExpert = mockPerformers.find(p => p.id === parseInt(expertId));
+      const expertData = foundExpert || mockPerformers[0]; // Default to first expert if not found
+      setExpert(expertData);
+      
+      // Set initial chat message from expert
+      setChatMessages([
+        {
+          id: 1,
+          sender: 'expert',
+          name: expertData.displayName,
+          text: `Hello! I'm available to help you. What can I assist you with today?`,
+          time: '2:30 PM',
+          isOnline: expertData.isOnline
+        }
+      ]);
+      
+      setIsLoading(false);
+    }, 500);
+  }, [expertId]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading chat...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!expert) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Expert Not Found</h2>
+            <p className="text-gray-600 mb-6">The expert you're looking for doesn't exist.</p>
+            <a href="/discover" className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+              Browse All Experts
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const sendMessage = (e) => {
     e.preventDefault();
