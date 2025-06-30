@@ -470,7 +470,9 @@ const DiscoverPageNew = () => {
                   >
                     <div className="text-2xl mb-2">📍</div>
                     <div className="font-medium">My Location</div>
-                    <div className="text-sm text-gray-500">Use current location</div>
+                    <div className="text-sm text-gray-500">
+                      {userLocation ? `${userLocation.city}, ${userLocation.state}` : 'Use current location'}
+                    </div>
                   </button>
                   
                   <button
