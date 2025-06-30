@@ -136,10 +136,10 @@ class AffiliateService:
     
     def _generate_affiliate_code(self, member_id: str) -> str:
         """Generate a unique affiliate code"""
-        # Create a hash of member_id + timestamp + random
-        data = f"{member_id}{datetime.utcnow().timestamp()}{secrets.token_hex(8)}"
+        # Create a more predictable but still unique hash using member_id as base
+        data = f"affiliate_{member_id}_{datetime.utcnow().strftime('%Y%m%d')}"
         hash_object = hashlib.md5(data.encode())
-        return hash_object.hexdigest()[:10].upper()
+        return f"REF{hash_object.hexdigest()[:8].upper()}"
 
 class CreditService:
     def __init__(self, db):
