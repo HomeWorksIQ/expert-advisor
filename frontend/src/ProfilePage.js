@@ -20,8 +20,34 @@ const ProfilePage = () => {
       const foundExpert = getExpertById(id);
       setExpert(foundExpert);
       setIsLoading(false);
+      
+      // Check if expert is favorited
+      const favorites = JSON.parse(localStorage.getItem('memberFavorites') || '[]');
+      setIsFavorited(favorites.includes(parseInt(id)));
+      
+      // Load uploaded documents for this expert
+      const uploadedDocs = JSON.parse(localStorage.getItem(`uploadedDocs_${id}`) || '[]');
+      setUploadedDocuments(uploadedDocs);
     }, 1000);
   }, [id]);
+
+  // Favorite toggle handler
+  const handleFavoriteToggle = () => {
+    const favorites = JSON.parse(localStorage.getItem('memberFavorites') || '[]');
+    const expertIdNum = parseInt(id);
+    
+    if (isFavorited) {
+      // Remove from favorites
+      const updatedFavorites = favorites.filter(fav => fav !== expertIdNum);
+      localStorage.setItem('memberFavorites', JSON.stringify(updatedFavorites));
+      setIsFavorited(false);
+    } else {
+      // Add to favorites
+      const updatedFavorites = [...favorites, expertIdNum];
+      localStorage.setItem('memberFavorites', JSON.stringify(updatedFavorites));
+      setIsFavorited(true);
+    }
+  };
 
   // File upload handler
   const handleFileSelect = (event) => {
