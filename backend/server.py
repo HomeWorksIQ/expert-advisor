@@ -49,6 +49,8 @@ from affiliate_credits_models import (
     ExpertPayoutAccount, PayoutRequest, PayoutHistory, ShoppingCart, CartItem,
     AffiliateStatus, CreditTransactionType, PayoutStatus, PayoutMethod
 )
+from member_auth_service import MemberAuthService
+from member_profile_service import MemberProfileService
 
 
 ROOT_DIR = Path(__file__).parent
