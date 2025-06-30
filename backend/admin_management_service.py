@@ -252,7 +252,12 @@ class AdminManagementService:
         except Exception as e:
             print(f"Search users error: {str(e)}")
             return {"success": False, "message": f"Search failed: {str(e)}"}
-async def get_pending_experts(self) -> Dict[str, Any]:
+    
+    # =============================================================================
+    # EXPERT MANAGEMENT
+    # =============================================================================
+    
+    async def get_pending_experts(self) -> Dict[str, Any]:
         """Get experts pending approval"""
         try:
             experts_cursor = self.db.users.find({
