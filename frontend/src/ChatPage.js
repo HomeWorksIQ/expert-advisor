@@ -122,7 +122,7 @@ const ChatPage = () => {
               <div className="flex space-x-2">
                 <a
                   href={`/profile/${expertId}`}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-lg text-sm hover:bg-gray-600 transition-all"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all"
                 >
                   View Profile
                 </a>
