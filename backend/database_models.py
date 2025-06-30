@@ -92,6 +92,17 @@ class User(BaseModel):
     education: Optional[List[Dict[str, str]]] = Field(None, description="Educational background")
     licenses: Optional[List[Dict[str, str]]] = Field(None, description="Professional licenses")
     
+    # Authentication fields
+    password: Optional[str] = Field(None, description="Hashed password (for email/password auth)")
+    emailVerificationToken: Optional[str] = Field(None, description="Email verification token")
+    emailVerificationExpires: Optional[datetime] = Field(None, description="Email verification expiry")
+    passwordResetToken: Optional[str] = Field(None, description="Password reset token")
+    passwordResetExpires: Optional[datetime] = Field(None, description="Password reset expiry")
+    
+    # Terms and agreements
+    agreesToTerms: Optional[bool] = Field(None, description="User agreed to terms of service")
+    termsAcceptedAt: Optional[datetime] = Field(None, description="When terms were accepted")
+    
     # Replaced gender field (keeping for backward compatibility)
     gender: Optional[str] = Field(None, description="User gender (deprecated - use expertiseCategory for experts)")
     age: Optional[int] = Field(None, description="User age", ge=18)
@@ -114,9 +125,45 @@ class User(BaseModel):
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
     lastSeen: Optional[datetime] = Field(None, description="Last activity timestamp")
+    deletedAt: Optional[datetime] = Field(None, description="Account deletion timestamp")
     
     # Stats (for performers)
     stats: Optional[Dict[str, Any]] = Field(None, description="User statistics")
+
+# Member-specific models
+class MemberSession(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique session identifier")
+    userId: str = Field(..., description="User ID who owns this session")
+    sessionToken: str = Field(..., description="JWT session token")
+    deviceInfo: Optional[str] = Field(None, description="Device information")
+    ipAddress: Optional[str] = Field(None, description="IP address")
+    userAgent: Optional[str] = Field(None, description="User agent string")
+    isActive: bool = Field(True, description="Session active status")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    expiresAt: datetime = Field(..., description="Session expiration time")
+
+class MemberFavorite(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique favorite identifier")
+    memberId: str = Field(..., description="Member user ID")
+    expertId: str = Field(..., description="Expert user ID")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+class MemberActivity(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique activity identifier")
+    memberId: str = Field(..., description="Member user ID")
+    activityType: str = Field(..., description="Type of activity")
+    description: str = Field(..., description="Activity description")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Activity metadata")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+class MemberSearchHistory(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique search identifier")
+    memberId: str = Field(..., description="Member user ID")
+    searchQuery: str = Field(..., description="Search query")
+    searchFilters: Optional[Dict[str, Any]] = Field(None, description="Applied filters")
+    resultsCount: int = Field(..., description="Number of results returned")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
 
 # Transaction Models
 class Transaction(BaseModel):
