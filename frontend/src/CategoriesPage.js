@@ -90,11 +90,11 @@ const CategoriesPage = () => {
               className="bg-white rounded-lg border border-gray-200 p-2 hover:shadow-lg transition-all group hover:border-green-300"
             >
               <div className="text-center">
-                <div className="text-2xl mb-2">{category.icon}</div>
-                <h3 className="text-md font-semibold text-gray-900 mb-1 group-hover:text-green-600 transition-colors">
+                <div className="text-xl mb-1">{category.icon}</div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-green-600 transition-colors">
                   {category.name}
                 </h3>
-                <p className="text-gray-600 text-xs mb-2">{category.description}</p>
+                <p className="text-gray-600 text-xs mb-1">{category.description}</p>
                 <div className="flex items-center justify-center space-x-2">
                   <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                     {category.count} expert{category.count !== 1 ? 's' : ''}
