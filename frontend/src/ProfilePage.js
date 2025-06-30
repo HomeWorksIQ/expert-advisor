@@ -412,6 +412,131 @@ const ProfilePage = () => {
                 </div>
               </div>
 
+            {/* Documents Tab */}
+            {activeTab === 'documents' && (
+              <div className="space-y-6">
+                {/* Expert's Documents for Download */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    📋 Available Documents from {expert.firstName}
+                  </h3>
+                  {expert.documents && expert.documents.length > 0 ? (
+                    <div className="space-y-3">
+                      {expert.documents.map(document => (
+                        <div key={document.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                              <span className="text-red-600 font-semibold text-xs">
+                                {document.type}
+                              </span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-gray-900">{document.name}</h4>
+                              <p className="text-sm text-gray-600">{document.description}</p>
+                              <div className="flex items-center space-x-4 text-xs text-gray-500 mt-1">
+                                <span>{document.size}</span>
+                                <span>•</span>
+                                <span>Uploaded {document.uploadDate}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleFileDownload(document)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all flex items-center gap-2"
+                          >
+                            <span>📥</span>
+                            Download
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <p className="text-gray-600">No documents available from this expert yet.</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Upload Documents to Expert */}
+                <div className="border-t border-gray-200 pt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    📤 Send Documents to {expert.firstName}
+                  </h3>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                    <div className="mb-4">
+                      <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 mb-2">
+                        Select file to upload
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <input
+                          id="file-upload"
+                          type="file"
+                          onChange={handleFileSelect}
+                          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        />
+                        <button
+                          onClick={handleFileUpload}
+                          disabled={!selectedFile || isUploading}
+                          className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+                            selectedFile && !isUploading
+                              ? 'bg-blue-500 text-white hover:bg-blue-600'
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                        >
+                          {isUploading ? (
+                            <span className="flex items-center gap-2">
+                              <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                              Uploading...
+                            </span>
+                          ) : (
+                            'Upload'
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {selectedFile && (
+                      <div className="mb-4 p-3 bg-white rounded-lg border">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{selectedFile.name}</p>
+                            <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setSelectedFile(null);
+                              const fileInput = document.getElementById('file-upload');
+                              if (fileInput) fileInput.value = '';
+                            }}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {uploadMessage && (
+                      <div className={`p-3 rounded-lg text-sm ${
+                        uploadMessage.includes('✅') 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {uploadMessage}
+                      </div>
+                    )}
+                    
+                    <div className="mt-4 text-xs text-gray-600">
+                      <p className="mb-1">• Accepted formats: PDF, DOC, DOCX, JPG, PNG</p>
+                      <p className="mb-1">• Maximum file size: 10MB</p>
+                      <p>• The expert will be notified when you upload a document</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Reviews Tab */}
             {activeTab === 'reviews' && (
               <div className="space-y-6">
