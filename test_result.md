@@ -102,15 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "on the front page, I need to change the model out for 3 professionals, mix it up with male and females, also find a image with a doctor and some other professional people
-
-CONTINUATION UPDATES:
-- The experts can perform all the same attributes at the performers and charge for their time or documents.
-- The client is always free to join, the expert will pay $50 a month after a 7 day free trial
-- Lets make the color scheme blue with green highlights.
-- The sample experts will be a random of people that want to pay for exposure based on location.
-- The first thing a member will do is pick a location or national demographic before selecting a category. They can also do a seach by text.
-- Also change the format to a more simple layout."
+user_problem_statement: "create 20 sample profiles to include more doctors, life insurance, Consultants, Teacher, Tudor, Marketing Agency. After the clients select a geographics area, they then can select a category and review these profile and select an expert that they need to chat with or select their services. The can also set an appointment to either chat online or meet at the experts office."
 
 backend:
   - task: "API Key Management System"
