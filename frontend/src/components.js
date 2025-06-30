@@ -871,50 +871,33 @@ export const HomePage = () => {
           
           {/* Location and Category Selection */}
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8 max-w-3xl mx-auto">
-            <h3 className="text-white text-lg font-semibold mb-4">Find experts in your area:</h3>
+            <h3 className="text-white text-lg font-semibold mb-4">Find experts near you:</h3>
             
             {/* Step 1: Location Selection */}
             <div className="mb-6">
-              <p className="text-white text-sm mb-3">Step 1: Choose your location</p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <a href="/discover?location=national" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center transition-all text-sm">
-                  National
-                </a>
-                <a href="/discover?location=local" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-center transition-all text-sm">
-                  Local Area
-                </a>
-                <a href="/discover?location=state" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-center transition-all text-sm">
-                  State-wide
-                </a>
-                <a href="/discover?location=city" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-center transition-all text-sm">
-                  City Only
+              <p className="text-white text-sm mb-3">Step 1: Choose your area or go national</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button 
+                  onClick={() => detectLocation()}
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg text-center transition-all flex items-center justify-center space-x-2"
+                >
+                  <span>📍</span>
+                  <span>Use My Location</span>
+                </button>
+                <a 
+                  href="/categories?location=national" 
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-lg text-center transition-all flex items-center justify-center space-x-2"
+                >
+                  <span>🌎</span>
+                  <span>Browse National Experts</span>
                 </a>
               </div>
+              <p className="text-white/80 text-xs mt-3 text-center">
+                Select your location to see experts in your area, or browse all national experts
+              </p>
             </div>
 
-            {/* Step 2: Category Selection */}
-            <div className="mb-6">
-              <p className="text-white text-sm mb-3">Step 2: Choose a category</p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-32 overflow-y-auto">
-                {categories.slice(0, 8).map(category => (
-                  <a 
-                    key={category.id}
-                    href={`/discover?category=${category.id}`} 
-                    className="bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded text-center transition-all text-xs flex items-center justify-center"
-                  >
-                    <span className="mr-1">{category.icon}</span>
-                    <span className="truncate">{category.name}</span>
-                  </a>
-                ))}
-              </div>
-              <div className="text-center mt-2">
-                <a href="/categories" className="text-white/80 hover:text-white text-xs underline">
-                  View all categories
-                </a>
-              </div>
-            </div>
-
-            {/* Step 3: Or Search Directly */}
+            {/* Or Search Directly */}
             <div>
               <p className="text-white text-sm mb-3">Or search directly:</p>
               <div className="flex gap-2">
