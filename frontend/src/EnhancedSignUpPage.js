@@ -211,18 +211,17 @@ const EnhancedSignUpPage = () => {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setFormData({...formData, userType: 'client'})}
+                  onClick={() => setFormData({...formData, userType: 'member'})}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.userType === 'client'
-                      ? 'border-blue-500 bg-blue-900/30 text-white'
+                    formData.userType === 'member'
+                      ? 'border-green-500 bg-green-900/30 text-white'
                       : 'border-gray-600 bg-gray-800 text-gray-300 hover:border-gray-500'
                   }`}
                 >
                   <div className="text-2xl mb-2">👤</div>
-                  <div className="font-medium">Client</div>
-                  <div className="text-xs opacity-75">
-                    {trialSettings.client_trial_days} days FREE
-                    <span className="text-gray-400"> (reg. $19.99/mo)</span>
+                  <div className="font-medium">Member</div>
+                  <div className="text-xs opacity-75 text-green-400">
+                    Always Free
                   </div>
                 </button>
                 
@@ -237,9 +236,8 @@ const EnhancedSignUpPage = () => {
                 >
                   <div className="text-2xl mb-2">🎓</div>
                   <div className="font-medium">Expert</div>
-                  <div className="text-xs opacity-75">
-                    {trialSettings.expert_trial_days} days FREE
-                    <span className="text-gray-400"> (reg. $29.99/mo)</span>
+                  <div className="text-xs opacity-75 text-blue-400">
+                    $50 Monthly
                   </div>
                 </button>
               </div>
