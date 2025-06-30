@@ -969,6 +969,41 @@ export const HomePage = () => {
               </p>
             </div>
 
+            {/* Zip Code / City Search */}
+            <div className="mb-6">
+              <p className="text-white text-sm mb-3">Or search by location:</p>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                <div className="md:col-span-6">
+                  <input 
+                    type="text" 
+                    id="zipCitySearch"
+                    placeholder="Enter zip code or city name..." 
+                    className="w-full px-4 py-2 rounded-lg text-gray-900 placeholder-gray-500 text-sm"
+                  />
+                </div>
+                <div className="md:col-span-3">
+                  <select 
+                    id="radiusSelect"
+                    className="w-full px-4 py-2 rounded-lg text-gray-900 text-sm"
+                  >
+                    <option value="5">Within 5 miles</option>
+                    <option value="10">Within 10 miles</option>
+                    <option value="25" selected>Within 25 miles</option>
+                    <option value="50">Within 50 miles</option>
+                    <option value="100">Within 100 miles</option>
+                  </select>
+                </div>
+                <div className="md:col-span-3">
+                  <button 
+                    onClick={() => searchByLocation()}
+                    className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-all text-sm"
+                  >
+                    Find Experts
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* Or Search Directly */}
             <div>
               <p className="text-white text-sm mb-3">Or search directly:</p>
