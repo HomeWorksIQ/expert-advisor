@@ -12,45 +12,11 @@ const BookingPage = () => {
   const [expert, setExpert] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Mock expert data - get from shared mockPerformers
-  const mockPerformers = [
-    {
-      id: 1, firstName: "Dr. Sarah", lastName: "Chen", displayName: "Dr. Sarah Chen",
-      specialty: "Family Medicine", hourlyRate: 150,
-      officeAddress: "123 Medical Center Dr, Boston, MA 02115",
-      availableFor: ["chat", "video_call", "in_person"]
-    },
-    {
-      id: 2, firstName: "Dr. Michael", lastName: "Rodriguez", displayName: "Dr. Michael Rodriguez",
-      specialty: "Cardiology", hourlyRate: 250,
-      officeAddress: "456 Heart Center Blvd, Houston, TX 77002",
-      availableFor: ["chat", "video_call", "in_person"]
-    },
-    {
-      id: 3, firstName: "Dr. Lisa", lastName: "Park", displayName: "Dr. Lisa Park",
-      specialty: "Mental Health", hourlyRate: 120,
-      officeAddress: "789 Wellness St, Austin, TX 78701",
-      availableFor: ["chat", "video_call", "in_person"]
-    },
-    {
-      id: 4, firstName: "James", lastName: "Wilson", displayName: "James Wilson",
-      specialty: "Life Insurance", hourlyRate: 100,
-      officeAddress: "101 Insurance Plaza, Denver, CO 80202",
-      availableFor: ["chat", "video_call", "in_person"]
-    },
-    {
-      id: 5, firstName: "Maria", lastName: "Garcia", displayName: "Maria Garcia",
-      specialty: "Family Protection", hourlyRate: 85,
-      officeAddress: "202 Protection Ave, Phoenix, AZ 85001",
-      availableFor: ["chat", "video_call", "in_person"]
-    }
-  ];
-
   useEffect(() => {
-    // Find expert by ID
+    // Find expert by ID using shared data
     setTimeout(() => {
-      const foundExpert = mockPerformers.find(p => p.id === parseInt(expertId));
-      setExpert(foundExpert || mockPerformers[0]); // Default to first expert if not found
+      const foundExpert = getExpertById(expertId);
+      setExpert(foundExpert);
       setIsLoading(false);
     }, 500);
   }, [expertId]);
