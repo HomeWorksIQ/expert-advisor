@@ -2008,14 +2008,11 @@ export const PerformerDashboard = () => {
 };
 
 // More placeholder components
-export const ProfilePage = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center text-white">
-      <h1 className="text-2xl font-bold mb-4">Profile Page</h1>
-      <p className="text-gray-400">This page will be implemented in the next iteration.</p>
-    </div>
-  </div>
-);
+export const ProfilePage = () => {
+  // This component is now replaced by the standalone ProfilePage.js file
+  // This export is kept for compatibility
+  return null;
+};
 
 export const StorePage = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
