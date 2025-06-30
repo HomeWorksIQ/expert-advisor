@@ -165,6 +165,56 @@ class MemberSearchHistory(BaseModel):
     resultsCount: int = Field(..., description="Number of results returned")
     createdAt: datetime = Field(default_factory=datetime.utcnow)
 
+# Admin-specific models
+class AdminSession(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique admin session identifier")
+    userId: str = Field(..., description="Admin user ID")
+    sessionToken: str = Field(..., description="JWT session token")
+    sessionType: str = Field("admin", description="Session type")
+    deviceInfo: Optional[str] = Field(None, description="Device information")
+    ipAddress: Optional[str] = Field(None, description="IP address")
+    userAgent: Optional[str] = Field(None, description="User agent string")
+    isActive: bool = Field(True, description="Session active status")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    expiresAt: datetime = Field(..., description="Session expiration time")
+
+class AdminAction(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique admin action identifier")
+    adminId: str = Field(..., description="Admin user ID who performed the action")
+    actionType: str = Field(..., description="Type of admin action")
+    targetType: str = Field(..., description="Type of target (user, expert, system, etc.)")
+    targetId: Optional[str] = Field(None, description="ID of the target entity")
+    description: str = Field(..., description="Action description")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional action metadata")
+    ipAddress: Optional[str] = Field(None, description="IP address where action was performed")
+    userAgent: Optional[str] = Field(None, description="User agent string")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+class SystemNotification(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique notification identifier")
+    title: str = Field(..., description="Notification title")
+    message: str = Field(..., description="Notification message")
+    notificationType: str = Field(..., description="Type of notification")
+    severity: str = Field("info", description="Notification severity (info, warning, error, critical)")
+    targetAudience: str = Field("admins", description="Target audience (admins, users, experts, all)")
+    isRead: bool = Field(False, description="Whether notification has been read")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional notification data")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    expiresAt: Optional[datetime] = Field(None, description="Notification expiration time")
+
+class PlatformSettings(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique settings identifier")
+    settingCategory: str = Field(..., description="Settings category")
+    settingKey: str = Field(..., description="Setting key")
+    settingValue: Any = Field(..., description="Setting value")
+    settingType: str = Field(..., description="Setting data type")
+    description: Optional[str] = Field(None, description="Setting description")
+    isEditable: bool = Field(True, description="Whether setting can be edited")
+    updatedBy: str = Field(..., description="Admin who last updated this setting")
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
 # Transaction Models
 class Transaction(BaseModel):
     id: str = Field(..., description="Unique transaction identifier")
