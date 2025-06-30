@@ -128,7 +128,7 @@ const ChatPage = () => {
                 </a>
                 <a
                   href={`/book/${expertId}`}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all"
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-all"
                 >
                   Book Appointment
                 </a>
