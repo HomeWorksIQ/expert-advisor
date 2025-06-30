@@ -329,6 +329,16 @@ function App() {
             <Route path="/payment-cancelled" element={<PaymentCancelledPage />} />
             <Route path="/help" element={<HelpSupportPage />} />
             <Route path="/test-geolocation" element={<TestGeolocationPage />} />
+            
+            {/* Affiliate and Credits Routes */}
+            <Route 
+              path="/affiliate" 
+              element={user?.userType === 'member' ? <AffiliateDashboard /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/payouts" 
+              element={user?.userType === 'expert' ? <ExpertPayoutDashboard /> : <Navigate to="/login" />} 
+            />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
