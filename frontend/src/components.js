@@ -665,76 +665,68 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured Creators Section */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4">
-            Featured <span className="text-blue-400">Experts</span>
+      {/* Featured Experts Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">
+            Featured Local <span className="text-green-600">Experts</span>
           </h2>
-          <p className="text-xl text-gray-400 text-center mb-16">
-            Discover certified professionals and trusted advisors
+          <p className="text-lg text-gray-600 text-center mb-12">
+            Professionals in your area paying for visibility
           </p>
           
           {isLoading ? (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-gray-800 rounded-lg overflow-hidden animate-pulse">
-                  <div className="w-full h-64 bg-gray-700"></div>
-                  <div className="p-6">
-                    <div className="h-6 bg-gray-700 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-700 rounded w-3/4 mb-4"></div>
-                    <div className="h-10 bg-gray-700 rounded"></div>
+                <div key={i} className="bg-gray-100 rounded-lg overflow-hidden animate-pulse">
+                  <div className="w-full h-48 bg-gray-200"></div>
+                  <div className="p-4">
+                    <div className="h-5 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div className="h-8 bg-gray-200 rounded"></div>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6">
               {featuredPerformers.map(performer => (
-                <div key={performer.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all">
+                <div key={performer.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all">
                   <div className="relative">
                     <img 
-                      src={performer.coverImage} 
+                      src={performer.profileImage} 
                       alt={performer.displayName}
-                      className="w-full h-64 object-cover"
+                      className="w-full h-48 object-cover"
                     />
-                    <div className="absolute top-4 right-4">
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        performer.isOnline 
-                          ? 'bg-green-500 text-white' 
-                          : 'bg-gray-600 text-gray-300'
-                      }`}>
-                        {performer.isOnline ? 'Online' : 'Offline'}
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2 py-1 bg-green-500 text-white text-xs rounded-full">
+                        FEATURED
                       </span>
                     </div>
-                    <div className="absolute bottom-4 left-4">
-                      <img 
-                        src={performer.profileImage} 
-                        alt={performer.displayName}
-                        className="w-16 h-16 rounded-full border-4 border-white"
-                      />
+                    <div className="absolute bottom-3 left-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        performer.isOnline 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {performer.isOnline ? 'Available' : 'Offline'}
+                      </span>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">{performer.displayName}</h3>
-                    <p className="text-blue-400 text-sm mb-2 font-semibold">{performer.specialty}</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {performer.credentials && performer.credentials.slice(0, 2).map((credential, index) => (
-                        <span key={index} className="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">
-                          {credential}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="text-gray-300 mb-4 line-clamp-2">{performer.bio}</p>
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">{performer.displayName}</h3>
+                    <p className="text-green-600 text-sm mb-2 font-medium">{performer.specialty}</p>
+                    <p className="text-gray-600 text-sm mb-3">{performer.serviceArea}</p>
+                    <p className="text-gray-700 mb-4 text-sm line-clamp-2">{performer.bio}</p>
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-400">
-                        {performer.yearsOfExperience}+ years experience
+                      <div className="text-sm text-gray-500">
+                        ${performer.hourlyRate || performer.sessionRate}/hr
                       </div>
                       <a 
                         href={`/profile/${performer.id}`}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all"
+                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg hover:from-blue-600 hover:to-green-600 transition-all text-sm"
                       >
-                        Book Consultation
+                        Contact
                       </a>
                     </div>
                   </div>
