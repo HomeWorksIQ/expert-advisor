@@ -100,7 +100,7 @@ const CategoriesPage = () => {
                     {category.count} expert{category.count !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="mt-3 text-green-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-2 text-green-600 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                   View experts →
                 </div>
               </div>
