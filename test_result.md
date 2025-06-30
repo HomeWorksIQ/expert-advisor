@@ -952,6 +952,18 @@ frontend:
         -agent: "testing"
         -comment: "The visual design has been updated to match 'The Experts' branding. The color scheme has been changed from pink/purple to blue/green gradients. The UI has a professional look with clean lines and a focus on readability. The dark theme elements are still present in some areas like the Discover page background, but with the new color palette."
 
+  - task: "Homepage Search Bar"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "testing"
+        -comment: "The homepage search bar is implemented and prominently displayed after the subtitle. It has a placeholder text about searching for expertise, a search button with a magnifying glass icon, and text below saying 'Or browse by category below'. The search bar is visually well-designed and positioned correctly on the page. However, I couldn't test the functionality (whether it navigates to /discover?search=[term]) due to authentication/routing issues that prevent accessing pages other than the homepage."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
