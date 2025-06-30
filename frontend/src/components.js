@@ -938,8 +938,7 @@ export const HomePage = () => {
             Find Local Experts. Get Professional Help.
           </p>
           <p className="text-lg mb-8 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
-            Connect with professionals in your area who pay to be featured. 
-            Free for clients - experts invest in their visibility.
+            Step 1: Choose your location → Step 2: Browse categories → Step 3: Connect with experts
           </p>
           
           {/* Location and Category Selection */}
