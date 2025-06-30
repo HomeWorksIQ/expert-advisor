@@ -83,6 +83,16 @@ export const MemberDashboard = () => {
             >
               Payments
             </button>
+            <button
+              onClick={() => setActiveTab('favorites')}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'favorites'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              My Favorites ❤️
+            </button>
           </div>
         </div>
         
