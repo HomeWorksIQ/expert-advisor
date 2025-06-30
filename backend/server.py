@@ -774,6 +774,7 @@ async def discover_experts(
         # In a real implementation, this would filter the experts collection in MongoDB
         
         mock_experts = [
+            # Medical Experts
             {
                 "id": 1,
                 "name": "Dr. Sarah Chen",
@@ -806,6 +807,22 @@ async def discover_experts(
             },
             {
                 "id": 3,
+                "name": "Dr. Emily Foster",
+                "category": "medical",
+                "specialty": "Pediatrics",
+                "location": {"city": "Los Angeles", "state": "CA", "zipCode": "90210"},
+                "experienceLevel": "experienced",
+                "yearsOfExperience": 12,
+                "isOnline": True,
+                "rating": 4.7,
+                "consultationRate": 180,
+                "profileImage": "https://images.unsplash.com/photo-1582750433449-648ed127bb54",
+                "credentials": ["MD", "Pediatric Board Certified"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            # Insurance Experts
+            {
+                "id": 4,
                 "name": "James Wilson",
                 "category": "insurance",
                 "specialty": "Life Insurance",
@@ -820,7 +837,23 @@ async def discover_experts(
                 "availableFor": ["chat", "video_call", "in_person"]
             },
             {
-                "id": 4,
+                "id": 5,
+                "name": "Lisa Anderson",
+                "category": "insurance",
+                "specialty": "Auto & Home Insurance",
+                "location": {"city": "Phoenix", "state": "AZ", "zipCode": "85001"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 18,
+                "isOnline": True,
+                "rating": 4.8,
+                "consultationRate": 85,
+                "profileImage": "https://images.unsplash.com/photo-1494790108755-2616c8da6ad6",
+                "credentials": ["Licensed Agent", "CPCU"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            # Business Experts
+            {
+                "id": 6,
                 "name": "David Thompson",
                 "category": "business",
                 "specialty": "Strategy Consulting",
@@ -835,7 +868,23 @@ async def discover_experts(
                 "availableFor": ["chat", "video_call", "in_person"]
             },
             {
-                "id": 5,
+                "id": 7,
+                "name": "Amanda Rodriguez",
+                "category": "business",
+                "specialty": "Marketing Strategy",
+                "location": {"city": "Miami", "state": "FL", "zipCode": "33101"},
+                "experienceLevel": "experienced",
+                "yearsOfExperience": 10,
+                "isOnline": False,
+                "rating": 4.6,
+                "consultationRate": 175,
+                "profileImage": "https://images.unsplash.com/photo-1580489944761-15a19d654956",
+                "credentials": ["MBA", "PMP"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            # Education Experts
+            {
+                "id": 8,
                 "name": "Professor Robert Adams",
                 "category": "education",
                 "specialty": "Mathematics",
@@ -847,6 +896,114 @@ async def discover_experts(
                 "consultationRate": 75,
                 "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
                 "credentials": ["PhD Mathematics"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 9,
+                "name": "Jennifer Kim",
+                "category": "education",
+                "specialty": "Language Learning",
+                "location": {"city": "San Francisco", "state": "CA", "zipCode": "94102"},
+                "experienceLevel": "experienced",
+                "yearsOfExperience": 8,
+                "isOnline": True,
+                "rating": 4.8,
+                "consultationRate": 60,
+                "profileImage": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
+                "credentials": ["MA Linguistics", "TESOL Certified"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 10,
+                "name": "Marcus Johnson",
+                "category": "education",
+                "specialty": "SAT/ACT Prep",
+                "location": {"city": "Chicago", "state": "IL", "zipCode": "60601"},
+                "experienceLevel": "intermediate",
+                "yearsOfExperience": 6,
+                "isOnline": True,
+                "rating": 4.7,
+                "consultationRate": 55,
+                "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+                "credentials": ["MS Education", "SAT Certified"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            # Legal Experts
+            {
+                "id": 11,
+                "name": "Attorney Michelle Stone",
+                "category": "legal",
+                "specialty": "Family Law",
+                "location": {"city": "Atlanta", "state": "GA", "zipCode": "30309"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 16,
+                "isOnline": False,
+                "rating": 4.8,
+                "consultationRate": 300,
+                "profileImage": "https://images.unsplash.com/photo-1594736797933-d0ff1d1e2e8e",
+                "credentials": ["JD", "State Bar Certified"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 12,
+                "name": "Richard Parker",
+                "category": "legal",
+                "specialty": "Business Law",
+                "location": {"city": "New York", "state": "NY", "zipCode": "10001"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 24,
+                "isOnline": True,
+                "rating": 4.9,
+                "consultationRate": 450,
+                "profileImage": "https://images.unsplash.com/photo-1556157382-97eda2d62296",
+                "credentials": ["JD", "LLM", "NY Bar"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            # Financial Experts
+            {
+                "id": 13,
+                "name": "Thomas Bradford",
+                "category": "financial",
+                "specialty": "Investment Planning",
+                "location": {"city": "Dallas", "state": "TX", "zipCode": "75201"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 19,
+                "isOnline": True,
+                "rating": 4.8,
+                "consultationRate": 275,
+                "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+                "credentials": ["CFP", "CFA"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            {
+                "id": 14,
+                "name": "Sophia Williams",
+                "category": "financial",
+                "specialty": "Retirement Planning",
+                "location": {"city": "Portland", "state": "OR", "zipCode": "97201"},
+                "experienceLevel": "experienced",
+                "yearsOfExperience": 11,
+                "isOnline": True,
+                "rating": 4.7,
+                "consultationRate": 225,
+                "profileImage": "https://images.unsplash.com/photo-1580489944761-15a19d654956",
+                "credentials": ["CFP", "ChFC"],
+                "availableFor": ["chat", "video_call", "in_person"]
+            },
+            # Technology Experts
+            {
+                "id": 15,
+                "name": "Kevin Zhang",
+                "category": "technology",
+                "specialty": "Cybersecurity",
+                "location": {"city": "Austin", "state": "TX", "zipCode": "78701"},
+                "experienceLevel": "expert",
+                "yearsOfExperience": 14,
+                "isOnline": True,
+                "rating": 4.9,
+                "consultationRate": 225,
+                "profileImage": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+                "credentials": ["CISSP", "CEH"],
                 "availableFor": ["chat", "video_call", "in_person"]
             }
         ]
