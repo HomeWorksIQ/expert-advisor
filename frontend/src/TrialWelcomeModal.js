@@ -13,7 +13,7 @@ const TrialWelcomeModal = ({ isOpen, onClose }) => {
           <div className="text-6xl mb-4">👋</div>
           <h3 className="text-2xl font-bold mb-4">Welcome, {user?.firstName}!</h3>
           <p className="text-gray-400 mb-6">
-            Thank you for joining Eye Candy. You're now on a 7-day free trial of our premium features.
+            Thank you for joining The Experts. You're now on a 7-day free trial of our premium features.
           </p>
           <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-4 rounded-lg mb-4">
             <p className="text-white font-semibold">🎁 Free Trial Benefits</p>
