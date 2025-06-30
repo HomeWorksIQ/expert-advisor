@@ -186,7 +186,7 @@ const DiscoverPage = () => {
             Discover Amazing Experts
           </h1>
           <p className="text-gray-400 text-lg">
-            Find your favorite content creators and explore exclusive content
+            Find your favorite experts and explore exclusive content
           </p>
         </div>
 
