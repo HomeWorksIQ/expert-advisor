@@ -573,7 +573,7 @@ const AdminDashboard = () => {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               Admin Dashboard
             </h1>
-            <p className="text-gray-400 mt-2">Manage your Eye Candy platform</p>
+            <p className="text-gray-400 mt-2">Manage your The Experts platform</p>
           </div>
         </div>
       </div>
