@@ -587,7 +587,7 @@ const DiscoverPageNew = () => {
                   onClick={handleSearch}
                   className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg"
                 >
-                  Search Experts ({filteredExperts.length} found)
+                  Search Experts ({expertCount} found)
                 </button>
               </div>
             </div>
