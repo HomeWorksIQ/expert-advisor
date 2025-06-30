@@ -27,7 +27,7 @@ const HelpSupportPage = () => {
             <div className="border-b border-gray-800 pb-4">
               <h3 className="font-medium text-pink-400 mb-2">What payment methods are accepted?</h3>
               <p className="text-gray-300">
-                Eye Candy accepts credit/debit cards through CCBill and Stripe, as well as various cryptocurrencies.
+                The Experts accepts credit/debit cards through CCBill and Stripe, as well as various cryptocurrencies.
                 All payment information is securely processed and we never store your full card details.
               </p>
             </div>
