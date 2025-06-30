@@ -112,9 +112,14 @@ class TestAdminUserSearch(unittest.TestCase):
         print(f"Searching for users with term: '{search_term}'")
         
         # Perform the search
-        response = requests.get(f"{API_URL}/admin/users/search?query={search_term}", headers=headers)
-        print(f"Search response: {response.status_code} - {response.text}")
-        self.assertEqual(response.status_code, 200)
+        try:
+            response = requests.get(f"{API_URL}/admin/users/search?query={search_term}", headers=headers)
+            print(f"Search response: {response.status_code}")
+            print(f"Response content: {response.text}")
+            self.assertEqual(response.status_code, 200)
+        except Exception as e:
+            print(f"Exception during search: {str(e)}")
+            raise
         
         data = response.json()
         self.assertTrue(data.get('success'))
