@@ -709,9 +709,6 @@ export const Header = ({ showSearch = true, className = "" }) => {
             <a href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
               Find Experts
             </a>
-            <a href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
-              Categories
-            </a>
           </nav>
 
           {/* User Actions */}
