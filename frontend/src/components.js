@@ -832,25 +832,26 @@ export const HomePage = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
+            // Use browser location for high accuracy
             const { latitude, longitude } = position.coords;
             
-            // Use a reverse geocoding service or IP geolocation
-            // For demo purposes, we'll simulate location detection
+            // For demo, simulate reverse geocoding from coordinates
             const mockLocation = {
               city: "Boston",
               state: "MA", 
               country: "USA",
-              coordinates: { lat: latitude, lng: longitude }
+              coordinates: { lat: latitude, lng: longitude },
+              source: "browser"
             };
             
             setUserLocation(mockLocation);
-            // Redirect to categories with detected location
             window.location.href = `/categories?location=local&city=${mockLocation.city}&state=${mockLocation.state}`;
           },
           async (error) => {
-            // Fallback to IP geolocation
+            console.log('Browser geolocation failed, trying IP detection...');
             await detectLocationByIP();
-          }
+          },
+          { timeout: 5000 }
         );
       } else {
         // Fallback to IP geolocation
@@ -865,19 +866,33 @@ export const HomePage = () => {
 
   const detectLocationByIP = async () => {
     try {
-      // For demo purposes, simulate IP-based location detection
-      // In production, you would call an IP geolocation service
-      const mockLocation = {
-        city: "Denver",
-        state: "CO",
-        country: "USA",
-        source: "ip"
-      };
+      // Call the backend IP geolocation API
+      const { API } = useUser();
+      const response = await fetch(`${API}/detect-location`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
       
-      setUserLocation(mockLocation);
-      window.location.href = `/categories?location=local&city=${mockLocation.city}&state=${mockLocation.state}`;
+      if (!response.ok) {
+        throw new Error('IP geolocation failed');
+      }
+      
+      const data = await response.json();
+      
+      if (data.success && data.location) {
+        const location = data.location;
+        setUserLocation(location);
+        
+        // Redirect to categories with detected location
+        window.location.href = `/categories?location=local&city=${location.city}&state=${location.state}&country=${location.country}`;
+      } else {
+        throw new Error('Invalid location response');
+      }
     } catch (error) {
       console.error('IP location detection failed:', error);
+      // Fallback to national if IP detection fails
       window.location.href = '/categories?location=national';
     }
   };
