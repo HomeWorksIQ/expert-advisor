@@ -430,7 +430,13 @@ class ShoppingCartService:
     
     async def _update_cart_totals(self, cart_id: str):
         """Update cart totals based on items"""
-        cart_items = await self.db.cart_items.find({"userId": cart_id}).to_list(100)
+        # Find the cart first to get the user_id
+        cart = await self.db.shopping_carts.find_one({"id": cart_id})
+        if not cart:
+            return
+        
+        user_id = cart["userId"]
+        cart_items = await self.db.cart_items.find({"userId": user_id}).to_list(100)
         subtotal = sum(item["totalPrice"] for item in cart_items)
         
         await self.db.shopping_carts.update_one(
