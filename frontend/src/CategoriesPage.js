@@ -90,7 +90,7 @@ const CategoriesPage = () => {
               className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-lg transition-all group hover:border-green-300"
             >
               <div className="text-center">
-                <div className="text-4xl mb-4">{category.icon}</div>
+                <div className="text-2xl mb-2">{category.icon}</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
                   {category.name}
                 </h3>
