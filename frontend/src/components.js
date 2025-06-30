@@ -823,6 +823,64 @@ export const HomePage = () => {
   const { user } = useUser();
   const [featuredPerformers, setFeaturedPerformers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userLocation, setUserLocation] = useState(null);
+
+  // Geo IP detection function
+  const detectLocation = async () => {
+    try {
+      // Try browser geolocation first
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            
+            // Use a reverse geocoding service or IP geolocation
+            // For demo purposes, we'll simulate location detection
+            const mockLocation = {
+              city: "Boston",
+              state: "MA", 
+              country: "USA",
+              coordinates: { lat: latitude, lng: longitude }
+            };
+            
+            setUserLocation(mockLocation);
+            // Redirect to categories with detected location
+            window.location.href = `/categories?location=local&city=${mockLocation.city}&state=${mockLocation.state}`;
+          },
+          async (error) => {
+            // Fallback to IP geolocation
+            await detectLocationByIP();
+          }
+        );
+      } else {
+        // Fallback to IP geolocation
+        await detectLocationByIP();
+      }
+    } catch (error) {
+      console.error('Location detection failed:', error);
+      // Fallback to national if location detection fails
+      window.location.href = '/categories?location=national';
+    }
+  };
+
+  const detectLocationByIP = async () => {
+    try {
+      // For demo purposes, simulate IP-based location detection
+      // In production, you would call an IP geolocation service
+      const mockLocation = {
+        city: "Denver",
+        state: "CO",
+        country: "USA",
+        source: "ip"
+      };
+      
+      setUserLocation(mockLocation);
+      window.location.href = `/categories?location=local&city=${mockLocation.city}&state=${mockLocation.state}`;
+    } catch (error) {
+      console.error('IP location detection failed:', error);
+      window.location.href = '/categories?location=national';
+    }
+  };
 
   useEffect(() => {
     // Simulate API call to fetch featured performers - show diverse selection
