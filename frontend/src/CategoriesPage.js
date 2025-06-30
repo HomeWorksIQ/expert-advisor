@@ -21,6 +21,7 @@ const categories = [
 const CategoriesPage = () => {
   const [searchParams] = useSearchParams();
   const [locationInfo, setLocationInfo] = useState('');
+  const [sortBy, setSortBy] = useState('alphabetical'); // 'alphabetical' or 'demand'
 
   useEffect(() => {
     const location = searchParams.get('location');
