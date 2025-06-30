@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 
 // Mock expert data - in a real app this would come from the backend
 const mockExperts = [
+  // Medical Experts
   {
     id: 1,
     name: "Dr. Sarah Chen",
@@ -36,6 +37,23 @@ const mockExperts = [
   },
   {
     id: 3,
+    name: "Dr. Emily Foster",
+    category: "medical",
+    specialty: "Pediatrics",
+    location: { city: "Los Angeles", state: "CA", zipCode: "90210" },
+    experienceLevel: "experienced",
+    yearsOfExperience: 12,
+    isOnline: true,
+    rating: 4.7,
+    consultationRate: 180,
+    profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw0fHxkb2N0b3IlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
+    credentials: ["MD", "Pediatric Board Certified"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+
+  // Insurance Experts
+  {
+    id: 4,
     name: "James Wilson",
     category: "insurance",
     specialty: "Life Insurance",
@@ -50,7 +68,24 @@ const mockExperts = [
     availableFor: ["chat", "video_call", "in_person"]
   },
   {
-    id: 4,
+    id: 5,
+    name: "Lisa Anderson",
+    category: "insurance",
+    specialty: "Auto & Home Insurance",
+    location: { city: "Phoenix", state: "AZ", zipCode: "85001" },
+    experienceLevel: "expert",
+    yearsOfExperience: 18,
+    isOnline: true,
+    rating: 4.8,
+    consultationRate: 85,
+    profileImage: "https://images.unsplash.com/photo-1494790108755-2616c8da6ad6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw2fHxpbnN1cmFuY2UlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
+    credentials: ["Licensed Agent", "CPCU"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+
+  // Business Experts
+  {
+    id: 6,
     name: "David Thompson",
     category: "business",
     specialty: "Strategy Consulting",
@@ -65,7 +100,24 @@ const mockExperts = [
     availableFor: ["chat", "video_call", "in_person"]
   },
   {
-    id: 5,
+    id: 7,
+    name: "Amanda Rodriguez",
+    category: "business",
+    specialty: "Marketing Strategy",
+    location: { city: "Miami", state: "FL", zipCode: "33101" },
+    experienceLevel: "experienced",
+    yearsOfExperience: 10,
+    isOnline: false,
+    rating: 4.6,
+    consultationRate: 175,
+    profileImage: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw4fHxidXNpbmVzcyUyMHdvbWFufGVufDB8fHxibHVlfDE3NTEyNDI0NzZ8MA&ixlib=rb-4.1.0&q=85",
+    credentials: ["MBA", "PMP"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+
+  // Education Experts
+  {
+    id: 8,
     name: "Professor Robert Adams",
     category: "education",
     specialty: "Mathematics",
@@ -77,6 +129,117 @@ const mockExperts = [
     consultationRate: 75,
     profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw4fHx0ZWFjaGVyJTIwbWFufGVufDB8fHxibHVlfDE3NTEyNDI0NzZ8MA&ixlib=rb-4.1.0&q=85",
     credentials: ["PhD Mathematics"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+  {
+    id: 9,
+    name: "Jennifer Kim",
+    category: "education",
+    specialty: "Language Learning",
+    location: { city: "San Francisco", state: "CA", zipCode: "94102" },
+    experienceLevel: "experienced",
+    yearsOfExperience: 8,
+    isOnline: true,
+    rating: 4.8,
+    consultationRate: 60,
+    profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxMHx8dGVhY2hlciUyMHdvbWFufGVufDB8fHxibHVlfDE3NTEyNDI0NzZ8MA&ixlib=rb-4.1.0&q=85",
+    credentials: ["MA Linguistics", "TESOL Certified"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+  {
+    id: 10,
+    name: "Marcus Johnson",
+    category: "education",
+    specialty: "SAT/ACT Prep",
+    location: { city: "Chicago", state: "IL", zipCode: "60601" },
+    experienceLevel: "intermediate",
+    yearsOfExperience: 6,
+    isOnline: true,
+    rating: 4.7,
+    consultationRate: 55,
+    profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxMnx8dGVhY2hlciUyMG1hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
+    credentials: ["MS Education", "SAT Certified"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+
+  // Legal Experts
+  {
+    id: 11,
+    name: "Attorney Michelle Stone",
+    category: "legal",
+    specialty: "Family Law",
+    location: { city: "Atlanta", state: "GA", zipCode: "30309" },
+    experienceLevel: "expert",
+    yearsOfExperience: 16,
+    isOnline: false,
+    rating: 4.8,
+    consultationRate: 300,
+    profileImage: "https://images.unsplash.com/photo-1594736797933-d0ff1d1e2e8e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxNHx8bGF3eWVyJTIwd29tYW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    credentials: ["JD", "State Bar Certified"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+  {
+    id: 12,
+    name: "Richard Parker",
+    category: "legal",
+    specialty: "Business Law",
+    location: { city: "New York", state: "NY", zipCode: "10001" },
+    experienceLevel: "expert",
+    yearsOfExperience: 24,
+    isOnline: true,
+    rating: 4.9,
+    consultationRate: 450,
+    profileImage: "https://images.unsplash.com/photo-1556157382-97eda2d62296?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxNnx8bGF3eWVyJTIwbWFufGVufDB8fHxibHVlfDE3NTEyNDI0NzZ8MA&ixlib=rb-4.1.0&q=85",
+    credentials: ["JD", "LLM", "NY Bar"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+
+  // Financial Experts
+  {
+    id: 13,
+    name: "Thomas Bradford",
+    category: "financial",
+    specialty: "Investment Planning",
+    location: { city: "Dallas", state: "TX", zipCode: "75201" },
+    experienceLevel: "expert",
+    yearsOfExperience: 19,
+    isOnline: true,
+    rating: 4.8,
+    consultationRate: 275,
+    profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxOHx8ZmluYW5jaWFsJTIwbWFufGVufDB8fHxibHVlfDE3NTEyNDI0NzZ8MA&ixlib=rb-4.1.0&q=85",
+    credentials: ["CFP", "CFA"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+  {
+    id: 14,
+    name: "Sophia Williams",
+    category: "financial",
+    specialty: "Retirement Planning",
+    location: { city: "Portland", state: "OR", zipCode: "97201" },
+    experienceLevel: "experienced",
+    yearsOfExperience: 11,
+    isOnline: true,
+    rating: 4.7,
+    consultationRate: 225,
+    profileImage: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyMHx8ZmluYW5jaWFsJTIwd29tYW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    credentials: ["CFP", "ChFC"],
+    availableFor: ["chat", "video_call", "in_person"]
+  },
+
+  // Technology Experts
+  {
+    id: 15,
+    name: "Kevin Zhang",
+    category: "technology",
+    specialty: "Cybersecurity",
+    location: { city: "Austin", state: "TX", zipCode: "78701" },
+    experienceLevel: "expert",
+    yearsOfExperience: 14,
+    isOnline: true,
+    rating: 4.9,
+    consultationRate: 225,
+    profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyMnx8dGVjaHx8YW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    credentials: ["CISSP", "CEH"],
     availableFor: ["chat", "video_call", "in_person"]
   }
 ];
