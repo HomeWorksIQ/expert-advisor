@@ -105,6 +105,22 @@ const EnhancedSignUpPage = () => {
     }
   };
 
+  const handleSocialLogin = async (provider) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/${provider}`
+      );
+      if (response.data.auth_url) {
+        window.location.href = response.data.auth_url;
+      }
+    } catch (error) {
+      alert(`Failed to initialize ${provider} login. Please try again.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black flex">
       {/* Left Side - Trial Offer */}
