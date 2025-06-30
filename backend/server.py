@@ -1811,6 +1811,238 @@ async def update_performer_status(user_id: str, status: str):
         raise HTTPException(status_code=400, detail=f"Failed to update status: {str(e)}")
 
 # =============================================================================
+# MEMBER AUTHENTICATION API ROUTES
+# =============================================================================
+
+@api_router.post("/members/register")
+async def register_member(registration_data: dict):
+    """Register a new member with email/password"""
+    try:
+        result = await member_auth_service.register_member(registration_data)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Registration failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Registration failed: {str(e)}")
+
+@api_router.post("/members/login")
+async def login_member(login_data: dict):
+    """Login member with email/password"""
+    try:
+        email = login_data.get('email', '')
+        password = login_data.get('password', '')
+        
+        result = await member_auth_service.login_member(email, password)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=401, detail=result.get('message', 'Login failed'))
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Login failed: {str(e)}")
+
+@api_router.post("/members/logout")
+async def logout_member(logout_data: dict):
+    """Logout member and invalidate session"""
+    try:
+        session_token = logout_data.get('session_token', '')
+        
+        result = await member_auth_service.logout_member(session_token)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Logout failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Logout failed: {str(e)}")
+
+@api_router.post("/members/verify-email")
+async def verify_member_email(verification_data: dict):
+    """Verify member email address"""
+    try:
+        token = verification_data.get('token', '')
+        
+        result = await member_auth_service.verify_email(token)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Email verification failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Email verification failed: {str(e)}")
+
+@api_router.post("/members/forgot-password")
+async def forgot_member_password(request_data: dict):
+    """Request password reset for member"""
+    try:
+        email = request_data.get('email', '')
+        
+        result = await member_auth_service.forgot_password(email)
+        return result  # Always return success for security
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Password reset request failed: {str(e)}")
+
+@api_router.post("/members/reset-password")
+async def reset_member_password(reset_data: dict):
+    """Reset member password"""
+    try:
+        token = reset_data.get('token', '')
+        new_password = reset_data.get('new_password', '')
+        
+        result = await member_auth_service.reset_password(token, new_password)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Password reset failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Password reset failed: {str(e)}")
+
+@api_router.post("/members/{member_id}/change-password")
+async def change_member_password(member_id: str, password_data: dict):
+    """Change member password (authenticated)"""
+    try:
+        old_password = password_data.get('old_password', '')
+        new_password = password_data.get('new_password', '')
+        
+        result = await member_auth_service.change_password(member_id, old_password, new_password)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Password change failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Password change failed: {str(e)}")
+
+# =============================================================================
+# MEMBER PROFILE API ROUTES
+# =============================================================================
+
+@api_router.get("/members/{member_id}/profile")
+async def get_member_profile(member_id: str):
+    """Get member profile"""
+    try:
+        result = await member_profile_service.get_member_profile(member_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'Profile not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get profile: {str(e)}")
+
+@api_router.put("/members/{member_id}/profile")
+async def update_member_profile(member_id: str, profile_data: dict):
+    """Update member profile"""
+    try:
+        result = await member_profile_service.update_member_profile(member_id, profile_data)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Profile update failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update profile: {str(e)}")
+
+@api_router.delete("/members/{member_id}/account")
+async def delete_member_account(member_id: str):
+    """Delete member account"""
+    try:
+        result = await member_profile_service.delete_member_account(member_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Account deletion failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to delete account: {str(e)}")
+
+@api_router.get("/members/{member_id}/preferences")
+async def get_member_preferences(member_id: str):
+    """Get member preferences"""
+    try:
+        result = await member_profile_service.get_member_preferences(member_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'Preferences not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get preferences: {str(e)}")
+
+@api_router.put("/members/{member_id}/preferences")
+async def update_member_preferences(member_id: str, preferences_data: dict):
+    """Update member preferences"""
+    try:
+        result = await member_profile_service.update_member_preferences(member_id, preferences_data)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Preferences update failed'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update preferences: {str(e)}")
+
+# =============================================================================
+# MEMBER DASHBOARD API ROUTES
+# =============================================================================
+
+@api_router.get("/members/{member_id}/dashboard")
+async def get_member_dashboard(member_id: str):
+    """Get member dashboard data"""
+    try:
+        result = await member_profile_service.get_member_dashboard(member_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'Dashboard data not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get dashboard: {str(e)}")
+
+@api_router.get("/members/{member_id}/activity")
+async def get_member_activity(member_id: str, limit: int = 50):
+    """Get member activity history"""
+    try:
+        result = await member_profile_service.get_member_activity(member_id, limit)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'Activity not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get activity: {str(e)}")
+
+# =============================================================================
+# MEMBER FAVORITES API ROUTES
+# =============================================================================
+
+@api_router.get("/members/{member_id}/favorites")
+async def get_member_favorites(member_id: str):
+    """Get member's favorite experts"""
+    try:
+        result = await member_profile_service.get_member_favorites(member_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get('message', 'Favorites not found'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get favorites: {str(e)}")
+
+@api_router.post("/members/{member_id}/favorites/{expert_id}")
+async def add_member_favorite(member_id: str, expert_id: str):
+    """Add expert to member's favorites"""
+    try:
+        result = await member_profile_service.add_favorite_expert(member_id, expert_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to add favorite'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to add favorite: {str(e)}")
+
+@api_router.delete("/members/{member_id}/favorites/{expert_id}")
+async def remove_member_favorite(member_id: str, expert_id: str):
+    """Remove expert from member's favorites"""
+    try:
+        result = await member_profile_service.remove_favorite_expert(member_id, expert_id)
+        if result.get('success'):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get('message', 'Failed to remove favorite'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to remove favorite: {str(e)}")
+
+# =============================================================================
 # AFFILIATE PROGRAM API ROUTES
 # =============================================================================
 
