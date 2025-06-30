@@ -1101,45 +1101,61 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Steps Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">
-            How <span className="text-blue-600">The Experts</span> Works
-          </h2>
-          <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Simple process: Choose location, find experts, get help. Free for members, affordable for experts.
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-xl text-white">📍</span>
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            {/* Steps Stack */}
+            <div className="flex-1 space-y-6">
+              <div className="flex items-center gap-4 p-6 bg-white rounded-lg shadow-sm">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl text-white">📍</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900">Choose Location</h3>
+                  <p className="text-gray-600 text-sm">
+                    Start by selecting your area - national, state, city, or local experts who pay to be visible in your region.
+                  </p>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-900">Choose Location</h3>
-              <p className="text-gray-600 text-sm">
-                Start by selecting your area - national, state, city, or local experts who pay to be visible in your region.
-              </p>
+              
+              <div className="flex items-center gap-4 p-6 bg-white rounded-lg shadow-sm">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl text-white">🔍</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900">Find Experts</h3>
+                  <p className="text-gray-600 text-sm">
+                    Browse professionals by category or search by keyword. All experts invest in their visibility.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 p-6 bg-white rounded-lg shadow-sm">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl text-white">💬</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900">Get Help</h3>
+                  <p className="text-gray-600 text-sm">
+                    Connect directly with experts. Pay only for their time and services - joining is always free.
+                  </p>
+                </div>
+              </div>
             </div>
             
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-xl text-white">🔍</span>
+            {/* Search Now Button */}
+            <div className="lg:w-64 w-full flex flex-col items-center lg:items-start">
+              <div className="text-center lg:text-left mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Ready to Start?</h3>
+                <p className="text-gray-600">Find the right expert for your needs</p>
               </div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-900">Find Experts</h3>
-              <p className="text-gray-600 text-sm">
-                Browse professionals by category or search by keyword. All experts invest in their visibility.
-              </p>
-            </div>
-            
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-xl text-white">💬</span>
-              </div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-900">Get Help</h3>
-              <p className="text-gray-600 text-sm">
-                Connect directly with experts. Pay only for their time and services - joining is always free.
-              </p>
+              <a
+                href="/categories"
+                className="w-full lg:w-auto px-8 py-4 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-green-600 transition-all text-center text-lg shadow-lg"
+              >
+                Search Now
+              </a>
             </div>
           </div>
         </div>
