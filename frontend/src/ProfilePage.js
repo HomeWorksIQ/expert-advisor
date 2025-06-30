@@ -51,7 +51,7 @@ const ProfilePage = () => {
   useEffect(() => {
     // Simulate API call to fetch expert data
     setTimeout(() => {
-      const foundExpert = mockExperts.find(expert => expert.id === id);
+      const foundExpert = mockExperts.find(expert => expert.id === parseInt(id));
       setExpert(foundExpert || mockExperts[0]); // Default to first expert if not found
       setIsLoading(false);
     }, 1000);
