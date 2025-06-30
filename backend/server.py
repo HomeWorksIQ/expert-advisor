@@ -180,30 +180,51 @@ async def mock_detect_location_from_ip(ip_address: str) -> Location:
             longitude=-74.0060
         ),
         Location(
+            country="United States",
+            country_code="US",
+            state="Massachusetts", 
+            state_code="MA",
+            city="Boston",
+            zip_code="02115",
+            latitude=42.3601,
+            longitude=-71.0589
+        ),
+        Location(
+            country="United States",
+            country_code="US",
+            state="Texas", 
+            state_code="TX",
+            city="Austin",
+            zip_code="78701",
+            latitude=30.2672,
+            longitude=-97.7431
+        ),
+        Location(
+            country="United States",
+            country_code="US",
+            state="Florida", 
+            state_code="FL",
+            city="Miami",
+            zip_code="33101",
+            latitude=25.7617,
+            longitude=-80.1918
+        ),
+        Location(
             country="Canada",
             country_code="CA",
             state="Ontario",
-            state_code="ON", 
+            state_code="ON",
             city="Toronto",
-            zip_code="M5V 3A8",
+            zip_code="M5H 2N2",
             latitude=43.6532,
             longitude=-79.3832
-        ),
-        Location(
-            country="United Kingdom",
-            country_code="GB",
-            state="England",
-            state_code="ENG",
-            city="London",
-            zip_code="SW1A 1AA",
-            latitude=51.5074,
-            longitude=-0.1278
         )
     ]
     
-    # Return random location based on IP hash for consistency
-    location_index = hash(ip_address) % len(mock_locations)
-    return mock_locations[location_index]
+    # Randomly select a location for demo purposes
+    # In production, this would use actual IP geolocation
+    import random
+    return random.choice(mock_locations)
 
 # Access Control Service
 class AccessControlService:
