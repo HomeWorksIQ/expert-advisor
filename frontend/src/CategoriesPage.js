@@ -93,9 +93,27 @@ const CategoriesPage = () => {
           </div>
         </div>
 
+        {/* Sort Controls */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="text-gray-600">
+            Showing {sortedCategories.length} categories
+          </div>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-600">Sort by:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option value="alphabetical">Alphabetical</option>
+              <option value="demand">High Demand</option>
+            </select>
+          </div>
+        </div>
+
         {/* Categories Grid */}
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {categories.map(category => (
+          {sortedCategories.map(category => (
             <a
               key={category.id}
               href={`/discover?category=${category.id}${searchParams.toString() ? `&${searchParams.toString()}` : ''}`}
