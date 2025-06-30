@@ -1088,7 +1088,7 @@ export const HomePage = () => {
             How <span className="text-blue-600">The Experts</span> Works
           </h2>
           <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Simple process: Choose location, find experts, get help. Free for clients, affordable for experts.
+            Simple process: Choose location, find experts, get help. Free for members, affordable for experts.
           </p>
           
           <div className="grid md:grid-cols-3 gap-6">
