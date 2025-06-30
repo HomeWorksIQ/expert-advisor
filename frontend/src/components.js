@@ -1585,7 +1585,7 @@ export const SignUpPage = () => {
                   />
                   <div className="text-center">
                     <div className="text-2xl mb-1">👤</div>
-                    <div className="text-sm font-medium">Client</div>
+                    <div className="text-sm font-medium">Member</div>
                     <div className="text-xs text-gray-400 mt-1">Seek expertise</div>
                   </div>
                 </label>
