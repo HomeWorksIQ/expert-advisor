@@ -96,7 +96,7 @@ const EnhancedSignUpPage = () => {
         google: 'https://accounts.google.com/oauth/authorize',
         linkedin: 'https://www.linkedin.com/oauth/v2/authorization',
         facebook: 'https://www.facebook.com/v18.0/dialog/oauth',
-        github: 'https://github.com/login/oauth/authorize'
+        apple: 'https://appleid.apple.com/auth/authorize'
       };
       
       // Simulate successful social login for demo
