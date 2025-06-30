@@ -960,12 +960,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Admin Dashboard with API Key Management"
-    - "Real-time Chat System Interface"
-    - "Appointment Booking System Interface"
-    - "App Router Integration for New Features"
-    - "Expert Platform Transformation"
+    - "Expert Profile Favorite Button"
+    - "Member Dashboard Favorites Tab"
+    - "Chat Page Timer and Cost Tracking"
+    - "Documents Tab Layout Update"
+    - "Homepage Search Bar"
   stuck_tasks:
+    - "Authentication/Routing Issues"
   test_all: false
   test_priority: "high_first"
 
