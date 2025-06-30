@@ -314,6 +314,8 @@ function App() {
             <Route path="/verify-otp" element={<VerifyOTPPage />} />
             <Route path="/discover" element={<DiscoverPageNew />} />
             <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/book/:expertId" element={<BookingPage />} />
+            <Route path="/chat/:expertId" element={<ChatPage />} />
             <Route path="/search" element={<EnhancedPerformerSearch />} />
             <Route path="/performer-search" element={<EnhancedPerformerSearch />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
