@@ -96,7 +96,7 @@ const CategoriesPage = () => {
                 </h3>
                 <p className="text-gray-600 text-xs mb-1">{category.description}</p>
                 <div className="flex items-center justify-center space-x-2">
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
                     {category.count} expert{category.count !== 1 ? 's' : ''}
                   </span>
                 </div>
