@@ -43,6 +43,12 @@ from calendar_service import CalendarIntegrationService
 from shipping_service import ShippingLabelService
 from trial_service import TrialService
 from performer_search_service import PerformerSearchService
+from affiliate_credits_service import AffiliateService, CreditService, PayoutService, ShoppingCartService
+from affiliate_credits_models import (
+    AffiliateProgram, ReferralTracking, CreditAccount, CreditTransaction,
+    ExpertPayoutAccount, PayoutRequest, PayoutHistory, ShoppingCart, CartItem,
+    AffiliateStatus, CreditTransactionType, PayoutStatus, PayoutMethod
+)
 
 
 ROOT_DIR = Path(__file__).parent
