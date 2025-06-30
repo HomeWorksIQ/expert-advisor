@@ -235,7 +235,37 @@ export const DiscoverPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [locationInfo, setLocationInfo] = useState('');
   const expertsPerPage = 12;
+
+  // Check URL parameters for location-based filtering
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const location = urlParams.get('location');
+    const category = urlParams.get('category');
+    const city = urlParams.get('city');
+    const state = urlParams.get('state');
+    const zip = urlParams.get('zip');
+    const radius = urlParams.get('radius');
+
+    // Set location info based on URL parameters
+    if (location === 'radius' && zip && radius) {
+      setLocationInfo(`Experts within ${radius} miles of ${zip}`);
+    } else if (location === 'radius' && city && radius) {
+      setLocationInfo(`Experts within ${radius} miles of ${city}`);
+    } else if (city && state) {
+      setLocationInfo(`Experts in ${city}, ${state}`);
+    } else if (location === 'national') {
+      setLocationInfo('National experts');
+    } else if (category) {
+      setLocationInfo(`${category.charAt(0).toUpperCase() + category.slice(1)} experts`);
+    }
+
+    // Apply category filter if specified
+    if (category) {
+      setFilters(prev => ({ ...prev, expertiseCategory: category }));
+    }
+  }, []);
 
   // Professional expert dataset
   const mockExperts = [
