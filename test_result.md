@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "Geo IP Location Detection & Simplified User Flow"
+  - task: "Replace Eye Candy with Experts & Add Location Search"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js, /app/frontend/src/CategoriesPage.js, /app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Replaced all instances of 'Eye Candy' with 'Experts' across the frontend codebase (components.js, HelpSupportPage.js, App.js, TrialWelcomeModal.js, AdminDashboard.js, App.css, payment-components.js). Added comprehensive location search functionality with zip code and city search capabilities. Users can now search by zip code or city name with distance radius options (5, 10, 25, 50, 100 miles). Updated homepage with location search section including zip/city input field and radius dropdown. Added backend API endpoint /api/experts/search-by-location for geographic searches. Updated CategoriesPage and DiscoverPage to handle radius search parameters and display location context."
     implemented: true
     working: true
     file: "/app/frontend/src/components.js, /app/frontend/src/CategoriesPage.js"
