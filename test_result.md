@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "Fixed Signup Page Pricing Model"
+  - task: "Updated Signup Page Button Labels & Removed Member Box"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/EnhancedSignUpPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Updated signup page as requested: 1) Removed member account box (mobile trial banner), 2) Changed 'Client' button to 'Member' with 'Always Free' label in green, 3) Updated 'Expert' button to show '$50 Monthly' label in blue, 4) Changed default userType from 'client' to 'member', 5) Updated dashboard redirect from '/client/dashboard' to '/member/dashboard'. Signup page now has clean two-button selection: Member (Always Free) and Expert ($50 Monthly) without confusing additional account boxes. Account type selection is now streamlined and matches the business model perfectly."
     implemented: true
     working: true
     file: "/app/frontend/src/EnhancedSignUpPage.js"
