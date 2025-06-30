@@ -185,18 +185,6 @@ const EnhancedSignUpPage = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12">
         <div className="w-full max-w-md">
           
-          {/* Mobile Trial Banner */}
-          <div className="lg:hidden mb-8 text-center">
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-3 rounded-lg mb-4">
-              <div className="text-lg font-bold">
-                {formData.userType === 'expert' ? 'Expert Account' : 'Member Account'}
-              </div>
-              <div className="text-sm opacity-90">
-                {formData.userType === 'expert' ? 'Free signup, then $50/month when published' : 'Always completely free'}
-              </div>
-            </div>
-          </div>
-
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-white mb-2">Join The Experts</h2>
             <p className="text-gray-400">
