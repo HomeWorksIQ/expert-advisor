@@ -174,9 +174,10 @@ const mockPerformers = [
     displayName: "David Thompson",
     username: "@david_business",
     email: "david.thompson@theexperts.com",
-    phone: "+1234567895",
+    phone: "+1-206-555-0106",
+    address: "303 Business Tower, Seattle, WA 98101",
     bio: "MBA business consultant with 20+ years helping startups and SMBs optimize operations, develop strategies, and scale effectively. Former Fortune 500 executive.",
-    profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
+    profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw2fHxidXNpbmVzcyUyMG1hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Seattle", state: "WA", country: "USA", zipCode: "98101" },
     gender: "male", age: 52, isOnline: true, rating: 4.9,
@@ -187,7 +188,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "303 Business Tower, Seattle, WA 98101",
     payingForExposure: true, exposureLevel: "National",
-    monthlyFee: 50.00
+    monthlyFee: 100.00, published: true, freeSignup: true
   },
   {
     id: 7,
@@ -196,9 +197,10 @@ const mockPerformers = [
     displayName: "Jennifer Lee",
     username: "@jennifer_finance",
     email: "jennifer.lee@theexperts.com",
-    phone: "+1234567896",
+    phone: "+1-415-555-0107",
+    address: "404 Financial District, San Francisco, CA 94102",
     bio: "CPA and financial consultant specializing in small business accounting, tax planning, and financial analysis. Helping businesses manage finances and grow profitably.",
-    profileImage: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
+    profileImage: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw3fHxmaW5hbmNpYWwlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "San Francisco", state: "CA", country: "USA", zipCode: "94102" },
     gender: "female", age: 41, isOnline: true, rating: 4.8,
@@ -209,7 +211,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "404 Financial District, San Francisco, CA 94102",
     payingForExposure: true, exposureLevel: "State",
-    monthlyFee: 50.00
+    monthlyFee: 70.00, published: true, freeSignup: true
   },
 
   // Teachers & Tutors
@@ -220,9 +222,10 @@ const mockPerformers = [
     displayName: "Professor Robert Adams",
     username: "@prof_adams_math",
     email: "robert.adams@theexperts.com",
-    phone: "+1234567897",
+    phone: "+1-617-555-0108",
+    address: "505 University Ave, Boston, MA 02116",
     bio: "Mathematics professor with 25+ years teaching experience. Offering tutoring in algebra, calculus, statistics, and test prep for SAT, ACT, and college entrance exams.",
-    profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
+    profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw4fHx0ZWFjaGVyJTIwbWFufGVufDB8fHxibHVlfDE3NTEyNDI0NzZ8MA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Boston", state: "MA", country: "USA", zipCode: "02116" },
     gender: "male", age: 58, isOnline: true, rating: 4.9,
@@ -233,7 +236,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "505 University Ave, Boston, MA 02116",
     payingForExposure: true, exposureLevel: "Local",
-    monthlyFee: 50.00
+    monthlyFee: 30.00, published: true, freeSignup: true
   },
   {
     id: 9,
@@ -242,9 +245,10 @@ const mockPerformers = [
     displayName: "Sarah Johnson",
     username: "@sarah_english_tutor",
     email: "sarah.johnson@theexperts.com",
-    phone: "+1234567898",
+    phone: "+1-503-555-0109",
+    address: "606 Learning Center, Portland, OR 97201",
     bio: "English teacher and writing coach with 12+ years experience. Specializing in essay writing, reading comprehension, grammar, and English as a second language (ESL).",
-    profileImage: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
+    profileImage: "https://images.unsplash.com/photo-1494790108755-2616c640887f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw5fHx0ZWFjaGVyJTIwd29tYW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Portland", state: "OR", country: "USA", zipCode: "97201" },
     gender: "female", age: 35, isOnline: true, rating: 4.8,
