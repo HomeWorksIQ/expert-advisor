@@ -112,23 +112,36 @@ const EnhancedSignUpPage = () => {
         <div className="absolute inset-0 bg-black bg-opacity-30"></div>
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           
-          {/* Free Trial Highlight */}
+          {/* Free Account Highlight */}
           <div className="mb-8">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <span>🎉</span>
-              <span>LIMITED TIME OFFER</span>
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-500 to-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <span>✨</span>
+              <span>{formData.userType === 'expert' ? 'EXPERT SIGNUP' : 'FREE MEMBERSHIP'}</span>
             </div>
             
             <h1 className="text-5xl font-bold mb-4 leading-tight">
-              Start Your
-              <span className="block bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                {getTrialDays()}-Day FREE Trial
-              </span>
+              {formData.userType === 'expert' ? (
+                <>
+                  Join as an
+                  <span className="block bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
+                    Expert
+                  </span>
+                </>
+              ) : (
+                <>
+                  Join as a
+                  <span className="block bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
+                    Member
+                  </span>
+                </>
+              )}
             </h1>
             
             <p className="text-xl text-gray-300 mb-8">
-              Experience all premium features with no credit card required. 
-              Cancel anytime during your trial period.
+              {formData.userType === 'expert' 
+                ? 'Create your profile for free, pay only when you publish and start getting clients.'
+                : 'Access all expert services completely free. No hidden fees, no subscriptions.'
+              }
             </p>
           </div>
 
