@@ -52,6 +52,17 @@ const CategoriesPage = () => {
     }
   }, [searchParams]);
 
+  // Sort categories based on selected option
+  const sortedCategories = [...categories].sort((a, b) => {
+    if (sortBy === 'alphabetical') {
+      return a.name.localeCompare(b.name);
+    } else if (sortBy === 'demand') {
+      const demandOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+      return demandOrder[b.demand] - demandOrder[a.demand];
+    }
+    return 0;
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
