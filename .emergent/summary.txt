@@ -1,0 +1,102 @@
+<analysis>
+The previous AI engineer successfully initiated development from an MVP codebase, prioritizing user requests chronologically. Initially, the engineer focused on frontend UI modifications, specifically removing search functionalities from the homepage and integrating a Search Now button linking to a category page, which were validated through testing. Following this, significant backend development was undertaken to introduce an affiliate program, credits system, and expert payout functionality, including new models and services. This also required recreating the discover page with extensive search parameters and linking it to an enhanced backend search endpoint. A core part of the work involved implementing a comprehensive member authentication and profile management system. While many backend functionalities were implemented and tested, some inconsistencies and Not Found errors for member profile, dashboard, and related endpoints were observed during subsequent preview tests. The last major task involved building out the admin backend, where core functionalities like admin login, user listing, financial overview, and analytics were successfully implemented, but a user search endpoint failed, indicating the current state of work. The engineer's approach involved incremental development, thorough testing, and direct engagement with the user for clarification and confirmation at critical junctures.
+</analysis>
+
+<product_requirements>
+The user initiated the project with a series of modifications to an existing application. The primary goals were:
+1.  **Homepage Redesign**: Remove existing search bars and criteria from the front page, while retaining Welcome to The Experts and the image of professionals. A Search Now button, linking to the category page, should be placed below The Experts.
+2.  **Affiliate Program**: Implement a system where members receive service credits when new users sign up via their unique referral link. These credits should be usable as a payment method within the shopping cart.
+3.  **Expert Payouts**: Develop functionality for experts to request funds into their bank accounts through the platform's payment system.
+4.  **Enhanced Search Flow**: Integrate the category page with a redesigned discover page. The discover page needs comprehensive search criteria (location, expert type, status, experience levels, sort by), pre-selecting the chosen category. Search results should be displayed either on the same page or a new results page, with an option for new searches. The category page background should be light blue.
+5.  **Data Accuracy & Linking**: Ensure all mock expert profiles have unique names and that booking, chat, and profile links function correctly. The search experts button on the discover page must accurately reflect the number of experts based on location criteria (national, user's location, or zip code). The My Location button should display the user's geo-IP detected city.
+6.  **Core Member Backend**: Implement fundamental member functionalities including email/password registration, login, logout, comprehensive profile management (CRUD), a member dashboard with activity tracking, and a favorites system for experts. These should integrate with the existing affiliate and credits systems.
+7.  **Admin Backend**: Develop core administrative functionalities including admin authentication (login/logout), a user management dashboard, a basic financial overview, an expert approval system, and platform analytics.
+</product_requirements>
+
+<key_technical_concepts>
+-   **Full-stack Application**: React.js frontend, FastAPI backend, MongoDB database.
+-   **State Management**: React's local state and context API for frontend.
+-   **API Design**: RESTful API endpoints for backend services with  prefix.
+-   **Database Interactions**: MongoDB models for data persistence, managed by Pydantic for validation.
+-   **Authentication**: JWT for secure user sessions, bcrypt for password hashing, OAuth (existing).
+-   **Dependency Management**: Yarn for frontend, pip for backend.
+-   **Deployment**: Kubernetes container environment, Supervisor for process management.
+-   **UI Framework**: Tailwind CSS for styling.
+</key_technical_concepts>
+
+<code_architecture>
+The application follows a full-stack architecture with a React frontend, FastAPI backend, and MongoDB as the database.
+
+Directory structure:
+
+
+**Key Files and Changes:**
+
+-   :
+    -   **Summary**: Main FastAPI application file handling all API routes, service initialization, and backend logic.
+    -   **Changes**:
+        -   Initial integration of , , , , and .
+        -   New API routes added for affiliate program management, credit transactions, expert payouts, member registration, login, profile management, and admin functionalities (auth, user management, financial, analytics).
+        -   Mock expert data updated to include more unique profiles and match frontend expansion.
+        -   Fixes for shopping cart subtotal and affiliate stats endpoint errors.
+-   :
+    -   **Summary**: Defines Pydantic models for MongoDB data structures, including users, experts, referrals, wallets, and transactions.
+    -   **Changes**: Added new models and fields required for the affiliate program, credits system, payouts, and comprehensive member profile management. Adopted UUIDs for IDs.
+-   :
+    -   **Summary**: New file containing Pydantic models specific to affiliate programs and credit systems.
+    -   **Changes**: Created to encapsulate models like , , , , , etc.
+-   :
+    -   **Summary**: New file containing service classes to manage business logic for affiliate programs, credits, and payouts.
+    -   **Changes**: Implemented methods for credit issuance, redemption, affiliate tracking, and expert payout requests.
+-   :
+    -   **Summary**: New file for handling member authentication logic.
+    -   **Changes**: Implemented functions for user registration, login, logout, password hashing, and JWT token generation.
+-   :
+    -   **Summary**: New file for managing member profile CRUD operations.
+    -   **Changes**: Implemented functions for retrieving, updating, and deleting member profiles, including preferences and dashboard data.
+-   :
+    -   **Summary**: New file for handling admin authentication logic.
+    -   **Changes**: Implemented functions for admin registration and login.
+-   :
+    -   **Summary**: New file containing service classes for admin-level management (user management, analytics, financial oversight).
+    -   **Changes**: Implemented methods for listing users, financial statistics, and platform analytics.
+-    & :
+    -   **Summary**: New files created to facilitate backend API preview and documentation.
+-   :
+    -   **Summary**: Contains main React components, including the HomePage.
+    -   **Changes**: Modified the  component to remove search buttons, search criteria, and the search bar. Functions related to previous search and location functionality were also removed.
+-   :
+    -   **Summary**: Main React application component defining routes and overall structure.
+    -   **Changes**: Added new routes for , , and  components.
+-   :
+    -   **Summary**: Likely contains enhanced or more complex React components.
+    -   **Changes**: Modified  to include a new Affiliate tab with corresponding content.
+-   , , :
+    -   **Summary**: New React components created to display and interact with the newly implemented backend features for affiliate programs, credits, and expert payouts.
+-   :
+    -   **Summary**: Page displaying different expert categories.
+    -   **Changes**: Changed background to light blue and updated category buttons to link to the  with pre-selected categories.
+-   :
+    -   **Summary**: New and completely redesigned page for discovering experts with comprehensive search and filtering capabilities.
+    -   **Changes**: Recreated to include search elements for location, expert type, status, experience levels, and sorting. Updated to fetch real data from the new backend search endpoint. Implemented logic to display the user's geo-IP detected city in the My Location button and dynamically calculate expert count for the search button.
+</code_architecture>
+
+<pending_tasks>
+-   Full resolution of member profile management, dashboard, and favorites API endpoints that consistently returned Not Found errors during preview testing.
+-   Fixing the User not found error for the admin user search functionality.
+</pending_tasks>
+
+<current_work>
+Immediately prior to this summary request, the AI engineer completed the implementation and initial testing of the core admin backend system. This includes:
+-   **Admin User Creation**: Successfully created a default admin user.
+-   **Admin Login**: Verified that admin login is functional, generating a session token.
+-   **User Management**: Confirmed that the admin can retrieve a list of all registered users on the platform.
+-   **Financial Overview**: Demonstrated the ability to access financial statistics and overview data.
+-   **Platform Analytics**: Verified that platform usage and growth metrics can be retrieved.
+
+However, the very last test of the admin user search functionality resulted in a Failed to get user details: 404: User not found error, indicating that this specific endpoint is not yet working as expected. The AI engineer was in the process of systematically checking and fixing issues, but this particular one remains unresolved.
+</current_work>
+
+<optional_next_step>
+Fix the User not found error in the admin user search functionality.
+</optional_next_step>
