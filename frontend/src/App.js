@@ -33,6 +33,7 @@ import DiscoverPageNew from './DiscoverPageNew';
 import AdminDashboard from './AdminDashboard';
 import ChatSystem from './ChatSystem';
 import AppointmentSystem from './AppointmentSystem';
+import SubscriptionPage from './SubscriptionPage';
 import VideoConferenceSystem from './VideoConferenceSystem';
 import EnhancedSignUpPage from './EnhancedSignUpPage';
 import EnhancedPerformerSearch from './EnhancedPerformerSearch';
