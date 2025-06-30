@@ -278,6 +278,7 @@ const DiscoverPageNew = () => {
   });
 
   const [userLocation, setUserLocation] = useState(null);
+  const [expertCount, setExpertCount] = useState(mockExperts.length);
 
   useEffect(() => {
     // Pre-select category if coming from categories page
@@ -286,6 +287,42 @@ const DiscoverPageNew = () => {
       setFilters(prev => ({ ...prev, category: categoryParam }));
     }
   }, [searchParams]);
+
+  // Calculate expert count based on filters and location
+  useEffect(() => {
+    calculateExpertCount();
+  }, [filters, userLocation]);
+
+  const calculateExpertCount = () => {
+    let count = mockExperts.length;
+    
+    // Apply basic filtering for count
+    if (filters.category !== 'all') {
+      count = mockExperts.filter(expert => expert.category === filters.category).length;
+    }
+    
+    // Location-based calculation
+    if (filters.location === 'local' && userLocation) {
+      // For local search, assume we find experts within reasonable distance
+      // In a real app, this would calculate based on actual geographic distance
+      count = Math.floor(count * 0.6); // Simulate local availability
+    } else if (filters.location === 'custom' && filters.zipCode) {
+      // For ZIP code search, simulate distance-based availability
+      const radius = parseInt(filters.radius);
+      if (radius <= 10) count = Math.floor(count * 0.3);
+      else if (radius <= 25) count = Math.floor(count * 0.5);
+      else if (radius <= 50) count = Math.floor(count * 0.7);
+      else count = Math.floor(count * 0.9);
+    }
+    
+    // Additional filter impacts
+    if (filters.status === 'online') count = Math.floor(count * 0.4);
+    if (filters.experienceLevel !== 'all') count = Math.floor(count * 0.7);
+    
+    // Ensure minimum count
+    count = Math.max(count, 1);
+    setExpertCount(count);
+  };
 
   // Filter experts based on current filters
   useEffect(() => {
