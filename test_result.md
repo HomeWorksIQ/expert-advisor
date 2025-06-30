@@ -289,6 +289,21 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
+  - task: "Homepage 'How it Works' Section Removal and Steps Redesign"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Removed the 'How it Works' section heading and redesigned the steps to be stacked vertically instead of a horizontal grid. Each step is now in a horizontal card format with icon on left and text on right. Added a 'Search Now' button positioned below the steps."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the 'How it Works' heading has been completely removed from the homepage. The 3 steps (Choose Location, Find Experts, Get Help) are now stacked vertically with the correct icons (📍, 🔍, 💬). Each step is in a horizontal card format with icon on left and text on right. The 'Search Now' button is positioned correctly and navigates to /categories when clicked. The layout is responsive and works well on mobile devices."
+
   - task: "Updated Signup Page Button Labels & Removed Member Box"
     implemented: true
     working: true
