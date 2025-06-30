@@ -289,7 +289,7 @@ function App() {
           <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
             <span className="text-white font-bold text-2xl">E</span>
           </div>
-          <p className="text-white text-lg">Loading Eye Candy...</p>
+          <p className="text-white text-lg">Loading The Experts...</p>
         </div>
       </div>
     );
