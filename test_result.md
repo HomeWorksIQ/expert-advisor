@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "Complete Expert Profile Pages with Chat/Video/Booking"
+  - task: "Fixed Signup Page Pricing Model"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/EnhancedSignUpPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Corrected signup page pricing to match business model: Members completely free (no monthly fees), Experts $50/month only when profile is published. Removed trial system language and updated all pricing references. Changed value proposition from '$199/$99 Value FREE for X days' to 'Free Signup/Always Free' with clear messaging: Members get 'Always completely free', Experts get 'Free signup, then $50/month when published'. Updated benefits list to reflect new model: Experts get 'Pay only when published ($50/month)', Members get 'No fees ever'. Removed confusing trial language throughout signup flow."
     implemented: true
     working: true
     file: "/app/frontend/src/ProfilePage.js, /app/frontend/src/App.js, /app/frontend/src/components.js"
