@@ -921,8 +921,21 @@ export const HomePage = () => {
         const location = data.location;
         setUserLocation(location);
         
-        // Redirect to categories with detected location
-        window.location.href = `/categories?location=local&city=${location.city}&state=${location.state}&country=${location.country}`;
+        // Create URL with complete location information including zip code if available
+        const params = new URLSearchParams({
+          location: 'local',
+          city: location.city || '',
+          state: location.state || '',
+          country: location.country || '',
+        });
+        
+        // Add zip code if available
+        if (location.zip_code || location.zipCode || location.postal_code) {
+          params.append('zip', location.zip_code || location.zipCode || location.postal_code);
+        }
+        
+        // Redirect to categories with complete location information
+        window.location.href = `/categories?${params.toString()}`;
       } else {
         throw new Error('Invalid location response');
       }
