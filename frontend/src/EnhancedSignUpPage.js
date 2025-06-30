@@ -112,35 +112,6 @@ const EnhancedSignUpPage = () => {
     }
   };
 
-  const handleSocialLogin = async (provider) => {
-    try {
-      setLoading(true);
-      
-      // Store the user type selection for after social login
-      localStorage.setItem('pendingUserType', formData.userType);
-      
-      // For demo purposes, simulate social login
-      // In production, this would redirect to actual OAuth URLs
-      const socialUrls = {
-        google: 'https://accounts.google.com/oauth/authorize',
-        linkedin: 'https://www.linkedin.com/oauth/v2/authorization',
-        facebook: 'https://www.facebook.com/v18.0/dialog/oauth',
-        github: 'https://github.com/login/oauth/authorize'
-      };
-      
-      // Simulate successful social login for demo
-      setTimeout(() => {
-        alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login initiated! In production, this would redirect to ${socialUrls[provider]}`);
-        setLoading(false);
-      }, 1000);
-      
-    } catch (error) {
-      console.error('Social login error:', error);
-      alert(`Failed to initialize ${provider} login. Please try again.`);
-      setLoading(false);
-    }
-  };
-
   const getTrialBenefits = () => {
     if (formData.userType === 'expert') {
       return [
