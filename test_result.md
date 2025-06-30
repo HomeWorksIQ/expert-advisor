@@ -688,6 +688,9 @@ frontend:
         -working: true
         -agent: "testing"
         -comment: "Code review confirms that both 'View Profile' and 'Book Appointment' buttons in ChatPage.js have the class 'bg-blue-500' which means they are now blue instead of gray. The buttons are located in the chat header section (lines 123-134) and both use the same styling class for consistent appearance."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the 'Book Appointment' button is now GREEN (bg-green-500) and the 'View Profile' button remains BLUE (bg-blue-500) as required. The 'Schedule Appointment' card in the Quick Actions section also has the correct green styling with green border (border-green-200), green hover (hover:bg-green-50), and green text (text-green-600 and text-green-500). Tested on multiple chat pages (chat/2, chat/3) and the green styling is consistent across all pages."
 
   - task: "Category Page Button Size Reduction"
     implemented: true
