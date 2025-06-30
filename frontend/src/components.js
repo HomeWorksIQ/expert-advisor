@@ -975,7 +975,7 @@ export const HomePage = () => {
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <Header showSearch={false} />
       
-      {/* Hero Section */}
+      {/* Hero Section - Simplified */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -985,135 +985,36 @@ export const HomePage = () => {
         />
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent drop-shadow-2xl">
-            The Experts
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent drop-shadow-2xl">
+            Welcome to The Experts
           </h1>
-          <p className="text-xl md:text-2xl mb-6 text-gray-100 drop-shadow-lg">
-            Find Local Experts. Get Professional Help.
+          <p className="text-xl md:text-3xl mb-8 text-gray-100 drop-shadow-lg">
+            Professional Advisory. Expert Guidance. Available for you.
           </p>
-          <p className="text-lg mb-8 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
-            Step 1: Choose your location → Step 2: Browse categories → Step 3: Connect with experts. Always free for members.
+          <p className="text-lg mb-12 text-gray-200 max-w-2xl mx-auto drop-shadow-md">
+            Connect with verified professionals in your area. Always free for members.
           </p>
           
-          {/* Search Bar */}
-          <div className="mb-8 max-w-xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search for expertise... (e.g., family doctor, insurance agent, business consultant)"
-                className="w-full px-6 py-4 text-lg rounded-lg border-2 border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && e.target.value.trim()) {
-                    window.location.href = `/discover?search=${encodeURIComponent(e.target.value.trim())}`;
-                  }
-                }}
-              />
-              <button
-                onClick={(e) => {
-                  const input = e.target.previousElementSibling;
-                  if (input.value.trim()) {
-                    window.location.href = `/discover?search=${encodeURIComponent(input.value.trim())}`;
-                  }
-                }}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-              >
-                🔍 Search
-              </button>
-            </div>
-            <p className="text-center text-gray-300 text-sm mt-2">
-              Or browse by category below
-            </p>
-          </div>
-          
-          {/* Location and Category Selection */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8 max-w-3xl mx-auto">
-            <h3 className="text-white text-lg font-semibold mb-4">Find experts near you:</h3>
-            
-            {/* Step 1: Location Selection */}
-            <div className="mb-6">
-              <p className="text-white text-sm mb-3">Step 1: Choose your area or go national</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button 
-                  onClick={() => detectLocation()}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg text-center transition-all flex items-center justify-center space-x-2"
-                >
-                  <span>📍</span>
-                  <span>Use My Location</span>
-                </button>
-                <a 
-                  href="/categories?location=national" 
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-lg text-center transition-all flex items-center justify-center space-x-2"
-                >
-                  <span>🌎</span>
-                  <span>Browse National Experts</span>
-                </a>
-              </div>
-              <p className="text-white/80 text-xs mt-3 text-center">
-                Select your location to see experts in your area, or browse all national experts
-              </p>
-            </div>
-
-            {/* Zip Code / City Search */}
-            <div className="mb-6">
-              <p className="text-white text-sm mb-3">Or search by location:</p>
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                <div className="md:col-span-6">
-                  <input 
-                    type="text" 
-                    id="zipCitySearch"
-                    placeholder="Enter zip code or city name..." 
-                    className="w-full px-4 py-2 rounded-lg text-gray-900 placeholder-gray-500 text-sm"
-                  />
-                </div>
-                <div className="md:col-span-3">
-                  <select 
-                    id="radiusSelect"
-                    className="w-full px-4 py-2 rounded-lg text-gray-900 text-sm"
-                  >
-                    <option value="5">Within 5 miles</option>
-                    <option value="10">Within 10 miles</option>
-                    <option value="25" selected>Within 25 miles</option>
-                    <option value="50">Within 50 miles</option>
-                    <option value="100">Within 100 miles</option>
-                  </select>
-                </div>
-                <div className="md:col-span-3">
-                  <button 
-                    onClick={() => searchByLocation()}
-                    className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-all text-sm"
-                  >
-                    Find Experts
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Or Search Directly */}
-            <div>
-              <p className="text-white text-sm mb-3">Or search directly:</p>
-              <div className="flex gap-2">
-                <input 
-                  type="text" 
-                  placeholder="Search by name, specialty, or keyword..." 
-                  className="flex-1 px-4 py-2 rounded-lg text-gray-900 placeholder-gray-500 text-sm"
-                />
-                <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-all text-sm">
-                  Search
-                </button>
-              </div>
-            </div>
+          {/* Simple Search Now Button */}
+          <div className="mb-12">
+            <a 
+              href="/categories"
+              className="inline-block px-12 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white rounded-lg font-semibold text-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              Search Now
+            </a>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a 
               href="/signup" 
-              className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="bg-white bg-opacity-10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300"
             >
               Join Free (Members)
             </a>
             <a 
               href="/signup?type=expert" 
-              className="border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105"
+              className="border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300"
             >
               List Your Services (Experts)
             </a>
