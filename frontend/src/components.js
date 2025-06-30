@@ -997,8 +997,8 @@ export const HomePage = () => {
           </p>
           
           {isLoading ? (
-            <div className="grid md:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
+            <div className="grid md:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
                 <div key={i} className="bg-gray-100 rounded-lg overflow-hidden animate-pulse">
                   <div className="w-full h-48 bg-gray-200"></div>
                   <div className="p-4">
@@ -1010,21 +1010,21 @@ export const HomePage = () => {
               ))}
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-6">
-              {featuredPerformers.map(performer => (
+            <div className="grid md:grid-cols-4 gap-6">
+              {featuredPerformers.slice(0, 8).map(performer => (
                 <div key={performer.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all">
                   <div className="relative">
                     <img 
                       src={performer.profileImage} 
                       alt={performer.displayName}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-40 object-cover"
                     />
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-2 right-2">
                       <span className="px-2 py-1 bg-green-500 text-white text-xs rounded-full">
                         FEATURED
                       </span>
                     </div>
-                    <div className="absolute bottom-3 left-3">
+                    <div className="absolute bottom-2 left-2">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         performer.isOnline 
                           ? 'bg-green-100 text-green-800' 
@@ -1035,19 +1035,45 @@ export const HomePage = () => {
                     </div>
                   </div>
                   <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">{performer.displayName}</h3>
-                    <p className="text-green-600 text-sm mb-2 font-medium">{performer.specialty}</p>
-                    <p className="text-gray-600 text-sm mb-3">{performer.serviceArea}</p>
-                    <p className="text-gray-700 mb-4 text-sm line-clamp-2">{performer.bio}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500">
-                        ${performer.hourlyRate || performer.sessionRate}/hr
+                    <h3 className="text-lg font-bold text-gray-900 mb-1 truncate">{performer.displayName}</h3>
+                    <p className="text-green-600 text-sm mb-1 font-medium">{performer.specialty}</p>
+                    <p className="text-gray-500 text-xs mb-2">{performer.location.city}, {performer.location.state}</p>
+                    <p className="text-gray-700 mb-3 text-sm line-clamp-2">{performer.bio}</p>
+                    
+                    {/* Service Options */}
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">Services:</span>
+                        <span className="text-xs text-gray-900 font-medium">
+                          ${performer.hourlyRate || performer.sessionRate}/hr
+                        </span>
                       </div>
+                      <div className="flex gap-1">
+                        {performer.availableFor.includes('chat') && (
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">💬 Chat</span>
+                        )}
+                        {performer.availableFor.includes('video_call') && (
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">📹 Video</span>
+                        )}
+                        {performer.availableFor.includes('in_person') && (
+                          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">🏢 Office</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex gap-2">
                       <a 
-                        href={`/profile/${performer.id}`}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg hover:from-blue-600 hover:to-green-600 transition-all text-sm"
+                        href={`/chat/${performer.id}`}
+                        className="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-xs text-center hover:bg-blue-600 transition-all"
                       >
-                        Contact
+                        Chat Now
+                      </a>
+                      <a 
+                        href={`/book/${performer.id}`}
+                        className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded text-xs text-center hover:from-blue-600 hover:to-green-600 transition-all"
+                      >
+                        Book Appt
                       </a>
                     </div>
                   </div>
@@ -1055,6 +1081,16 @@ export const HomePage = () => {
               ))}
             </div>
           )}
+          
+          {/* View All Button */}
+          <div className="text-center mt-8">
+            <a 
+              href="/discover"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg hover:from-blue-600 hover:to-green-600 transition-all"
+            >
+              View All Experts
+            </a>
+          </div>
         </div>
       </section>
 
