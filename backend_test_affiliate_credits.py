@@ -511,10 +511,10 @@ class TestPayoutSystem(unittest.TestCase):
         self.assertTrue(data["success"])
         self.assertIn("requests", data)
         
-        requests = data["requests"]
-        self.assertGreaterEqual(len(requests), 1)
+        payout_requests = data["requests"]
+        self.assertGreaterEqual(len(payout_requests), 1)
         
-        print(f"Retrieved {len(requests)} payout requests for expert {TEST_EXPERT_ID}")
+        print(f"Retrieved {len(payout_requests)} payout requests for expert {TEST_EXPERT_ID}")
         
         # Get pending requests only
         response = requests.get(
