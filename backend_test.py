@@ -1785,6 +1785,239 @@ class TestStoreAndProductsManagement(unittest.TestCase):
         print("Correctly handled non-existent order ID")
 
 
+class TestExpertAPIs(unittest.TestCase):
+    """Test suite for Expert APIs"""
+
+    def setUp(self):
+        """Set up test fixtures"""
+        print(f"\nUsing API URL: {API_URL}")
+
+    def test_01_get_expert_categories(self):
+        """Test retrieving expert categories"""
+        print("\n=== Testing Get Expert Categories ===")
+        
+        response = requests.get(f"{API_URL}/experts/categories")
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertIn("categories", data)
+        categories = data["categories"]
+        
+        # Verify we have the expected categories
+        self.assertGreaterEqual(len(categories), 5)  # Should have at least 5 categories
+        
+        # Check for specific required categories
+        category_ids = [cat["id"] for cat in categories]
+        required_categories = ["legal", "medical", "financial", "accounting", "business"]
+        
+        for required_cat in required_categories:
+            self.assertIn(required_cat, category_ids, f"Missing required category: {required_cat}")
+        
+        # Verify category structure
+        for category in categories:
+            self.assertIn("id", category)
+            self.assertIn("name", category)
+            self.assertIn("description", category)
+        
+        print(f"Retrieved {len(categories)} expert categories:")
+        for category in categories:
+            print(f"- {category['name']} ({category['id']}): {category['description']}")
+
+    def test_02_get_featured_experts(self):
+        """Test retrieving featured experts"""
+        print("\n=== Testing Get Featured Experts ===")
+        
+        response = requests.get(f"{API_URL}/experts/featured")
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertIn("featured_experts", data)
+        experts = data["featured_experts"]
+        
+        # Verify we have featured experts
+        self.assertGreaterEqual(len(experts), 1)  # Should have at least 1 featured expert
+        
+        # Verify expert structure
+        for expert in experts:
+            self.assertIn("id", expert)
+            self.assertIn("name", expert)
+            self.assertIn("title", expert)
+            self.assertIn("category", expert)
+            self.assertIn("rating", expert)
+            self.assertIn("consultations", expert)
+            self.assertIn("rate", expert)
+            self.assertIn("image", expert)
+        
+        print(f"Retrieved {len(experts)} featured experts:")
+        for expert in experts:
+            print(f"- {expert['name']} ({expert['title']}): {expert['category']} category, ${expert['rate']} rate")
+            
+        # Store expert IDs for later tests
+        self.expert_ids = [expert["id"] for expert in experts]
+
+    def test_03_expert_profile_consistency(self):
+        """Test expert profile routing consistency"""
+        print("\n=== Testing Expert Profile Routing Consistency ===")
+        
+        # First get featured experts to get valid expert IDs
+        response = requests.get(f"{API_URL}/experts/featured")
+        self.assertEqual(response.status_code, 200)
+        
+        featured_experts = response.json()["featured_experts"]
+        self.assertGreaterEqual(len(featured_experts), 1)
+        
+        # Get the first expert ID
+        expert_id = featured_experts[0]["id"]
+        
+        # Test expert profile endpoint
+        response = requests.get(f"{API_URL}/experts/{expert_id}/profile")
+        self.assertEqual(response.status_code, 200)
+        
+        profile = response.json()
+        if "success" in profile and profile["success"] == True:
+            # If the response has a success field, the actual profile might be in a nested field
+            if "profile" in profile:
+                profile = profile["profile"]
+        
+        # Verify the profile has the expected fields
+        self.assertIn("id", profile)
+        
+        # Verify ID consistency
+        self.assertEqual(profile["id"], expert_id)
+        
+        print(f"Expert profile for {expert_id} is consistent")
+        
+        # Test expert consultations endpoint
+        response = requests.get(f"{API_URL}/experts/{expert_id}/consultations")
+        self.assertEqual(response.status_code, 200)
+        
+        # The response should be a list of consultations or a success response
+        consultations = response.json()
+        if isinstance(consultations, dict) and "success" in consultations:
+            if "consultations" in consultations:
+                consultations = consultations["consultations"]
+        
+        # Consultations might be empty, but the response should be valid
+        self.assertIsInstance(consultations, list)
+        
+        print(f"Expert consultations endpoint for {expert_id} is working")
+
+    def test_04_expert_search_by_location(self):
+        """Test expert search by location"""
+        print("\n=== Testing Expert Search By Location ===")
+        
+        # Test with zip code
+        response = requests.get(f"{API_URL}/experts/search-by-location?zip_code=02115&radius=25")
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data["success"])
+        self.assertIn("experts", data)
+        self.assertIn("search_params", data)
+        
+        # Verify search parameters
+        search_params = data["search_params"]
+        self.assertEqual(search_params["radius"], 25)
+        self.assertIn("02115", search_params["location"])
+        
+        # Experts might be empty depending on the mock data, but the response should be valid
+        experts = data["experts"]
+        self.assertIsInstance(experts, list)
+        
+        print(f"Search by zip code returned {len(experts)} experts")
+        for expert in experts:
+            print(f"- {expert['name']} ({expert['specialty']}): {expert['distance']} miles away")
+        
+        # Test with category filter
+        response = requests.get(f"{API_URL}/experts/search-by-location?zip_code=02115&radius=25&category=medical")
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        self.assertTrue(data["success"])
+        
+        # Verify category filter
+        search_params = data["search_params"]
+        self.assertEqual(search_params["category"], "medical")
+        
+        print(f"Search by zip code and medical category returned {len(data['experts'])} experts")
+
+    def test_05_expert_search(self):
+        """Test expert search endpoint"""
+        print("\n=== Testing Expert Search ===")
+        
+        # Test basic search
+        response = requests.get(f"{API_URL}/experts/search")
+        self.assertEqual(response.status_code, 200)
+        
+        # Test with category
+        response = requests.get(f"{API_URL}/experts/search?category=legal")
+        self.assertEqual(response.status_code, 200)
+        
+        data = response.json()
+        if "message" in data:
+            # This might be a mock response
+            self.assertIn("Expert search for legal category", data["message"])
+            print(f"Expert search response: {data['message']}")
+        else:
+            # If it's a real response with experts
+            self.assertIn("experts", data)
+            experts = data["experts"]
+            self.assertIsInstance(experts, list)
+            print(f"Expert search returned {len(experts)} experts")
+        
+        # Test with multiple parameters
+        response = requests.get(f"{API_URL}/experts/search?category=medical&online_only=true")
+        self.assertEqual(response.status_code, 200)
+        
+        print("Expert search endpoint is working with different parameters")
+
+    def test_06_expert_data_structure(self):
+        """Test expert data structure"""
+        print("\n=== Testing Expert Data Structure ===")
+        
+        # Get featured experts
+        response = requests.get(f"{API_URL}/experts/featured")
+        self.assertEqual(response.status_code, 200)
+        
+        featured_experts = response.json()["featured_experts"]
+        self.assertGreaterEqual(len(featured_experts), 1)
+        
+        # Verify expert data structure
+        for expert in featured_experts:
+            # Check required fields
+            required_fields = ["id", "name", "title", "category", "rating", "rate"]
+            for field in required_fields:
+                self.assertIn(field, expert, f"Missing required field: {field}")
+            
+            # Verify ID format (should be a string)
+            self.assertIsInstance(expert["id"], str)
+            
+            # Verify numeric fields
+            self.assertIsInstance(expert["rating"], (int, float))
+            self.assertIsInstance(expert["rate"], (int, float))
+            self.assertIsInstance(expert["consultations"], int)
+            
+            # Verify image URL
+            self.assertIsInstance(expert["image"], str)
+            self.assertTrue(expert["image"].startswith("http"))
+        
+        print(f"Verified data structure for {len(featured_experts)} experts")
+        
+        # Get categories
+        response = requests.get(f"{API_URL}/experts/categories")
+        self.assertEqual(response.status_code, 200)
+        
+        categories = response.json()["categories"]
+        
+        # Verify category data structure
+        for category in categories:
+            required_fields = ["id", "name", "description"]
+            for field in required_fields:
+                self.assertIn(field, category, f"Missing required field: {field}")
+        
+        print(f"Verified data structure for {len(categories)} categories")
+
+
 def run_individual_test(test_name):
     """Run a single test by name"""
     suite = unittest.TestSuite()
