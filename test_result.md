@@ -289,7 +289,17 @@ backend:
         -comment: "Teaser session management tested successfully. Creates time-limited sessions, tracks expiry, prevents multiple concurrent sessions per user."
 
 frontend:
-  - task: "Complete Business Model & UI Updates"
+  - task: "Enhanced Geo IP with City + Zip Display in Categories"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js, /app/frontend/src/CategoriesPage.js, /app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Enhanced geo IP detection and categories page display to show both city and zip code when available. Updated detectLocationByIP function to pass complete location information including zip code via URL parameters. Enhanced CategoriesPage to display format: 'Local experts in Boston, MA (02115)' when both city and zip are available from geo IP. Expanded backend mock_detect_location_from_ip with more diverse US cities: Boston MA (02115), Austin TX (78701), Miami FL (33101), plus existing LA, NYC, and Toronto. API now properly returns zip_code field in location response. Categories page correctly handles and displays all location information from geo IP search."
     implemented: true
     working: true
     file: "/app/frontend/src/components.js, /app/backend/server.py, multiple"
