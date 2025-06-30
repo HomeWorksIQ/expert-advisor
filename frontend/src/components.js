@@ -825,6 +825,33 @@ export const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
 
+  // Search by location function
+  const searchByLocation = async () => {
+    const zipCityInput = document.getElementById('zipCitySearch').value;
+    const radius = document.getElementById('radiusSelect').value;
+    
+    if (!zipCityInput.trim()) {
+      alert('Please enter a zip code or city name');
+      return;
+    }
+    
+    try {
+      // Check if input is a zip code (5 digits) or city name
+      const isZipCode = /^\d{5}$/.test(zipCityInput.trim());
+      
+      if (isZipCode) {
+        // Handle zip code search
+        window.location.href = `/categories?location=radius&zip=${zipCityInput}&radius=${radius}`;
+      } else {
+        // Handle city name search
+        window.location.href = `/categories?location=radius&city=${encodeURIComponent(zipCityInput)}&radius=${radius}`;
+      }
+    } catch (error) {
+      console.error('Location search failed:', error);
+      alert('Location search failed. Please try again.');
+    }
+  };
+
   // Geo IP detection function
   const detectLocation = async () => {
     try {
