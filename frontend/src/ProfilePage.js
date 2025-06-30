@@ -197,6 +197,17 @@ const ProfilePage = () => {
               
               {/* Action Buttons */}
               <div className="flex flex-col gap-3 min-w-[200px]">
+                <button
+                  onClick={handleFavoriteToggle}
+                  className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg transition-all ${
+                    isFavorited 
+                      ? 'bg-red-500 text-white hover:bg-red-600' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  <span>{isFavorited ? '❤️' : '🤍'}</span>
+                  <span className="font-semibold">{isFavorited ? 'Favorited' : 'Add to Favorites'}</span>
+                </button>
                 <a 
                   href={`/chat/${expert.id}`}
                   className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
