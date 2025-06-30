@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 from enum import Enum
+import uuid
 
 # Enums for better type safety
 class UserType(str, Enum):
