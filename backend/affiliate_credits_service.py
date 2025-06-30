@@ -102,24 +102,37 @@ class AffiliateService:
     
     async def get_referral_stats(self, member_id: str) -> Dict[str, Any]:
         """Get referral statistics for a member"""
-        affiliate_account = await self.get_affiliate_account(member_id)
-        if not affiliate_account:
-            return {"error": "No affiliate account found"}
-        
-        # Get recent referrals
-        recent_referrals = await self.db.referral_tracking.find({
-            "referrerId": member_id,
-            "hasSignedUp": True
-        }).sort("signupDate", -1).limit(10).to_list(10)
-        
-        return {
-            "affiliate_code": affiliate_account.affiliateCode,
-            "referral_link": affiliate_account.referralLink,
-            "total_referrals": affiliate_account.totalReferrals,
-            "total_credits_earned": affiliate_account.totalCreditsEarned,
-            "recent_referrals": recent_referrals,
-            "status": affiliate_account.status
-        }
+        try:
+            affiliate_account = await self.get_affiliate_account(member_id)
+            if not affiliate_account:
+                return {"error": "No affiliate account found"}
+            
+            # Get recent referrals
+            recent_referrals = await self.db.referral_tracking.find({
+                "referrerId": member_id,
+                "hasSignedUp": True
+            }).sort("signupDate", -1).limit(10).to_list(10)
+            
+            return {
+                "affiliate_code": affiliate_account.affiliateCode,
+                "referral_link": affiliate_account.referralLink,
+                "total_referrals": affiliate_account.totalReferrals,
+                "total_credits_earned": affiliate_account.totalCreditsEarned,
+                "recent_referrals": recent_referrals,
+                "status": affiliate_account.status
+            }
+        except Exception as e:
+            # Log the error and return a safe response
+            print(f"Error getting referral stats: {str(e)}")
+            return {
+                "error": f"Failed to get referral stats: {str(e)}",
+                "affiliate_code": None,
+                "referral_link": None,
+                "total_referrals": 0,
+                "total_credits_earned": 0.0,
+                "recent_referrals": [],
+                "status": "inactive"
+            }
     
     def _generate_affiliate_code(self, member_id: str) -> str:
         """Generate a unique affiliate code"""
