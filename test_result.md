@@ -797,20 +797,23 @@ frontend:
         -agent: "testing"
         -comment: "The Discover page has been updated to match 'The Experts' branding. It now displays 'Discover Professional Experts' as the heading with 'Medical experts' as the current category. The page includes proper filtering options for Status, Expertise Category, Experience Level, and Sort By. The expert cards display professional information including credentials, specialties, and consultation rates. Each expert card has verification badges and availability status indicators."
 
-  - task: "Dashboard Functionality - Member Dashboard Tabs"
+  - task: "UI/UX Testing - Creator Cards"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components.js"
     stuck_count: 0
-    priority: "high"
+    priority: "medium"
     needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
-        -comment: "Implemented member dashboard with tabs for feed, subscriptions, messages, and referrals. Need to test if tabs work correctly."
+        -comment: "Implemented creator cards with profile image, cover image, name, username, bio, and subscription price. Need to test if they display correctly."
         -working: "NA"
         -agent: "testing"
-        -comment: "Unable to fully test the member dashboard tabs due to Playwright script issues. From code review, the tabs are implemented with proper state management and content switching."
+        -comment: "Unable to fully test the creator cards due to Playwright script issues. From code review, the creator cards are implemented with all required information and proper styling."
+        -working: true
+        -agent: "testing"
+        -comment: "The creator cards have been updated to expert cards with professional styling. Each card displays the expert's profile image, name, specialty, verification badge, and availability status. The cards also show key credentials, consultation rates, and ratings. The design uses a professional blue/green color scheme consistent with 'The Experts' branding."
 
   - task: "Dashboard Functionality - Performer Dashboard Tabs"
     implemented: true
