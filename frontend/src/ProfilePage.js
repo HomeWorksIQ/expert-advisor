@@ -307,11 +307,11 @@ const ProfilePage = () => {
 
             {/* Documents Tab */}
             {activeTab === 'documents' && (
-              <div className="space-y-6">
-                {/* Expert's Documents for Download */}
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Left Side - Expert's Documents */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    📋 Available Documents from {expert.firstName}
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    📋 Documents from {expert.firstName}
                   </h3>
                   {expert.documents && expert.documents.length > 0 ? (
                     <div className="space-y-3">
@@ -348,11 +348,58 @@ const ProfilePage = () => {
                       <p className="text-gray-600">No documents available from this expert yet.</p>
                     </div>
                   )}
+                  
+                  {/* Member's Uploaded Documents */}
+                  {uploadedDocuments.length > 0 && (
+                    <div className="mt-6">
+                      <h4 className="text-md font-semibold text-gray-900 mb-3">
+                        📄 Shared Documents
+                      </h4>
+                      <div className="space-y-3">
+                        {uploadedDocuments.map(document => (
+                          <div key={document.id} className="flex items-center justify-between p-4 border border-green-200 rounded-lg bg-green-50">
+                            <div className="flex items-center space-x-4">
+                              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <span className="text-green-600 font-semibold text-xs">
+                                  {document.type}
+                                </span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900">{document.name}</h4>
+                                <p className="text-sm text-gray-600">{document.description}</p>
+                                <div className="flex items-center space-x-4 text-xs text-gray-500 mt-1">
+                                  <span>{document.size}</span>
+                                  <span>•</span>
+                                  <span>Uploaded {document.uploadDate}</span>
+                                  <span>•</span>
+                                  <span className="text-green-600">Shared with expert</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleFileDownload(document)}
+                                className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all text-sm"
+                              >
+                                📥 Download
+                              </button>
+                              <button
+                                onClick={() => handleFileDelete(document.id)}
+                                className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all text-sm"
+                              >
+                                🗑️ Delete
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Upload Documents to Expert */}
-                <div className="border-t border-gray-200 pt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                {/* Right Side - Upload Documents */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     📤 Send Documents to {expert.firstName}
                   </h3>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -423,7 +470,8 @@ const ProfilePage = () => {
                     <div className="mt-4 text-xs text-gray-600">
                       <p className="mb-1">• Accepted formats: PDF, DOC, DOCX, JPG, PNG</p>
                       <p className="mb-1">• Maximum file size: 10MB</p>
-                      <p>• The expert will be notified when you upload a document</p>
+                      <p>• Documents will be visible to both you and the expert</p>
+                      <p>• You can delete your uploaded documents anytime</p>
                     </div>
                   </div>
                 </div>
