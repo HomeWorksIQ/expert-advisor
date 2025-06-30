@@ -27,55 +27,59 @@ const throttle = (func, limit) => {
   };
 };
 
-// Enhanced Mock Data for Development
+// Enhanced Mock Data for Professional Experts
 const mockPerformers = [
   {
     id: 1,
-    firstName: "Isabella",
-    lastName: "Rose",
-    displayName: "Isabella Rose",
-    username: "@isabella_rose",
-    email: "isabella@example.com",
+    firstName: "Dr. Sarah",
+    lastName: "Chen",
+    displayName: "Dr. Sarah Chen",
+    username: "@dr_sarah_chen",
+    email: "sarah.chen@theexperts.com",
     phone: "+1234567890",
-    bio: "Welcome to my exclusive world ✨ Premium content creator sharing intimate moments and lifestyle content. Join me for daily updates and exclusive content you won't find anywhere else!",
-    profileImage: "https://images.unsplash.com/photo-1701286618296-b40443dc63a9",
-    coverImage: "https://images.pexels.com/photos/7533330/pexels-photo-7533330.jpeg",
+    bio: "Board-certified family physician with 15+ years of experience. Specializing in preventive care, health consultations, and telemedicine. Available for virtual consultations and second opinions.",
+    profileImage: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3J8ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: {
-      address: "123 Main St, Los Angeles, CA 90210",
-      city: "Los Angeles",
-      state: "CA",
+      address: "123 Medical Center Dr, Boston, MA 02115",
+      city: "Boston",
+      state: "MA",
       country: "USA",
-      zipCode: "90210"
+      zipCode: "02115"
     },
     gender: "female",
-    age: 25,
+    age: 42,
     isOnline: true,
     lastSeen: new Date().toISOString(),
-    followers: 125000,
-    following: 45,
-    posts: 247,
-    subscribers: 12500,
+    followers: 15000,
+    following: 200,
+    posts: 147,
+    subscribers: 2500,
     rating: 4.9,
-    subscriptionType: "paid",
-    monthlyFee: 19.99,
+    subscriptionType: "consultation",
+    monthlyFee: 150.00,
+    consultationRate: 200.00,
+    specialty: "Medical",
+    credentials: ["MD", "Board Certified Family Medicine", "Telemedicine Certified"],
+    yearsOfExperience: 15,
+    education: "Harvard Medical School",
     bundles: [
-      { months: 3, price: 54.99, discount: 8 },
-      { months: 6, price: 99.99, discount: 17 },
-      { months: 12, price: 179.99, discount: 25 }
+      { sessions: 3, price: 540.00, discount: 10 },
+      { sessions: 6, price: 1020.00, discount: 15 },
+      { sessions: 12, price: 1920.00, discount: 20 }
     ],
     socialAccounts: {
-      instagram: "@isabella_rose_official",
-      twitter: "@isabella_rose",
-      tiktok: "@isabella_rose"
+      linkedin: "sarah-chen-md",
+      twitter: "@dr_sarah_chen"
     },
     bankVerified: true,
     idVerified: true,
     accountStatus: "active",
     createdAt: "2023-01-15T10:30:00Z",
     earnings: {
-      total: 45780.50,
-      thisMonth: 5240.30,
-      pendingPayout: 1250.75
+      total: 125780.50,
+      thisMonth: 15240.30,
+      pendingPayout: 3250.75
     },
     preferences: {
       darkMode: true,
@@ -89,50 +93,55 @@ const mockPerformers = [
   },
   {
     id: 2,
-    firstName: "Sophia",
-    lastName: "Dreams",
-    displayName: "Sophia Dreams",
-    username: "@sophia_dreams",
-    email: "sophia@example.com",
+    firstName: "Marcus",
+    lastName: "Johnson",
+    displayName: "Marcus Johnson",
+    username: "@marcus_business",
+    email: "marcus.johnson@theexperts.com",
     phone: "+1234567891",
-    bio: "Your favorite girl next door 💕 Custom content available. Let's chat and get to know each other better!",
-    profileImage: "https://images.unsplash.com/photo-1701286842710-5f37edc4b8b4",
-    coverImage: "https://images.pexels.com/photos/2330137/pexels-photo-2330137.jpeg",
+    bio: "Senior Business Consultant with MBA from Wharton. Helping startups and established businesses optimize operations, strategic planning, and market expansion. 20+ years of Fortune 500 experience.",
+    profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
+    coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: {
-      address: "456 Beach Blvd, Miami, FL 33139",
-      city: "Miami",
-      state: "FL",
+      address: "456 Business Park, New York, NY 10001",
+      city: "New York",
+      state: "NY",
       country: "USA",
-      zipCode: "33139"
+      zipCode: "10001"
     },
-    gender: "female",
-    age: 23,
+    gender: "male",
+    age: 45,
     isOnline: false,
     lastSeen: "2024-01-20T14:45:00Z",
-    followers: 89000,
-    following: 67,
+    followers: 22000,
+    following: 150,
     posts: 189,
-    subscribers: 8900,
-    rating: 4.7,
-    subscriptionType: "paid",
-    monthlyFee: 24.99,
+    subscribers: 1800,
+    rating: 4.8,
+    subscriptionType: "consultation",
+    monthlyFee: 300.00,
+    consultationRate: 250.00,
+    specialty: "Business Strategy",
+    credentials: ["MBA Wharton", "PMP Certified", "Six Sigma Black Belt"],
+    yearsOfExperience: 22,
+    education: "Wharton School of Business",
     bundles: [
-      { months: 3, price: 69.99, discount: 7 },
-      { months: 6, price: 129.99, discount: 13 },
-      { months: 12, price: 239.99, discount: 20 }
+      { sessions: 3, price: 675.00, discount: 10 },
+      { sessions: 6, price: 1275.00, discount: 15 },
+      { sessions: 12, price: 2400.00, discount: 20 }
     ],
     socialAccounts: {
-      instagram: "@sophia_dreams_official",
-      twitter: "@sophia_dreams"
+      linkedin: "marcus-johnson-consultant",
+      twitter: "@marcus_business"
     },
     bankVerified: true,
     idVerified: true,
     accountStatus: "active",
     createdAt: "2023-03-22T09:15:00Z",
     earnings: {
-      total: 32450.25,
-      thisMonth: 3890.60,
-      pendingPayout: 980.40
+      total: 89450.25,
+      thisMonth: 12890.60,
+      pendingPayout: 2980.40
     },
     preferences: {
       darkMode: true,
@@ -141,6 +150,68 @@ const mockPerformers = [
         push: true,
         email: true,
         sms: true
+      }
+    }
+  },
+  {
+    id: 3,
+    firstName: "Jennifer",
+    lastName: "Rodriguez",
+    displayName: "Jennifer Rodriguez",
+    username: "@jennifer_legal",
+    email: "jennifer.rodriguez@theexperts.com",
+    phone: "+1234567892",
+    bio: "Corporate Attorney specializing in business law, contract negotiations, and legal compliance. JD from Stanford Law. Providing legal guidance for businesses of all sizes with 12+ years of experience.",
+    profileImage: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
+    coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
+    location: {
+      address: "789 Legal Plaza, San Francisco, CA 94102",
+      city: "San Francisco",
+      state: "CA",
+      country: "USA",
+      zipCode: "94102"
+    },
+    gender: "female",
+    age: 38,
+    isOnline: true,
+    lastSeen: new Date().toISOString(),
+    followers: 18500,
+    following: 180,
+    posts: 156,
+    subscribers: 1200,
+    rating: 4.9,
+    subscriptionType: "consultation",
+    monthlyFee: 400.00,
+    consultationRate: 350.00,
+    specialty: "Legal",
+    credentials: ["JD Stanford Law", "CA State Bar", "Corporate Law Specialist"],
+    yearsOfExperience: 12,
+    education: "Stanford Law School",
+    bundles: [
+      { sessions: 3, price: 945.00, discount: 10 },
+      { sessions: 6, price: 1785.00, discount: 15 },
+      { sessions: 12, price: 3360.00, discount: 20 }
+    ],
+    socialAccounts: {
+      linkedin: "jennifer-rodriguez-attorney",
+      twitter: "@jennifer_legal"
+    },
+    bankVerified: true,
+    idVerified: true,
+    accountStatus: "active",
+    createdAt: "2023-02-10T11:20:00Z",
+    earnings: {
+      total: 156890.75,
+      thisMonth: 18240.50,
+      pendingPayout: 4120.25
+    },
+    preferences: {
+      darkMode: true,
+      language: "en",
+      notifications: {
+        push: true,
+        email: true,
+        sms: false
       }
     }
   }
