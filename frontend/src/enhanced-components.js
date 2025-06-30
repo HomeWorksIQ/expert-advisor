@@ -445,6 +445,9 @@ export const DiscoverPage = () => {
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-indigo-600 bg-clip-text text-transparent mb-4">
             Discover Professional Experts
           </h1>
+          {locationInfo && (
+            <p className="text-lg text-green-400 font-medium mb-2">{locationInfo}</p>
+          )}
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Connect with certified professionals across legal, medical, financial, and business expertise. 
             Get expert guidance from qualified advisors you can trust.
