@@ -317,6 +317,9 @@ frontend:
         -working: true
         -agent: "testing"
         -comment: "UI testing confirms that the 'How it Works' heading has been completely removed from the homepage. The 3 steps (Choose Location, Find Experts, Get Help) are now stacked vertically with the correct icons (📍, 🔍, 💬). Each step is in a horizontal card format with icon on left and text on right. The 'Search Now' button is positioned correctly and navigates to /categories when clicked. The layout is responsive and works well on mobile devices."
+        -working: true
+        -agent: "testing"
+        -comment: "Retested the homepage UI changes. The hero section has been successfully simplified with the 'Welcome to The Experts' title prominently displayed. The complex location selection UI and search bar have been completely removed from the hero section. A simple 'Search Now' button is now positioned below the title and correctly links to the /categories page when clicked. The featured experts section is still displayed properly below the hero section. The overall layout looks clean and simplified as requested."
 
   - task: "Updated Signup Page Button Labels & Removed Member Box"
     implemented: true
