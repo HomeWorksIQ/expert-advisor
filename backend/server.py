@@ -2209,6 +2209,7 @@ async def search_users(query: str, user_type: Optional[str] = None):
             raise HTTPException(status_code=400, detail=result.get('message', 'Search failed'))
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Search failed: {str(e)}")
+
 @api_router.get("/admin/experts/pending")
 async def get_pending_experts():
     """Get experts pending approval"""

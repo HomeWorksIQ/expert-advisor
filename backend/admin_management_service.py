@@ -232,8 +232,8 @@ class AdminManagementService:
             search_results = []
             for user in users:
                 search_results.append({
-                    "id": user['id'],
-                    "email": user['email'],
+                    "id": user.get('id', ''),
+                    "email": user.get('email', ''),
                     "firstName": user.get('firstName'),
                     "lastName": user.get('lastName'),
                     "displayName": user.get('displayName'),
@@ -250,13 +250,9 @@ class AdminManagementService:
             }
             
         except Exception as e:
+            print(f"Search users error: {str(e)}")
             return {"success": False, "message": f"Search failed: {str(e)}"}
-    
-    # =============================================================================
-    # EXPERT MANAGEMENT
-    # =============================================================================
-    
-    async def get_pending_experts(self) -> Dict[str, Any]:
+async def get_pending_experts(self) -> Dict[str, Any]:
         """Get experts pending approval"""
         try:
             experts_cursor = self.db.users.find({
