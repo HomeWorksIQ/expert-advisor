@@ -87,7 +87,7 @@ const CategoriesPage = () => {
             <a
               key={category.id}
               href={`/discover?category=${category.id}${searchParams.toString() ? `&${searchParams.toString()}` : ''}`}
-              className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-lg transition-all group hover:border-green-300"
+              className="bg-white rounded-lg border border-gray-200 p-2 hover:shadow-lg transition-all group hover:border-green-300"
             >
               <div className="text-center">
                 <div className="text-2xl mb-2">{category.icon}</div>
