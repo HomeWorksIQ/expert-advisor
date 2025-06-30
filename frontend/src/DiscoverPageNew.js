@@ -374,9 +374,28 @@ const DiscoverPageNew = () => {
           setUserLocation(data.location);
           setFilters(prev => ({ ...prev, location: 'local' }));
         }
+      } else {
+        // Fallback to mock location for demo
+        const mockLocation = {
+          city: "Boston",
+          state: "MA",
+          zipCode: "02115",
+          country: "USA"
+        };
+        setUserLocation(mockLocation);
+        setFilters(prev => ({ ...prev, location: 'local' }));
       }
     } catch (error) {
       console.error('Location detection failed:', error);
+      // Fallback to mock location for demo
+      const mockLocation = {
+        city: "Boston",
+        state: "MA", 
+        zipCode: "02115",
+        country: "USA"
+      };
+      setUserLocation(mockLocation);
+      setFilters(prev => ({ ...prev, location: 'local' }));
     }
   };
 
