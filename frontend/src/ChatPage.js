@@ -127,7 +127,7 @@ const ChatPage = () => {
                 className="w-12 h-12 rounded-full object-cover"
               />
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">{expert.name}</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{expert.displayName}</h2>
                 <p className="text-green-600 text-sm">{expert.specialty}</p>
                 <div className="flex items-center space-x-2">
                   <div className={`w-2 h-2 rounded-full ${expert.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></div>
