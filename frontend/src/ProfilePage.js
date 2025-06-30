@@ -9,51 +9,11 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('about');
 
-  // Mock expert data - in real app, fetch by id
-  const mockExperts = [
-    {
-      id: "1",
-      firstName: "Dr. Sarah",
-      lastName: "Chen",
-      displayName: "Dr. Sarah Chen",
-      email: "sarah.chen@theexperts.com",
-      phone: "+1-617-555-0101",
-      address: "123 Medical Center Dr, Boston, MA 02115",
-      bio: "Board-certified family physician with 15+ years experience. Specializing in preventive care, wellness consultations, and telemedicine. Available for virtual consultations and health screenings.",
-      profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3IlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
-      coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
-      location: { city: "Boston", state: "MA", country: "USA", zipCode: "02115" },
-      gender: "female",
-      age: 42,
-      isOnline: true,
-      rating: 4.9,
-      category: "Medical",
-      specialty: "Family Medicine",
-      hourlyRate: 150.00,
-      sessionRate: 200.00,
-      serviceArea: "Local & Virtual",
-      yearsOfExperience: 15,
-      services: ["Health Consultations", "Preventive Care", "Telemedicine", "Health Screenings"],
-      availableFor: ["chat", "video_call", "in_person"],
-      officeAddress: "123 Medical Center Dr, Boston, MA 02115",
-      monthlyFee: 75.00,
-      published: true,
-      reviews: [
-        { id: 1, author: "John D.", rating: 5, text: "Dr. Chen was extremely helpful and professional. Great consultation!", date: "2024-01-15" },
-        { id: 2, author: "Sarah M.", rating: 5, text: "Excellent doctor, very knowledgeable and caring.", date: "2024-01-10" },
-        { id: 3, author: "Mike R.", rating: 4, text: "Good consultation, answered all my questions.", date: "2024-01-05" }
-      ],
-      credentials: ["MD", "Board Certified Family Medicine", "Telemedicine Certified"],
-      education: "Harvard Medical School",
-      officeHours: "Monday-Friday: 9AM-5PM, Saturday: 10AM-3PM"
-    }
-  ];
-
   useEffect(() => {
-    // Simulate API call to fetch expert data
+    // Fetch expert data from shared data source
     setTimeout(() => {
-      const foundExpert = mockExperts.find(expert => expert.id === parseInt(id));
-      setExpert(foundExpert || mockExperts[0]); // Default to first expert if not found
+      const foundExpert = getExpertById(id);
+      setExpert(foundExpert);
       setIsLoading(false);
     }, 1000);
   }, [id]);
