@@ -125,7 +125,7 @@ export const SubscriptionPackageSelector = ({ onPackageSelect, selectedPackage, 
       period: '3 months',
       originalPrice: 150.00,
       savings: 7,
-      description: 'Popular choice for serious creators',
+      description: 'Popular choice for serious experts',
       features: ['Everything in Monthly', 'Advanced analytics', 'Priority listing', 'Custom branding'],
       popular: true
     },
