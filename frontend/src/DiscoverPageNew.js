@@ -126,51 +126,38 @@ const DiscoverPageNew = () => {
 
   // Filter experts based on current filters
   useEffect(() => {
-    let filtered = [...mockExperts];
+    const fetchExperts = async () => {
+      try {
+        const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+        const params = new URLSearchParams();
+        
+        if (filters.category !== 'all') params.append('category', filters.category);
+        if (filters.status !== 'all') params.append('status', filters.status);
+        if (filters.experienceLevel !== 'all') params.append('experienceLevel', filters.experienceLevel);
+        if (filters.sortBy) params.append('sortBy', filters.sortBy);
+        if (filters.location === 'custom' && filters.zipCode) {
+          params.append('zipCode', filters.zipCode);
+          params.append('radius', filters.radius);
+        }
+        if (filters.location !== 'all') params.append('location', filters.location);
+        
+        const response = await fetch(`${API_BASE_URL}/api/experts/discover?${params.toString()}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setFilteredExperts(data.experts);
+        } else {
+          // Fallback to mock data if API fails
+          setFilteredExperts(mockExperts);
+        }
+      } catch (error) {
+        console.error('Failed to fetch experts:', error);
+        // Fallback to mock data
+        setFilteredExperts(mockExperts);
+      }
+    };
 
-    // Filter by category
-    if (filters.category !== 'all') {
-      filtered = filtered.filter(expert => expert.category === filters.category);
-    }
-
-    // Filter by status
-    if (filters.status !== 'all') {
-      filtered = filtered.filter(expert => 
-        filters.status === 'online' ? expert.isOnline : !expert.isOnline
-      );
-    }
-
-    // Filter by experience level
-    if (filters.experienceLevel !== 'all') {
-      filtered = filtered.filter(expert => expert.experienceLevel === filters.experienceLevel);
-    }
-
-    // Filter by location (simplified for demo)
-    if (filters.location === 'local' && userLocation) {
-      filtered = filtered.filter(expert => 
-        expert.location.city === userLocation.city
-      );
-    }
-
-    // Sort results
-    switch (filters.sortBy) {
-      case 'rating':
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case 'price_low':
-        filtered.sort((a, b) => a.consultationRate - b.consultationRate);
-        break;
-      case 'price_high':
-        filtered.sort((a, b) => b.consultationRate - a.consultationRate);
-        break;
-      case 'experience':
-        filtered.sort((a, b) => b.yearsOfExperience - a.yearsOfExperience);
-        break;
-      default:
-        break;
-    }
-
-    setFilteredExperts(filtered);
+    fetchExperts();
   }, [filters, userLocation]);
 
   const handleLocationDetection = async () => {
