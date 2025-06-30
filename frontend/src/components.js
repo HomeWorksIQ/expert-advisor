@@ -54,9 +54,10 @@ const mockPerformers = [
     displayName: "Dr. Sarah Chen",
     username: "@dr_sarah_chen",
     email: "sarah.chen@theexperts.com",
-    phone: "+1234567890",
+    phone: "+1-617-555-0101",
+    address: "123 Medical Center Dr, Boston, MA 02115",
     bio: "Board-certified family physician with 15+ years experience. Specializing in preventive care, wellness consultations, and telemedicine. Available for virtual consultations and health screenings.",
-    profileImage: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3J8ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxkb2N0b3IlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Boston", state: "MA", country: "USA", zipCode: "02115" },
     gender: "female", age: 42, isOnline: true, rating: 4.9,
@@ -67,7 +68,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "123 Medical Center Dr, Boston, MA 02115",
     payingForExposure: true, exposureLevel: "State",
-    monthlyFee: 50.00
+    monthlyFee: 75.00, published: true, freeSignup: true
   },
   {
     id: 2,
@@ -76,9 +77,10 @@ const mockPerformers = [
     displayName: "Dr. Michael Rodriguez",
     username: "@dr_michael_cardio",
     email: "michael.rodriguez@theexperts.com",
-    phone: "+1234567891",
+    phone: "+1-713-555-0102",
+    address: "456 Heart Center Blvd, Houston, TX 77002",
     bio: "Cardiologist with 20+ years experience treating heart conditions. Offering consultations for heart health, prevention strategies, and second opinions on cardiac treatments.",
-    profileImage: "https://images.unsplash.com/photo-1609188076864-c35269136b09?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxkb2N0b3J8ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
+    profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxkb2N0b3IlMjBtYW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Houston", state: "TX", country: "USA", zipCode: "77002" },
     gender: "male", age: 48, isOnline: false, rating: 4.8,
@@ -89,7 +91,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "456 Heart Center Blvd, Houston, TX 77002",
     payingForExposure: true, exposureLevel: "National",
-    monthlyFee: 50.00
+    monthlyFee: 125.00, published: true, freeSignup: true
   },
   {
     id: 3,
@@ -98,9 +100,10 @@ const mockPerformers = [
     displayName: "Dr. Lisa Park",
     username: "@dr_lisa_wellness",
     email: "lisa.park@theexperts.com",
-    phone: "+1234567892",
+    phone: "+1-512-555-0103",
+    address: "789 Wellness St, Austin, TX 78701",
     bio: "Licensed therapist and wellness coach. Specializing in anxiety, depression, relationship counseling, and stress management. Virtual and in-person sessions available.",
-    profileImage: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
+    profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx0aGVyYXBpc3QlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Austin", state: "TX", country: "USA", zipCode: "78701" },
     gender: "female", age: 38, isOnline: true, rating: 4.9,
@@ -111,7 +114,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "789 Wellness St, Austin, TX 78701",
     payingForExposure: true, exposureLevel: "State",
-    monthlyFee: 50.00
+    monthlyFee: 60.00, published: true, freeSignup: true
   },
 
   // Life Insurance Professionals
@@ -122,9 +125,10 @@ const mockPerformers = [
     displayName: "James Wilson",
     username: "@james_insurance",
     email: "james.wilson@theexperts.com",
-    phone: "+1234567893",
+    phone: "+1-303-555-0104",
+    address: "101 Insurance Plaza, Denver, CO 80202",
     bio: "Licensed life insurance agent with 15+ years helping families secure their financial future. Specializing in term life, whole life, and estate planning insurance solutions.",
-    profileImage: "https://images.unsplash.com/photo-1629922949549-ae97b9843336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMGNvbnN1bHRhbnRzfGVufDB8fHxibHVlfDE3NTEyNDI0NzF8MA&ixlib=rb-4.1.0&q=85",
+    profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw0fHxpbnN1cmFuY2UlMjBtYW58ZW58MHx8fGJsdWV8MTc1MTI0MjQ3Nnww&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Denver", state: "CO", country: "USA", zipCode: "80202" },
     gender: "male", age: 43, isOnline: true, rating: 4.7,
@@ -135,7 +139,7 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "101 Insurance Plaza, Denver, CO 80202",
     payingForExposure: true, exposureLevel: "Local",
-    monthlyFee: 50.00
+    monthlyFee: 40.00, published: true, freeSignup: true
   },
   {
     id: 5,
@@ -144,9 +148,10 @@ const mockPerformers = [
     displayName: "Maria Garcia",
     username: "@maria_protection",
     email: "maria.garcia@theexperts.com",
-    phone: "+1234567894",
+    phone: "+1-602-555-0105",
+    address: "202 Protection Ave, Phoenix, AZ 85001",
     bio: "Senior insurance advisor specializing in family protection plans and business insurance. 18+ years helping clients navigate complex insurance needs and claims.",
-    profileImage: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
+    profileImage: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw1fHxpbnN1cmFuY2UlMjB3b21hbnxlbnwwfHx8Ymx1ZXwxNzUxMjQyNDc2fDA&ixlib=rb-4.1.0&q=85",
     coverImage: "https://images.pexels.com/photos/2977565/pexels-photo-2977565.jpeg",
     location: { city: "Phoenix", state: "AZ", country: "USA", zipCode: "85001" },
     gender: "female", age: 45, isOnline: false, rating: 4.8,
@@ -157,8 +162,9 @@ const mockPerformers = [
     availableFor: ["chat", "video_call", "in_person"],
     officeAddress: "202 Protection Ave, Phoenix, AZ 85001",
     payingForExposure: true, exposureLevel: "State",
-    monthlyFee: 50.00
-  },
+    monthlyFee: 45.00, published: true, freeSignup: true
+  }
+];,
 
   // Business Consultants
   {
