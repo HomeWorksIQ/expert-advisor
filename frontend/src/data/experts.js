@@ -29,7 +29,36 @@ export const mockExperts = [
     ],
     credentials: ["MD", "Board Certified Family Medicine", "Telemedicine Certified"],
     education: "Harvard Medical School",
-    officeHours: "Monday-Friday: 9AM-5PM, Saturday: 10AM-3PM"
+    officeHours: "Monday-Friday: 9AM-5PM, Saturday: 10AM-3PM",
+    documents: [
+      {
+        id: 1,
+        name: "Health Assessment Form",
+        type: "PDF",
+        size: "2.3 MB",
+        uploadDate: "2024-01-15",
+        downloadUrl: "/documents/health-assessment-form.pdf",
+        description: "Pre-consultation health assessment form to complete before your appointment"
+      },
+      {
+        id: 2,
+        name: "Telemedicine Guidelines",
+        type: "PDF",
+        size: "1.8 MB",
+        uploadDate: "2024-01-10",
+        downloadUrl: "/documents/telemedicine-guidelines.pdf",
+        description: "Guidelines for telemedicine consultations and what to expect"
+      },
+      {
+        id: 3,
+        name: "Wellness Tips Handbook",
+        type: "PDF",
+        size: "4.2 MB",
+        uploadDate: "2024-01-05",
+        downloadUrl: "/documents/wellness-tips-handbook.pdf",
+        description: "Comprehensive guide to maintaining good health and wellness"
+      }
+    ]
   },
   {
     id: 2,
