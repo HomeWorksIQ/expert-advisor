@@ -111,7 +111,7 @@ export const SubscriptionPackageSelector = ({ onPackageSelect, selectedPackage, 
   const performerPackages = [
     {
       id: 'performer_monthly',
-      name: 'Creator Monthly',
+      name: 'Expert Monthly',
       price: 50.00,
       period: '1 month',
       description: 'Start your content creation journey',
