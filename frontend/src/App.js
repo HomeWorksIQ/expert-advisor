@@ -311,6 +311,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/verify-otp" element={<VerifyOTPPage />} />
             <Route path="/discover" element={<DiscoverPageNew />} />
+            <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/search" element={<EnhancedPerformerSearch />} />
             <Route path="/performer-search" element={<EnhancedPerformerSearch />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
