@@ -9,6 +9,10 @@ const ChatPage = () => {
   const [expert, setExpert] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState([]);
+  const [sessionStartTime, setSessionStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [isSessionActive, setIsSessionActive] = useState(false);
 
   useEffect(() => {
     // Find expert by ID using shared data and set initial chat message
