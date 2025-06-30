@@ -3,19 +3,19 @@ import { Header } from './components';
 import { useSearchParams } from 'react-router-dom';
 
 const categories = [
-  { id: "medical", name: "Medical & Health", icon: "🏥", count: 3, description: "Doctors, therapists, and health professionals" },
-  { id: "insurance", name: "Insurance", icon: "🛡️", count: 2, description: "Life insurance agents and protection specialists" },
-  { id: "business", name: "Business Consulting", icon: "💼", count: 2, description: "Strategy consultants and business advisors" },
-  { id: "education", name: "Education & Tutoring", icon: "📚", count: 3, description: "Teachers, tutors, and academic coaches" },
-  { id: "marketing", name: "Marketing & Advertising", icon: "📱", count: 2, description: "Digital marketers and brand strategists" },
-  { id: "home_services", name: "Home Services", icon: "🔧", count: 1, description: "Contractors, handymen, and home repair" },
-  { id: "fitness", name: "Fitness & Wellness", icon: "💪", count: 1, description: "Personal trainers and wellness coaches" },
-  { id: "legal", name: "Legal Services", icon: "⚖️", count: 1, description: "Attorneys and legal advisors" },
-  { id: "technology", name: "Technology & IT", icon: "💻", count: 1, description: "IT support and tech consultants" },
-  { id: "real_estate", name: "Real Estate", icon: "🏠", count: 1, description: "Real estate agents and property advisors" },
-  { id: "automotive", name: "Automotive", icon: "🚗", count: 1, description: "Auto mechanics and car experts" },
-  { id: "pet_care", name: "Pet Care", icon: "🐕", count: 1, description: "Veterinarians and pet specialists" },
-  { id: "financial", name: "Financial Planning", icon: "💰", count: 1, description: "Financial planners and investment advisors" }
+  { id: "medical", name: "Medical & Health", icon: "🏥", count: 3, description: "Doctors, therapists, and health professionals", demand: "high" },
+  { id: "insurance", name: "Insurance", icon: "🛡️", count: 2, description: "Life insurance agents and protection specialists", demand: "medium" },
+  { id: "business", name: "Business Consulting", icon: "💼", count: 2, description: "Strategy consultants and business advisors", demand: "high" },
+  { id: "education", name: "Education & Tutoring", icon: "📚", count: 3, description: "Teachers, tutors, and academic coaches", demand: "medium" },
+  { id: "marketing", name: "Marketing & Advertising", icon: "📱", count: 2, description: "Digital marketers and brand strategists", demand: "medium" },
+  { id: "home_services", name: "Home Services", icon: "🔧", count: 1, description: "Contractors, handymen, and home repair", demand: "low" },
+  { id: "fitness", name: "Fitness & Wellness", icon: "💪", count: 1, description: "Personal trainers and wellness coaches", demand: "low" },
+  { id: "legal", name: "Legal Services", icon: "⚖️", count: 1, description: "Attorneys and legal advisors", demand: "high" },
+  { id: "technology", name: "Technology & IT", icon: "💻", count: 1, description: "IT support and tech consultants", demand: "high" },
+  { id: "real_estate", name: "Real Estate", icon: "🏠", count: 1, description: "Real estate agents and property advisors", demand: "medium" },
+  { id: "automotive", name: "Automotive", icon: "🚗", count: 1, description: "Auto mechanics and car experts", demand: "low" },
+  { id: "pet_care", name: "Pet Care", icon: "🐕", count: 1, description: "Veterinarians and pet specialists", demand: "low" },
+  { id: "financial", name: "Financial Planning", icon: "💰", count: 1, description: "Financial planners and investment advisors", demand: "high" }
 ];
 
 const CategoriesPage = () => {
