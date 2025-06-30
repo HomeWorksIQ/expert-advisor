@@ -39,6 +39,7 @@ import EnhancedPerformerSearch from './EnhancedPerformerSearch';
 import CategoriesPage from './CategoriesPage';
 import BookingPage from './BookingPage';
 import ChatPage from './ChatPage';
+import ProfilePageComponent from './ProfilePage';
 import HelpSupportPage from './HelpSupportPage';
 import { GeolocationSettingsPage } from './GeolocationSettingsPage';
 import { ProfileAccessController } from './AccessControlComponents';
