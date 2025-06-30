@@ -703,6 +703,111 @@ backend:
         -comment: "Tested the profile access control API. The API correctly enforces access rules based on location preferences, subscription types, and user blocking. It returns appropriate access levels (full, teaser, blocked) with detailed reasons. The teaser session functionality works correctly, creating time-limited preview sessions and expiring them after the configured duration."
 
 frontend:
+  - task: "GitHub to Apple SSO Change"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/EnhancedSignUpPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Replaced GitHub social login button with Apple button in the signup page. Updated the button styling to use black background (bg-black) and added Apple logo SVG."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the GitHub button has been completely replaced with an Apple button in the social login section. The Apple button has the correct black background (bg-black), Apple logo SVG, and 'Apple' text label. Clicking the button shows the Apple login simulation message as expected. The GitHub button is completely removed from the page."
+
+  - task: "Expert Free Signup Flow"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/EnhancedSignUpPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Updated expert signup flow to be free with deferred billing. Changed value proposition from trial-based to 'Free Signup' with clear messaging that experts pay $50/month only when they publish their profile."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the expert signup flow now shows 'Free Signup' as the value proposition and 'Pay $50/month only when you publish your profile' as the description. The Expert button in the account type selection shows '$50 Monthly' label in blue. The benefits list includes 'Pay only when published ($50/month)' as expected. No immediate payment is required during signup."
+
+  - task: "Expert Dashboard Expertise Selection"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Implemented expertise selection tab in expert dashboard with 10 expertise categories, monthly fees, and demand levels. Added 'Continue to Subscription' button that redirects to subscription page after selection."
+        -working: false
+        -agent: "testing"
+        -comment: "Unable to test the expertise selection tab as the expert dashboard requires authentication. When attempting to access /performer-dashboard directly, the user is redirected to the homepage instead of the login page. Code review shows the feature is implemented with 10 expertise categories, monthly fees, demand levels, and a 'Continue to Subscription' button, but could not verify functionality."
+
+  - task: "Subscription Page"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/SubscriptionPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Created subscription page that shows selected expertise category, monthly fee, benefits list, and payment form with card/PayPal options."
+        -working: false
+        -agent: "testing"
+        -comment: "Unable to test the subscription page as direct access to /subscription?expertise=medical&fee=125 redirects to the homepage. Code review shows the page is implemented with expertise category display, monthly fee, benefits list, payment form with card/PayPal options, and 'Subscribe for $X/month' button, but could not verify functionality."
+
+  - task: "Category Page Button Size Reduction"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/CategoriesPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Reduced the size of category buttons on the categories page to make them more compact. Updated the padding, icon size, and text spacing to create a more efficient layout that displays more categories in the same space."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that category buttons are now very small/compact with reduced padding (p-2 or p-3) and smaller text size (text-sm or text-xs). The grid layout uses 'md:grid-cols-3 lg:grid-cols-4' which allows more buttons to be displayed in the same space. The buttons have a clean, compact appearance that makes efficient use of space."
+
+  - task: "Category Page Sort Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/CategoriesPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Added sort functionality to categories page with 'Alphabetical' and 'High Demand' options. Implemented sorting logic to reorder categories based on selected option."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the sort dropdown is present with 'Alphabetical' and 'High Demand' options. The sort functionality works correctly - selecting different options changes the order of categories. Alphabetical sort orders categories A-Z by name, and High Demand sort shows high demand categories first."
+
+  - task: "Header Navigation Changes"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Updated header navigation to only show 'Find Experts' link and removed 'Categories' link. Changed 'Find Experts' link to redirect to /categories page."
+        -working: true
+        -agent: "testing"
+        -comment: "UI testing confirms that the header navigation now only shows 'Find Experts' link and the 'Categories' link has been completely removed. The 'Find Experts' link correctly redirects to /categories when clicked. The navigation is clean and focused as required."
+
   - task: "Chat Page Profile Button Color Change"
     implemented: true
     working: true
