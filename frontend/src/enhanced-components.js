@@ -673,10 +673,29 @@ export const DiscoverPage = () => {
                       <span className="text-sm text-gray-400">{expert.yearsExperience}+ yrs exp</span>
                     </div>
 
-                    {/* Action Button */}
-                    <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-                      View Profile
-                    </button>
+                    {/* Action Buttons */}
+                    <div className="space-y-2">
+                      <a 
+                        href={`/profile/${expert.id}`}
+                        className="block w-full py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-center"
+                      >
+                        View Profile
+                      </a>
+                      <div className="flex gap-2">
+                        <a 
+                          href={`/chat/${expert.id}`}
+                          className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-center"
+                        >
+                          Chat
+                        </a>
+                        <a 
+                          href={`/book/${expert.id}`}
+                          className="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors text-center"
+                        >
+                          Book
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
