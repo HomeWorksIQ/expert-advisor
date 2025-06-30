@@ -117,14 +117,22 @@ const ChatPage = () => {
                 </div>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">${expert.hourlyRate}/hour</p>
-              <a
-                href={`/book/${expertId}`}
-                className="inline-block mt-1 px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all"
-              >
-                Book Appointment
-              </a>
+            <div className="flex flex-col space-y-2">
+              <p className="text-sm text-gray-600 text-right">${expert.hourlyRate}/hour</p>
+              <div className="flex space-x-2">
+                <a
+                  href={`/profile/${expertId}`}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-lg text-sm hover:bg-gray-600 transition-all"
+                >
+                  View Profile
+                </a>
+                <a
+                  href={`/book/${expertId}`}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all"
+                >
+                  Book Appointment
+                </a>
+              </div>
             </div>
           </div>
         </div>
