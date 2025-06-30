@@ -86,21 +86,21 @@ const EnhancedSignUpPage = () => {
   const getTrialBenefits = () => {
     if (formData.userType === 'expert') {
       return [
-        'Premium Analytics & Insights',
-        'Advanced Messaging Tools',
-        'Video Consultation Tools',
-        'Service Monetization',
-        'Priority Support',
-        'Custom Branding'
+        'Free profile creation',
+        'Advanced messaging tools',
+        'Video consultation tools',
+        'Service monetization',
+        'Priority support',
+        'Pay only when published ($50/month)'
       ];
     } else {
       return [
-        'Premium Expert Access',
-        'HD Video Consultations',
-        'Document Sharing',
-        'Advanced Search',
-        'Priority Messaging',
-        'Ad-Free Experience'
+        'Free access to all experts',
+        'HD video consultations',
+        'Document sharing',
+        'Advanced search',
+        'Priority messaging',
+        'No fees ever'
       ];
     }
   };
