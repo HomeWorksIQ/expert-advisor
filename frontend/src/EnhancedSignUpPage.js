@@ -151,12 +151,14 @@ const EnhancedSignUpPage = () => {
 
           {/* Value Proposition */}
           <div className="text-center">
-            <div className="text-3xl font-bold text-yellow-400 mb-2">
-              ${formData.userType === 'performer' ? '199' : '99'} Value
+            <div className="text-3xl font-bold text-green-400 mb-2">
+              {formData.userType === 'expert' ? 'Free Signup' : 'Always Free'}
             </div>
             <div className="text-lg text-gray-300">
-              <span className="line-through">Regular Price</span>
-              <span className="ml-2 text-green-400 font-bold">FREE for {getTrialDays()} days!</span>
+              {formData.userType === 'expert' 
+                ? 'Pay $50/month only when you publish your profile'
+                : 'Complete access to all expert services'
+              }
             </div>
           </div>
         </div>
