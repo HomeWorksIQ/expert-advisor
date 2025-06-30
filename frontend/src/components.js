@@ -866,9 +866,9 @@ export const HomePage = () => {
 
   const detectLocationByIP = async () => {
     try {
-      // Call the backend IP geolocation API
-      const { API } = useUser();
-      const response = await fetch(`${API}/detect-location`, {
+      // Get API base URL from environment
+      const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      const response = await fetch(`${API_BASE_URL}/api/detect-location`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
