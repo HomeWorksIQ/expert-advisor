@@ -164,7 +164,7 @@ const mockPerformers = [
     payingForExposure: true, exposureLevel: "State",
     monthlyFee: 45.00, published: true, freeSignup: true
   }
-];,
+];
 
   // Business Consultants
   {
