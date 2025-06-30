@@ -216,12 +216,12 @@ const ChatPage = () => {
             </a>
             <a 
               href={`/book/${expertId}`}
-              className="flex items-center justify-center gap-2 p-4 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center gap-2 p-4 border border-green-200 rounded-lg hover:bg-green-50 transition-colors"
             >
               <span>📅</span>
               <div className="text-center">
-                <div className="font-medium text-blue-600">Schedule Appointment</div>
-                <div className="text-sm text-blue-500">Video call, phone, or in-person</div>
+                <div className="font-medium text-green-600">Schedule Appointment</div>
+                <div className="text-sm text-green-500">Video call, phone, or in-person</div>
               </div>
             </a>
           </div>
