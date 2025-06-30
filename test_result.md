@@ -719,20 +719,20 @@ frontend:
         -agent: "testing"
         -comment: "Unable to fully test the authentication flow due to Playwright script issues. From code review, the login and signup forms are implemented with proper validation and user type selection."
 
-  - task: "UI/UX Testing - Hero Section"
+  - task: "Navigation Testing - Dashboard Access Control"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components.js"
+    working: "NA"
+    file: "/app/frontend/src/App.js"
     stuck_count: 0
-    priority: "medium"
+    priority: "high"
     needs_retesting: false
     status_history:
         -working: "NA"
         -agent: "main"
-        -comment: "Implemented hero section with background image, heading, and call-to-action buttons. Need to test if it displays properly."
-        -working: true
+        -comment: "Implemented access control for member and performer dashboards. Need to test if unauthorized users are redirected to login."
+        -working: "NA"
         -agent: "testing"
-        -comment: "Based on visual inspection, the hero section displays correctly with the Eye Candy heading, subheading, and two call-to-action buttons (Start Your Journey and Explore Creators). The background image with gradient overlay is also visible."
+        -comment: "Unable to fully test dashboard access control due to Playwright script issues. From code review, the routes are protected with conditional rendering that checks for user authentication and user type."
 
   - task: "UI/UX Testing - Discover Page"
     implemented: true
