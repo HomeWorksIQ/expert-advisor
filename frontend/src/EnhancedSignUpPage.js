@@ -132,10 +132,10 @@ const EnhancedSignUpPage = () => {
             </p>
           </div>
 
-          {/* Trial Benefits */}
+          {/* Benefits */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
             <h3 className="text-xl font-semibold mb-4">
-              {formData.userType === 'performer' ? 'Performer' : 'Member'} Trial Includes:
+              {formData.userType === 'expert' ? 'Expert Account Includes:' : 'Member Account Includes:'}
             </h3>
             <div className="grid grid-cols-1 gap-3">
               {getTrialBenefits().map((benefit, index) => (
