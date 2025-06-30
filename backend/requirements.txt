@@ -22,4 +22,5 @@ google-auth>=2.0.0
 google-auth-oauthlib>=1.0.0
 google-api-python-client>=2.0.0
 cachetools>=5.0.0
-lxml>=4.9.0
+lxml>=4.9.0passlib[bcrypt]
+python-jose[cryptography]
