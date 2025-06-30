@@ -339,20 +339,18 @@ export const Header = ({ showSearch = true, className = "" }) => {
   };
 
   return (
-    <header className={`bg-black border-b border-gray-800 sticky top-0 z-50 ${className}`}>
+    <header className={`bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-3">
-              <img 
-                src="/experts-logo.svg" 
-                alt="The Experts - Professional Advisory Platform" 
-                className="h-8 w-auto"
-              />
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">E</span>
+              </div>
               <div className="flex flex-col">
-                <span className="text-blue-500 font-bold text-lg leading-none" style={{fontFamily: 'sans-serif'}}>The Experts</span>
-                <span className="text-gray-400 text-xs" style={{fontFamily: 'sans-serif'}}>Professional Advisory</span>
+                <span className="text-blue-600 font-bold text-lg leading-none" style={{fontFamily: 'sans-serif'}}>The Experts</span>
+                <span className="text-gray-500 text-xs" style={{fontFamily: 'sans-serif'}}>Local Professional Network</span>
               </div>
             </a>
           </div>
@@ -364,10 +362,10 @@ export const Header = ({ showSearch = true, className = "" }) => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search creators..."
+                    placeholder="Search experts..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 pl-10 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500"
                   />
                   <div className="absolute left-3 top-2.5">
                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -379,12 +377,12 @@ export const Header = ({ showSearch = true, className = "" }) => {
               
               {/* Search Results Dropdown */}
               {searchResults.length > 0 && (
-                <div className="absolute top-full mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50">
+                <div className="absolute top-full mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50">
                   {searchResults.map(performer => (
                     <a
                       key={performer.id}
                       href={`/profile/${performer.id}`}
-                      className="flex items-center space-x-3 p-3 hover:bg-gray-700 transition-colors"
+                      className="flex items-center space-x-3 p-3 hover:bg-gray-50 transition-colors"
                     >
                       <img
                         src={performer.profileImage}
@@ -392,8 +390,8 @@ export const Header = ({ showSearch = true, className = "" }) => {
                         className="w-10 h-10 rounded-full object-cover"
                       />
                       <div>
-                        <p className="text-white font-medium">{performer.displayName}</p>
-                        <p className="text-gray-400 text-sm">{performer.username}</p>
+                        <p className="text-gray-900 font-medium">{performer.displayName}</p>
+                        <p className="text-gray-500 text-sm">{performer.specialty}</p>
                       </div>
                       {performer.isOnline && (
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -407,14 +405,14 @@ export const Header = ({ showSearch = true, className = "" }) => {
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-6">
-            <a href="/discover" className="text-gray-300 hover:text-white transition-colors">
+            <a href="/discover" className="text-gray-600 hover:text-blue-600 transition-colors">
               Find Experts
             </a>
-            <a href="/categories" className="text-gray-300 hover:text-white transition-colors">
-              Specialties
+            <a href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
+              Categories
             </a>
-            <a href="/consultations" className="text-gray-300 hover:text-white transition-colors">
-              Consultations
+            <a href="/how-it-works" className="text-gray-600 hover:text-blue-600 transition-colors">
+              How It Works
             </a>
           </nav>
 
