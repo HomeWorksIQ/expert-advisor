@@ -120,7 +120,7 @@ export const SubscriptionPackageSelector = ({ onPackageSelect, selectedPackage, 
     },
     {
       id: 'performer_quarterly',
-      name: 'Creator Quarterly',
+      name: 'Expert Quarterly',
       price: 140.00,
       period: '3 months',
       originalPrice: 150.00,
