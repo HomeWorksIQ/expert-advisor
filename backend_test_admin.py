@@ -128,6 +128,9 @@ class TestAdminUserSearch(unittest.TestCase):
         search_term = "test"
         response = requests.get(f"{API_URL}/admin/users/search?query={search_term}", headers=headers)
         
+        print(f"Search response status code: {response.status_code}")
+        print(f"Search response: {response.text}")
+        
         self.assertEqual(response.status_code, 200)
         
         data = response.json()
