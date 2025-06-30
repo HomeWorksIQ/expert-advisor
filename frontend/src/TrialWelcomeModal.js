@@ -7,7 +7,7 @@ const TrialWelcomeModal = ({ isOpen, onClose }) => {
 
   const steps = [
     {
-      title: "Welcome to Eye Candy! 🎉",
+      title: "Welcome to The Experts! 🎉",
       content: (
         <div className="text-center">
           <div className="text-6xl mb-4">👋</div>
