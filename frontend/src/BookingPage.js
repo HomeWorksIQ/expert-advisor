@@ -113,7 +113,7 @@ const BookingPage = () => {
           </h1>
           <div className="flex items-center space-x-4">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">{expert.name}</h2>
+              <h2 className="text-xl font-semibold text-gray-900">{expert.displayName}</h2>
               <p className="text-green-600">{expert.specialty}</p>
               <p className="text-gray-600">${expert.hourlyRate}/hour</p>
             </div>
