@@ -78,6 +78,23 @@ const ProfilePage = () => {
       // Simulate file upload - in real app, this would call an API
       await new Promise(resolve => setTimeout(resolve, 2000));
       
+      // Create new uploaded document
+      const newDocument = {
+        id: Date.now(),
+        name: selectedFile.name,
+        type: selectedFile.type.includes('pdf') ? 'PDF' : selectedFile.type.includes('doc') ? 'DOC' : 'IMG',
+        size: `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`,
+        uploadDate: new Date().toISOString().split('T')[0],
+        uploadedBy: 'member',
+        description: `Document uploaded by member for ${expert.firstName}`
+      };
+      
+      // Save to localStorage and update state
+      const existingDocs = JSON.parse(localStorage.getItem(`uploadedDocs_${id}`) || '[]');
+      const updatedDocs = [...existingDocs, newDocument];
+      localStorage.setItem(`uploadedDocs_${id}`, JSON.stringify(updatedDocs));
+      setUploadedDocuments(updatedDocs);
+      
       setUploadMessage(`✅ File "${selectedFile.name}" uploaded successfully! The expert will receive it shortly.`);
       setSelectedFile(null);
       
@@ -90,6 +107,13 @@ const ProfilePage = () => {
     } finally {
       setIsUploading(false);
     }
+  };
+
+  // File delete handler
+  const handleFileDelete = (documentId) => {
+    const updatedDocs = uploadedDocuments.filter(doc => doc.id !== documentId);
+    localStorage.setItem(`uploadedDocs_${id}`, JSON.stringify(updatedDocs));
+    setUploadedDocuments(updatedDocs);
   };
 
   // File download handler
